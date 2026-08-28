@@ -1,0 +1,5 @@
+[
+  {"id":"local-only","claim":"The web demo makes no third-party requests.","where":"Privacy page","test":"npm test -- -t @claim:local-only","sandbox":"fresh browser context; record every request while opening /demo"},
+  {"id":"discard-default","claim":"Discards bodies by default.","where":"landing facts","test":"npm test -- -t @claim:discard-default","sandbox":"fresh browser; assert the documented receiver default"},
+  {"id":"sample-demo","claim":"Try it with sample data opens a sample report and saves nothing.","where":"landing action, demo banner","test":"npm test -- -t @claim:sample-demo","sandbox":"fresh browser; click the landing action and assert the report and banner"}
+]

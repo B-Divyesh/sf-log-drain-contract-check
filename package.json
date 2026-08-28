@@ -1,0 +1,21 @@
+{
+  "name": "drain-check-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "npm run build:site",
+    "build:site": "vite build --outDir dist/site && cp staticwebapp.config.json dist/staticwebapp.config.json",
+    "test": "vitest run",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "jsdom": "^26.0.0",
+    "playwright": "^1.58.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vitest": "^3.0.5"
+  }
+}

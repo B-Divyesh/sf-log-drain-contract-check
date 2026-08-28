@@ -1,0 +1,7 @@
+{
+  "slug": "log-drain-contract-check",
+  "title": "Drain Check",
+  "artifact_class": "cli",
+  "smallest_useful_product": "A local receiver that accepts a 10-minute drain sample, reports event rate/field types/likely secrets, and generates a forwarding configuration plus retention estimate.",
+  "constraints": "Bind locally by default; discard bodies after aggregation unless explicitly saved; ship conservative secret detectors and clear false-positive handling."
+}
