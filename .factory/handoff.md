@@ -1,38 +1,50 @@
-# Drain Check handoff
+# Drain Check verification handoff
 
-## Delivered
+## Verdict
 
-- Rust `drain-check` CLI with `listen`, `inspect`, `demo`, and `forwarding` commands.
-- A localhost-only receiver (`127.0.0.1`) that accepts newline-delimited JSON over HTTP, aggregates a bounded sample, and discards bodies by default.
-- JSON contract reports with event rate, average event size, field paths/types/presence, conservative secret and email detectors, 7/30-day retention estimates, and a forwarding note.
-- `--save-sample` is explicit and records that decision in the report.
-- Bundled realistic sample at `examples/drain.ndjson`; `cargo run -- demo --json` writes the same report to a temporary path.
-- Vite static docs/demo site in `dist/site`, with `/`, `/demo`, `/privacy`, `/terms`, and a styled runtime 404 route.
-- One-click browser demo, local CLI terminal recording, metadata, sitemap, robots, CSP/security headers, favicon/apple icon, and original pixel/demoscene hero art.
+**FAIL — do not release candidate `fc83213d0b4bef15d7d049310d3b6245903bf418`.**
 
-## Verification
+Tested live at <https://log-drain-contract-check.sociobot.in> on 2026-08-28 UTC. The deployment is healthy and its emitted HTML/assets match the candidate byte-for-byte, so this is not a deployment-only failure.
 
-Run from the repository root:
+Full evidence and reproduction details are in [verification.md](verification.md).
+
+## Release blockers
+
+- An installed package cannot run `drain-check demo`; it depends on repository-relative `examples/drain.ndjson`.
+- The web demo understates both retention estimates by about 100×.
+- Invalid NDJSON is silently accepted as HTTP 202; an incomplete request terminates the receiver and loses the report.
+- Raw bodies and parsed events remain in memory for the full window despite the discard-after-aggregation claim.
+- No rate limit was observed through 100 rapid requests (all 202; no 429/`Retry-After`).
+- The brief requires false-positive handling, but the CLI offers none.
+- The mobile landing page has two serious Axe findings.
+- `cargo fmt --check`, strict Clippy, and strict TypeScript checks fail.
+- Claims coverage is incomplete, and the discard/no-save claim tests assert copy rather than behavior.
+
+## What passed
+
+- All three commands listed in `.factory/claims.json` pass after `npm ci`.
+- The cold first screen plainly explains what the product does, who it serves, and what to click; its one-click sample demo opens successfully.
+- `cargo test`, Rust release build, `npm test`, exact Vite production build, `cargo package`, and clean package installation pass.
+- Normal inspect/receiver flows, JSON output, explicit sample saving, missing-file errors, and unknown-option exit behavior work.
+- Live routes have correct titles/landmarks and no console errors or third-party requests.
+- Lighthouse mobile: performance 99, accessibility 100, best practices 100, SEO 100; LCP 1.3 s, CLS 0.
+- Initial JS/CSS/image transfer is well inside budget; npm audit reports no vulnerabilities.
+
+## Verification commands
 
 ```sh
-cargo test
+npm ci
+npm test -- -t @claim:local-only
+npm test -- -t @claim:discard-default
+npm test -- -t @claim:sample-demo
 npm test
-npm run build:site
-cargo package --allow-dirty --no-verify
+npm run build
+cargo test --all-targets --all-features --locked
+cargo test --doc --locked
+cargo build --release --locked
+cargo package --locked
+cargo fmt --all -- --check
+cargo clippy --all-targets --all-features -- -D warnings
 ```
 
-All passed in this work order. The browser test suite covers all entries in `.factory/claims.json`, demo navigation, third-party request absence, and Axe on a 390 px mobile demo. The live receiver was also exercised with `curl`; it returned HTTP 202 for the bundled NDJSON and produced a report with 3 events.
-
-Build output: `dist/site/index.html`.
-
-Lighthouse-class checks: production JS is 7.04 KB raw / 3.02 KB gzip; CSS is 5.63 KB raw / 1.94 KB gzip; LCP hero is 62.2 KB WebP; Axe has zero violations on the mobile demo. A CLI Lighthouse run could not complete in this container because Chrome showed a local HTTP interstitial; the static budget and browser accessibility checks passed.
-
-## Privacy
-
-No telemetry, analytics, third-party runtime scripts, or remote fonts. The web demo is isolated and uses no persistent real-data storage. The CLI does not open a public listener by default and does not persist received bodies unless `--save-sample` is supplied.
-
-## Known gaps / next steps
-
-- The receiver accepts newline-delimited JSON. Other managed-drain envelopes may need a small adapter before their JSON records can be sampled.
-- Conservative detectors are intentionally not a compliance scanner. Teams should add review rules for their own identifiers before forwarding production data.
-- Run Lighthouse in a normal Chrome environment before a public performance certification; the production assets are already well below the stated budgets.
+The product code was not modified during verification. Only this handoff and the independent verification report were added or updated.
