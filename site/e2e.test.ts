@@ -66,6 +66,7 @@ describe('published claims', () => {
 
   it('@claim:contract-report proves fields, types, findings, and retention values', () => {
     cargoTest('documented_sample_has_exact_metrics');
+    cargoTest('cli_rejects_invalid_listener_and_forwarding_values');
   }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:false-positive-controls proves custom and ignored field handling', () => {
@@ -82,6 +83,7 @@ describe('published claims', () => {
 
   it('@claim:explicit-save writes only accepted bodies when requested', () => {
     cargoTest('save_sample_writes_only_accepted_bodies_when_requested');
+    cargoTest('colliding_output_and_sample_paths_are_rejected_before_binding');
   }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:interrupt-report writes a report after Ctrl-C', () => {

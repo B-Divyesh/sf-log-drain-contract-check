@@ -10,6 +10,7 @@ use std::{
     sync::atomic::{AtomicBool, Ordering},
     time::{Duration, Instant},
 };
+use url::Url;
 
 const DEMO_SAMPLE: &str = include_str!("../examples/drain.ndjson");
 const MAX_HEADER_BYTES: usize = 32 * 1024;
@@ -60,7 +61,8 @@ enum Command {
     /// Analyse newline-delimited JSON from a file without opening a listener.
     Inspect {
         input: PathBuf,
-        #[arg(long, default_value_t = 600)]
+        /// Duration of the file sample in seconds. Must be at least one second.
+        #[arg(long, default_value_t = 600, value_parser = clap::value_parser!(u64).range(1..))]
         sample_seconds: u64,
         #[arg(long, default_value = "report.json")]
         output: PathBuf,
@@ -87,7 +89,7 @@ enum Command {
             default_value = "https://receiver.example/logs",
             value_parser = validate_http_url
         )]
-        url: String,
+        url: Url,
         #[arg(long, default_value = "generic-http")]
         platform: String,
     },
@@ -114,9 +116,7 @@ fn main() -> Result<(), String> {
         }
         Command::Demo { json } => run_demo(json),
         Command::Forwarding { url, platform } => {
-            println!(
-                "# {platform}\n# Send POST requests to this endpoint after contract review\nurl = \"{url}\"\nmethod = \"POST\"\ncontent_type = \"application/json\""
-            );
+            print!("{}", forwarding_config(&url, &platform));
             Ok(())
         }
         Command::Listen {
@@ -142,20 +142,24 @@ fn main() -> Result<(), String> {
     }
 }
 
-fn validate_http_url(value: &str) -> Result<String, String> {
-    let rest = value
-        .strip_prefix("https://")
-        .or_else(|| value.strip_prefix("http://"))
-        .ok_or_else(|| "URL must start with http:// or https://".to_string())?;
-    let authority = rest.split('/').next().unwrap_or_default();
-    if authority.is_empty()
-        || authority.starts_with('.')
-        || authority.ends_with('.')
-        || authority.chars().any(char::is_whitespace)
-    {
+fn validate_http_url(value: &str) -> Result<Url, String> {
+    let url = Url::parse(value).map_err(|error| format!("URL must be valid: {error}"))?;
+    if !matches!(url.scheme(), "http" | "https") {
+        return Err("URL must use http:// or https://".to_string());
+    }
+    if url.host_str().is_none() {
         return Err("URL must include a valid host".to_string());
     }
-    Ok(value.to_string())
+    Ok(url)
+}
+
+fn forwarding_config(url: &Url, platform: &str) -> String {
+    // JSON string encoding keeps the generated quoted configuration valid even
+    // when a URL contains characters that need escaping.
+    let encoded_url = serde_json::to_string(url.as_str()).expect("URL strings serialize");
+    format!(
+        "# {platform}\n# Send POST requests to this endpoint after contract review\nurl = {encoded_url}\nmethod = \"POST\"\ncontent_type = \"application/json\"\n"
+    )
 }
 
 fn run_demo(json: bool) -> Result<(), String> {
@@ -225,6 +229,7 @@ struct ListenOptions {
 }
 
 fn listen(options: ListenOptions) -> Result<(), String> {
+    validate_distinct_output_paths(&options.output, options.save_sample.as_deref())?;
     let listener = bind_local(options.port)?;
     listener
         .set_nonblocking(true)
@@ -243,6 +248,34 @@ fn listen(options: ListenOptions) -> Result<(), String> {
         &options,
         &RUNNING,
     )
+}
+
+fn validate_distinct_output_paths(output: &Path, save_sample: Option<&Path>) -> Result<(), String> {
+    let Some(sample) = save_sample else {
+        return Ok(());
+    };
+    if comparable_path(output)? == comparable_path(sample)? {
+        return Err(
+            "--output and --save-sample must name different files so the report cannot overwrite accepted bodies."
+                .to_string(),
+        );
+    }
+    Ok(())
+}
+
+fn comparable_path(path: &Path) -> Result<PathBuf, String> {
+    if path.exists() {
+        return fs::canonicalize(path)
+            .map_err(|error| format!("Could not resolve {}: {error}", path.display()));
+    }
+
+    let parent = path.parent().unwrap_or_else(|| Path::new("."));
+    let filename = path
+        .file_name()
+        .ok_or_else(|| format!("{} must name a file", path.display()))?;
+    let parent = fs::canonicalize(parent)
+        .map_err(|error| format!("Could not resolve {}: {error}", parent.display()))?;
+    Ok(parent.join(filename))
 }
 
 fn bind_local(port: u16) -> Result<TcpListener, String> {
@@ -566,7 +599,59 @@ mod tests {
     fn cli_rejects_invalid_listener_and_forwarding_values() {
         assert!(Cli::try_parse_from(["drain-check", "listen", "--duration", "0"]).is_err());
         assert!(Cli::try_parse_from(["drain-check", "listen", "--port", "0"]).is_err());
+        assert!(Cli::try_parse_from([
+            "drain-check",
+            "inspect",
+            "sample.ndjson",
+            "--sample-seconds",
+            "0"
+        ])
+        .is_err());
         assert!(Cli::try_parse_from(["drain-check", "forwarding", "--url", "not a url"]).is_err());
+    }
+
+    #[test]
+    fn forwarding_requires_a_real_http_url_and_encodes_it_safely() {
+        for value in [
+            "http://:",
+            "https://?query",
+            "not a url",
+            "ftp://example.com",
+        ] {
+            assert!(
+                validate_http_url(value).is_err(),
+                "{value} should be rejected"
+            );
+        }
+        let url = validate_http_url("https://example.com/\"").unwrap();
+        let config = forwarding_config(&url, "generic-http");
+        assert!(config.contains("url = \"https://example.com/%22\""));
+        assert!(!config.contains("%22\"\""));
+    }
+
+    #[test]
+    fn colliding_output_and_sample_paths_are_rejected_before_binding() {
+        let directory = tempfile::tempdir().unwrap();
+        let shared = directory.path().join("accepted.ndjson");
+        fs::write(&shared, "{\"event\":\"saved\"}\n").unwrap();
+        let occupied = TcpListener::bind((Ipv4Addr::LOCALHOST, 0)).unwrap();
+        let options = ListenOptions {
+            duration: 1,
+            port: occupied.local_addr().unwrap().port(),
+            output: shared.clone(),
+            retention_days: vec![7],
+            save_sample: Some(shared.clone()),
+            detector: DetectorConfig::default(),
+            rate_limit: 20,
+            json: false,
+        };
+
+        let error = listen(options).unwrap_err();
+        assert!(error.contains("--output and --save-sample must name different files"));
+        assert_eq!(
+            fs::read_to_string(shared).unwrap(),
+            "{\"event\":\"saved\"}\n"
+        );
     }
 
     #[test]

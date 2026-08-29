@@ -16,7 +16,7 @@ cargo run -- listen --duration 600 --port 8787 --output report.json
 # Point a temporary HTTP drain to http://127.0.0.1:8787/.
 ```
 
-The listener binds only to `127.0.0.1`. It aggregates accepted events as they arrive, then drops their parsed values and bodies. Pass `--save-sample sample.ndjson` only when you intentionally want accepted bodies written to disk.
+The listener binds only to `127.0.0.1`. It aggregates accepted events as they arrive, then drops their parsed values and bodies. Pass `--save-sample sample.ndjson` only when you intentionally want accepted bodies written to disk. `--output` and `--save-sample` must name different files; Drain Check refuses a collision before opening the listener.
 
 Malformed or incomplete requests return HTTP 400 without ending the sample window. The default rolling limit accepts 20 requests per second, then returns HTTP 429 with `Retry-After: 1`. Change it with `--rate-limit`.
 
@@ -27,7 +27,7 @@ cargo run -- inspect examples/drain.ndjson --sample-seconds 600 --output report.
 cargo run -- forwarding --url https://receiver.example/logs
 ```
 
-`--json` prints the report to standard output for scripts. Add `--sensitive-field session_key` for a team-specific field name. Add `--ignore-field '$.request_id'` after reviewing a false positive. A trailing `*` ignores a path prefix. `cargo run -- --help` lists all commands and options.
+`inspect --sample-seconds` must be at least 1. `forwarding` accepts a parsed HTTP(S) URL and safely encodes it in the generated configuration. `--json` prints the report to standard output for scripts. Add `--sensitive-field session_key` for a team-specific field name. Add `--ignore-field '$.request_id'` after reviewing a false positive. A trailing `*` ignores a path prefix. `cargo run -- --help` lists all commands and options.
 
 ## What the report contains
 
