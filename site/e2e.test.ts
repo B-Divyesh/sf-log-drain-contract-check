@@ -9,6 +9,10 @@ let server: ViteDevServer;
 let browser: Browser;
 const base = 'http://127.0.0.1:4179';
 const routes = ['/', '/demo', '/privacy', '/terms', '/missing'];
+// Each published Cargo-backed claim must pass from a cold clone. Rust compilation
+// legitimately takes longer than Vitest's 5s default, while the behavior checks
+// below still run unchanged after compilation completes.
+const CARGO_CLAIM_TIMEOUT_MS = 60_000;
 
 beforeAll(async () => {
   server = await createServer({ server: { host: '127.0.0.1', port: 4179 }, logLevel: 'error' });
@@ -53,40 +57,40 @@ describe('published claims', () => {
     expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
     await context.close();
     cargoTest('listener_binds_to_loopback');
-  });
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:discard-default proves accepted values are absent from the report', () => {
     cargoTest('detects_without_storing_values');
     cargoTest('receiver_rejects_bad_requests_and_keeps_prior_events');
-  });
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:contract-report proves fields, types, findings, and retention values', () => {
     cargoTest('documented_sample_has_exact_metrics');
-  });
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:false-positive-controls proves custom and ignored field handling', () => {
     cargoTest('supports_custom_patterns_and_explicit_suppression');
-  });
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:rate-limit proves the rolling request threshold', () => {
     cargoTest('rate_limit_returns_429_with_retry_after');
-  });
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:request-recovery proves bad requests do not end the window', () => {
     cargoTest('receiver_rejects_bad_requests_and_keeps_prior_events');
-  });
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:explicit-save writes only accepted bodies when requested', () => {
     cargoTest('save_sample_writes_only_accepted_bodies_when_requested');
-  });
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:interrupt-report writes a report after Ctrl-C', () => {
     cargoTest('interrupt_writes_the_partial_report');
-  });
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:portable-demo runs the embedded sample outside the repository', () => {
     cargoTest('installed_demo_runs_outside_repository');
-  });
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:mit-license proves the stated license is present', () => {
     expect(readFileSync('LICENSE', 'utf8')).toContain('Permission is hereby granted, free of charge');
