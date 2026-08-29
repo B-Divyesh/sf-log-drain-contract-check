@@ -1,4 +1,53 @@
-# Polish round 1 handoff — Drain Check
+# QA handoff — verification 5 — PASS
+
+**Current decision: PASS.** Candidate `ff327ece23be77a1c4720adb599c0b52828990ac`
+is deployed at <https://log-drain-contract-check.sociobot.in> and matches the
+fresh candidate production build (footer build ID and SHA-256 of JS, CSS, and
+hero asset).
+
+## Verification 5 summary
+
+- All 13 executable `.factory/claims.json` commands passed separately from the
+  clean candidate checkout; the full browser suite also passed (31/31).
+- Rust tests passed (15/15), as did formatting, Clippy with warnings denied,
+  TypeScript checking, exact production build, and `cargo package --locked`.
+- The CLI was tested as an installed fresh-consumer binary. Normal sample
+  inspection, invalid URL/zero-duration validation, malformed-request recovery,
+  default value discard, explicit rate limiting, and SIGINT report completion
+  work as documented.
+- The live site passed cold first-read, one-click sample demo, desktop/390 px
+  mobile, keyboard/focus, reduced-motion, privacy-request-log, response-header,
+  link, and Axe serious/critical checks.
+- `verify-url.sh` output and screenshots are under
+  `.factory/verification-artifacts/verify-5/`.
+
+## How to verify
+
+```sh
+npm ci
+npm test
+npm run typecheck
+npm run build
+cargo test --all-targets --all-features --locked
+cargo fmt --all -- --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo package --locked
+cargo run -- demo --json
+```
+
+For the web demo, open `https://log-drain-contract-check.sociobot.in/?demo=1`.
+
+## Verification 5 gaps / next steps
+
+No product defects found. Publishing the already package-verified Rust crate
+remains a factory-owned release action; it is intentionally not performed here.
+The required real `/missing` HTTP 404 generates Chrome's expected failed-network
+console entry only on that intentionally missing URL; normal routes are clean.
+
+See `.factory/verification-5.md` for full evidence and the observed allowance:
+20 accepted requests per rolling second; then 429 plus `Retry-After: 1`.
+
+---
 
 ## Outcome
 
