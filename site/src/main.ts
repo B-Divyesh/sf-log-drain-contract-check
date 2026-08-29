@@ -34,12 +34,12 @@ function setMetadata(title: string, description: string, path: string) {
 }
 
 function landing() {
-  setMetadata('Drain Check — inspect a log drain sample', 'Inspect a bounded local log drain sample before forwarding it.', '/');
+  setMetadata('Drain Check — check a log drain sample', 'Check a bounded local log drain sample before forwarding it.', '/');
   return shell(`<main id="main" tabindex="-1">
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow">LOCAL 10-MINUTE SAMPLE</p>
-        <h1 tabindex="-1">Inspect a log drain before forwarding</h1>
+        <h1 tabindex="-1">Check a log drain before forwarding</h1>
         <p class="lede">For platform teams checking volume, field types, and sensitive data before enabling a log drain.</p>
         <p class="hero-action"><a class="button primary" href="/?demo=1" data-route>Try it with sample data</a><span class="button-note">Opens the bundled report. Writes no browser data.</span></p>
         <ul class="facts"><li>The receiver binds to <code>127.0.0.1</code>.</li><li>Accepted bodies are discarded by default.</li><li>Free under the MIT License.</li></ul>
@@ -50,7 +50,7 @@ function landing() {
       <div class="terminal-bar"><span aria-hidden="true">●</span><span id="run-title">bundled sample / recorded run</span><button id="replay-demo" type="button">Replay recording</button></div>
       <p id="run-help" class="sr-only">A text recording of the bundled CLI demo. Use the replay button to play it again.</p>
       <pre tabindex="0"><code id="terminal-output">$ drain-check demo
-Reviewed 3 events in 600s. 17 fields. 3 findings across 2 fields.
+Reviewed 3 events in 600s. 17 field paths. 3 findings in 2 field paths.
 Report: /tmp/drain-check-demo-[unique]/report.json
 
 $ drain-check forwarding --url https://receiver.example/logs
@@ -62,7 +62,7 @@ content_type = "application/json"</code></pre>
     </section>
     <section id="how" class="steps" aria-labelledby="how-title">
       <p class="eyebrow">HOW IT WORKS</p><h2 id="how-title">Review a drain in three steps</h2>
-      <ol><li><strong>Listen locally.</strong><br>Run one bounded window.</li><li><strong>Review the report.</strong><br>Check fields and likely sensitive data.</li><li><strong>Generate a forwarding configuration.</strong><br>Review the generated configuration.</li></ol>
+      <ol><li><strong>Run the receiver locally.</strong><br>Run one bounded window.</li><li><strong>Review the report.</strong><br>Check field paths and likely sensitive data.</li><li><strong>Generate a forwarding configuration.</strong><br>Review the generated configuration.</li></ol>
     </section>
     <section class="limits" aria-labelledby="limits-title"><h2 id="limits-title">What Drain Check does not retain</h2><p>The receiver discards accepted bodies after aggregation by default.</p><p>Saving accepted bodies requires <code>--save-sample</code>.</p></section>
     <section class="install" aria-labelledby="install-title"><p class="eyebrow">RUN IT LOCALLY</p><h2 id="install-title">Start a bounded receiver</h2><p>Clone the <a href="https://github.com/B-Divyesh/sf-log-drain-contract-check">public source repository on GitHub</a>, then run the receiver:</p><pre tabindex="0"><code>git clone https://github.com/B-Divyesh/sf-log-drain-contract-check.git
@@ -86,10 +86,10 @@ function demo(path = '/demo') {
   const sevenDays = sampleReport.retention.find((estimate) => estimate.days === 7)!;
   const thirtyDays = sampleReport.retention.find((estimate) => estimate.days === 30)!;
   const reviewFields = new Set(sampleReport.findings.map((finding) => finding.path)).size;
-  return shell(`<div class="demo-banner" role="status"><span>Demo — sample data, nothing is saved</span><button id="reset-demo" type="button">Reset demo</button><a href="/" data-route>Start for real</a></div>
+  return shell(`<div class="demo-banner" role="status"><span>Demo — sample data, nothing is saved</span><button id="reset-demo" type="button">Reset demo</button><a href="/" data-route>View local setup</a></div>
     <main id="main" tabindex="-1" class="demo"><p class="eyebrow">SAMPLE REPORT / 10-MINUTE WINDOW</p><h1 tabindex="-1">Review this drain sample</h1><p class="lede">This report uses bundled checkout logs. It is separate from any real run.</p>
-      <section class="metrics" aria-label="Sample summary"><div><strong>${sampleReport.events}</strong><span>events</span></div><div><strong>${sampleReport.events_per_second} / sec</strong><span>event rate</span></div><div><strong>${sampleReport.fields.length}</strong><span>field paths</span></div><div><strong>${sampleReport.findings.length}</strong><span>findings across ${reviewFields} fields</span></div></section>
-      <section class="report" aria-labelledby="risk-title"><div><h2 id="risk-title">Review possible sensitive fields</h2><p>Detectors are conservative. A match needs a human decision.</p>${findingMarkup()}</div><div><h2>Retention estimate</h2><p>At this sample rate and average event size:</p><dl><dt>7 days</dt><dd>about ${sevenDays.display}</dd><dt>30 days</dt><dd>about ${thirtyDays.display}</dd></dl><h2>Generate a forwarding configuration</h2><p>Run this separate command after reviewing the report:</p><pre tabindex="0"><code>$ drain-check forwarding --url https://receiver.example/logs
+      <section class="metrics" aria-label="Sample summary"><div><strong>${sampleReport.events}</strong><span>events</span></div><div><strong>${sampleReport.events_per_second} / sec</strong><span>event rate</span></div><div><strong>${sampleReport.fields.length}</strong><span>field paths</span></div><div><strong>${sampleReport.findings.length}</strong><span>findings in ${reviewFields} field paths</span></div></section>
+      <section class="report" aria-labelledby="risk-title"><div><h2 id="risk-title">Review possible sensitive data</h2><p>Detectors are conservative. A match needs a human decision.</p>${findingMarkup()}</div><div><h2>Retention estimate</h2><p>At this sample rate and average event size:</p><dl><dt>7 days</dt><dd>about ${sevenDays.display}</dd><dt>30 days</dt><dd>about ${thirtyDays.display}</dd></dl><h2>Generate a forwarding configuration</h2><p>Run this separate command after reviewing the report:</p><pre tabindex="0"><code>$ drain-check forwarding --url https://receiver.example/logs
 # generic-http
 # Send POST requests to this endpoint after report review
 url = "https://receiver.example/logs"

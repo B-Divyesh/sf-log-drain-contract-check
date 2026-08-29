@@ -153,6 +153,24 @@ fn help_lists_each_command_and_its_options() {
 }
 
 #[test]
+fn forwarding_rejects_control_character_platform_labels() {
+    let result = drain_check()
+        .args([
+            "forwarding",
+            "--url",
+            "https://receiver.example/logs",
+            "--platform",
+            "generic-http\nurl = \"https://attacker.invalid\"",
+        ])
+        .output()
+        .unwrap();
+
+    assert!(!result.status.success());
+    assert!(String::from_utf8_lossy(&result.stderr).contains("control characters"));
+    assert!(!String::from_utf8_lossy(&result.stdout).contains("attacker.invalid"));
+}
+
+#[test]
 fn version_matches_the_released_changelog_section() {
     let result = drain_check().arg("--version").output().unwrap();
 

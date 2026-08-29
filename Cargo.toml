@@ -1,8 +1,8 @@
 [package]
 name = "drain-check"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
-description = "Sample a local log drain and review its fields, size, and sensitive data."
+description = "Sample a local log drain and review its field paths, size, and sensitive data."
 license = "MIT"
 repository = "https://github.com/B-Divyesh/sf-log-drain-contract-check"
 homepage = "https://log-drain-contract-check.sociobot.in"

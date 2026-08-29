@@ -11,7 +11,7 @@
     "claim": "The website makes no third-party requests or storage writes, and the receiver binds only to loopback.",
     "where": "landing facts, privacy page, README",
     "test": "npm test -- -t @claim:local-only",
-    "sandbox": "fresh browser context records requests, cookies, and storage; Rust regression asserts the bound address is loopback"
+    "sandbox": "fresh browser context runs landing → demo → reset → local setup, records same-origin requests, and asserts empty cookies, Web Storage, IndexedDB, Cache Storage, service workers, and OPFS; Rust regression asserts the bound address is loopback"
   },
   {
     "id": "discard-default",
@@ -29,10 +29,10 @@
   },
   {
     "id": "forwarding-config",
-    "claim": "The separate forwarding command validates an HTTP(S) URL and safely renders it in a configuration.",
+    "claim": "The separate forwarding command validates an HTTP(S) URL, rejects control characters in its platform label, and safely renders a configuration.",
     "where": "landing recording, demo configuration section, README",
     "test": "npm test -- -t @claim:forwarding-config",
-    "sandbox": "bundled demo plus Rust regression; assert the command and generated output, reject non-HTTP destinations, and encode unsafe URL characters"
+    "sandbox": "bundled demo plus CLI regressions; assert the command and generated output, reject non-HTTP destinations and control-character platform labels, and encode unsafe URL characters"
   },
   {
     "id": "source-checkout",
@@ -71,10 +71,10 @@
   },
   {
     "id": "separate-output-paths",
-    "claim": "The receiver refuses matching --output and --save-sample paths before opening its listener.",
+    "claim": "The receiver refuses matching --output and --save-sample paths before starting.",
     "where": "README, CLI validation message",
     "test": "npm test -- -t @claim:separate-output-paths",
-    "sandbox": "use the same existing path for both options; assert startup fails before binding and the existing file stays unchanged"
+    "sandbox": "use the same existing path for both options; assert startup fails before the receiver binds and the existing file stays unchanged"
   },
   {
     "id": "minimum-sample-duration",
@@ -102,7 +102,7 @@
     "claim": "Ctrl-C finishes the sample early and writes its report.",
     "where": "CLI runtime help",
     "test": "npm test -- -t @claim:interrupt-report",
-    "sandbox": "start the compiled listener for 60 seconds, send SIGINT, assert successful exit and a valid report"
+    "sandbox": "start the compiled receiver for 60 seconds, send SIGINT, assert successful exit and a valid report"
   },
   {
     "id": "portable-demo",
@@ -113,10 +113,10 @@
   },
   {
     "id": "site-build-output",
-    "claim": "The static site build writes deployable files and deployment configuration to dist/site.",
+    "claim": "The static site build writes deployable files and Azure Static Web Apps configuration to dist/site.",
     "where": "README",
     "test": "npm test -- -t @claim:site-build-output",
-    "sandbox": "fresh checkout; run npm run build:site and assert dist/site/index.html plus dist/site/staticwebapp.config.json"
+    "sandbox": "fresh checkout; run npm run build:site and assert dist/site/index.html plus a root staticwebapp.config.json with route rewrites, 404 handling, security headers, and asset caching"
   },
   {
     "id": "mit-license",

@@ -1,7 +1,8 @@
-import { execFileSync } from 'node:child_process';
+import { execFile, execFileSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { promisify } from 'node:util';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { chromium, type Browser } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
@@ -15,6 +16,7 @@ const routes = ['/', '/?demo=1', '/demo', '/privacy', '/terms', '/missing'];
 // legitimately takes longer than Vitest's 5s default, while the behavior checks
 // below still run unchanged after compilation completes.
 const CARGO_CLAIM_TIMEOUT_MS = 60_000;
+const execFileAsync = promisify(execFile);
 
 function manifestVersion() {
   const cargo = readFileSync('Cargo.toml', 'utf8');
@@ -35,6 +37,44 @@ afterAll(async () => {
 function cargoTest(name: string) {
   execFileSync('cargo', ['test', '--locked', name], { cwd: process.cwd(), stdio: 'pipe' });
 }
+
+async function browserStorageSnapshot(page: import('playwright').Page) {
+  return page.evaluate(async () => {
+    const idbFactory = indexedDB as IDBFactory & {
+      databases?: () => Promise<Array<{ name?: string }>>;
+    };
+    const indexedDb = idbFactory.databases ? await idbFactory.databases() : [];
+    const cacheNames = await caches.keys();
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    const storageManager = navigator.storage as StorageManager & {
+      getDirectory?: () => Promise<FileSystemDirectoryHandle>;
+    };
+    const opfsEntries: string[] = [];
+    if (storageManager.getDirectory) {
+      const directory = await storageManager.getDirectory();
+      for await (const [name] of directory.entries()) opfsEntries.push(name);
+    }
+    return {
+      cookies: document.cookie,
+      local: Object.keys(localStorage),
+      session: Object.keys(sessionStorage),
+      indexedDb: indexedDb.map(({ name }) => name ?? ''),
+      cacheNames,
+      registrations: registrations.map(({ scope }) => scope),
+      opfsEntries,
+    };
+  });
+}
+
+const emptyBrowserStorage = {
+  cookies: '',
+  local: [],
+  session: [],
+  indexedDb: [],
+  cacheNames: [],
+  registrations: [],
+  opfsEntries: [],
+};
 
 describe('claims contract', () => {
   it('lists one executable tagged test for every declared claim', () => {
@@ -60,7 +100,7 @@ describe('published claims', () => {
     expect(await page.getByText('558.1 KiB').count()).toBe(1);
     expect(await page.getByText('2.3 MiB').count()).toBe(1);
     expect(await page.getByText('17', { exact: true }).count()).toBe(1);
-    expect(await page.getByText('findings across 2 fields', { exact: true }).count()).toBe(1);
+    expect(await page.getByText('findings in 2 field paths', { exact: true }).count()).toBe(1);
     expect(await page.locator('.report li').filter({ hasText: 'secret-shaped value' }).count()).toBe(1);
     expect(await page.locator('.report li').filter({ hasText: 'sensitive field name' }).count()).toBe(1);
     expect(await page.locator('.report li').filter({ hasText: 'email-shaped value' }).count()).toBe(1);
@@ -73,17 +113,20 @@ describe('published claims', () => {
     const page = await context.newPage();
     const requests: string[] = [];
     page.on('request', (request) => requests.push(request.url()));
-    await page.goto(`${base}/?demo=1`);
-    expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
+    await page.goto(base);
+    await page.getByRole('link', { name: 'Try it with sample data' }).click();
+    expect(page.url()).toBe(`${base}/?demo=1`);
+    expect(await browserStorageSnapshot(page)).toEqual(emptyBrowserStorage);
     await page.evaluate(() => localStorage.setItem('real:drain-check', 'keep'));
     await page.getByRole('button', { name: 'Reset demo' }).click();
     expect(requests.every((url) => new URL(url).origin === base)).toBe(true);
     expect(await context.cookies()).toEqual([]);
     expect(await page.evaluate(() => localStorage.getItem('real:drain-check'))).toBe('keep');
     expect(await page.evaluate(() => localStorage.getItem('demo:drain-check'))).toBeNull();
-    expect(await page.evaluate(() => sessionStorage.length)).toBe(0);
-    await page.getByRole('link', { name: 'Start for real' }).click();
+    await page.getByRole('link', { name: 'View local setup' }).click();
     expect(page.url()).toBe(`${base}/`);
+    await page.evaluate(() => localStorage.removeItem('real:drain-check'));
+    expect(await browserStorageSnapshot(page)).toEqual(emptyBrowserStorage);
     await context.close();
     cargoTest('listener_binds_to_loopback');
   }, CARGO_CLAIM_TIMEOUT_MS);
@@ -102,6 +145,7 @@ describe('published claims', () => {
 
   it('@claim:forwarding-config renders a validated destination in a separate configuration', async () => {
     cargoTest('forwarding_requires_a_real_http_url_and_encodes_it_safely');
+    cargoTest('forwarding_rejects_control_character_platform_labels');
     const page = await browser.newPage();
     await page.goto(`${base}/?demo=1`);
     expect(await page.getByRole('heading', { name: 'Generate a forwarding configuration' }).count()).toBe(1);
@@ -112,12 +156,12 @@ describe('published claims', () => {
     await page.close();
   }, CARGO_CLAIM_TIMEOUT_MS);
 
-  it('@claim:source-checkout runs from a fresh public source checkout', () => {
+  it('@claim:source-checkout runs from a fresh public source checkout', async () => {
     const temporary = mkdtempSync(join(tmpdir(), 'drain-check-source-'));
     const checkout = join(temporary, 'sf-log-drain-contract-check');
     try {
-      execFileSync('git', ['clone', '--quiet', '--depth', '1', 'https://github.com/B-Divyesh/sf-log-drain-contract-check.git', checkout], { stdio: 'pipe' });
-      const output = execFileSync('cargo', ['run', '--locked', '--', '--help'], { cwd: checkout, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+      await execFileAsync('git', ['clone', '--quiet', '--depth', '1', 'https://github.com/B-Divyesh/sf-log-drain-contract-check.git', checkout]);
+      const { stdout: output } = await execFileAsync('cargo', ['run', '--locked', '--', '--help'], { cwd: checkout, encoding: 'utf8' });
       expect(output).toContain('Sample a local log drain');
       expect(output).toContain('listen');
     } finally {
@@ -172,6 +216,11 @@ describe('published claims', () => {
     const output = join(process.cwd(), 'dist', 'site');
     expect(existsSync(join(output, 'index.html'))).toBe(true);
     expect(existsSync(join(output, 'staticwebapp.config.json'))).toBe(true);
+    const config = JSON.parse(readFileSync(join(output, 'staticwebapp.config.json'), 'utf8'));
+    expect(config.routes.some((route: { route: string; rewrite?: string }) => route.route === '/privacy' && route.rewrite === '/index.html')).toBe(true);
+    expect(config.responseOverrides['404'].rewrite).toBe('/404.html');
+    expect(config.globalHeaders['Content-Security-Policy']).toContain("frame-ancestors 'none'");
+    expect(config.routes.some((route: { route: string; headers?: Record<string, string> }) => route.route === '/assets/*' && route.headers?.['Cache-Control']?.includes('immutable'))).toBe(true);
   }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:mit-license proves the stated license is present', () => {
@@ -214,7 +263,7 @@ describe('responsive and accessible site', () => {
   it('uses the demo sandbox exit label and rejects oversized request headers', async () => {
     const page = await browser.newPage();
     await page.goto(`${base}/demo`);
-    expect(await page.getByRole('link', { name: 'Start for real' }).count()).toBe(1);
+    expect(await page.getByRole('link', { name: 'View local setup' }).count()).toBe(1);
     await page.close();
     cargoTest('receiver_rejects_headers_beyond_32_kib_even_with_a_delimiter');
   }, CARGO_CLAIM_TIMEOUT_MS);
@@ -238,14 +287,14 @@ describe('responsive and accessible site', () => {
     expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('H1');
     expect(page.url()).toBe(`${base}/?demo=1`);
     await page.goBack();
-    expect(await page.getByRole('heading', { name: 'Inspect a log drain before forwarding' }).count()).toBe(1);
+    expect(await page.getByRole('heading', { name: 'Check a log drain before forwarding' }).count()).toBe(1);
     expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('H1');
     await page.close();
   });
 
   it('sets route titles, metadata, legal links, and the designed 404 contract', async () => {
     const expected = [
-      ['/', 'Drain Check — inspect a log drain sample', 'https://log-drain-contract-check.sociobot.in/'],
+      ['/', 'Drain Check — check a log drain sample', 'https://log-drain-contract-check.sociobot.in/'],
       ['/?demo=1', 'Demo — Drain Check', 'https://log-drain-contract-check.sociobot.in/?demo=1'],
       ['/privacy', 'Privacy — Drain Check', 'https://log-drain-contract-check.sociobot.in/privacy'],
       ['/terms', 'Terms — Drain Check', 'https://log-drain-contract-check.sociobot.in/terms'],

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3
+
+- Restore the demo exit label so it names the local setup screen it opens.
+- Reject control characters in forwarding platform labels.
+- Verify every browser storage surface stays empty through the web demo flow.
+- Clarify static-host deployment requirements and report field-path wording.
+
 ## 0.1.2
 
 - Measure original accepted event bytes so whitespace is included in retention estimates.

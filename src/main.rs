@@ -22,7 +22,7 @@ static RUNNING: AtomicBool = AtomicBool::new(true);
 #[command(
     name = "drain-check",
     version,
-    about = "Sample a local log drain and review its fields, size, and sensitive data."
+    about = "Sample a local log drain and review its field paths, size, and sensitive data."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -58,7 +58,7 @@ enum Command {
         #[arg(long)]
         json: bool,
     },
-    /// Analyse newline-delimited JSON from a file without opening a listener.
+    /// Analyse newline-delimited JSON from a file without opening a receiver.
     Inspect {
         input: PathBuf,
         /// Duration of the file sample in seconds. Must be at least one second.
@@ -90,7 +90,11 @@ enum Command {
             value_parser = validate_http_url
         )]
         url: Url,
-        #[arg(long, default_value = "generic-http")]
+        #[arg(
+            long,
+            default_value = "generic-http",
+            value_parser = validate_platform_label
+        )]
         platform: String,
     },
 }
@@ -151,6 +155,13 @@ fn validate_http_url(value: &str) -> Result<Url, String> {
         return Err("URL must include a valid host".to_string());
     }
     Ok(url)
+}
+
+fn validate_platform_label(value: &str) -> Result<String, String> {
+    if value.chars().any(char::is_control) {
+        return Err("platform labels must not contain control characters".to_string());
+    }
+    Ok(value.to_string())
 }
 
 fn forwarding_config(url: &Url, platform: &str) -> String {
@@ -229,7 +240,7 @@ fn write_report(report: Report, output: &Path, json: bool) -> Result<(), String>
             .collect::<HashSet<_>>()
             .len();
         println!(
-            "Reviewed {} events in {}s. {} fields. {} findings across {} fields.\nReport: {}",
+            "Reviewed {} events in {}s. {} field paths. {} findings in {} field paths.\nReport: {}",
             report.events,
             report.sample_seconds,
             report.fields.len(),
@@ -262,7 +273,7 @@ fn listen(options: ListenOptions) -> Result<(), String> {
     ctrlc::set_handler(|| RUNNING.store(false, Ordering::SeqCst))
         .map_err(|error| format!("Could not install Ctrl-C handler: {error}"))?;
     eprintln!(
-        "Drain Check listens only on http://127.0.0.1:{}/ for {}s. Press Ctrl-C to finish early and write the report.",
+        "Drain Check receives only on http://127.0.0.1:{}/ for {}s. Press Ctrl-C to finish early and write the report.",
         options.port, options.duration
     );
     run_listener(
@@ -690,6 +701,13 @@ mod tests {
         ])
         .is_err());
         assert!(Cli::try_parse_from(["drain-check", "forwarding", "--url", "not a url"]).is_err());
+        assert!(Cli::try_parse_from([
+            "drain-check",
+            "forwarding",
+            "--platform",
+            "generic-http\nurl = \"https://attacker.invalid\"",
+        ])
+        .is_err());
     }
 
     #[test]
@@ -709,6 +727,9 @@ mod tests {
         let config = forwarding_config(&url, "generic-http");
         assert!(config.contains("url = \"https://example.com/%22\""));
         assert!(!config.contains("%22\"\""));
+        let error = validate_platform_label("generic-http\nurl = \"https://attacker.invalid\"")
+            .unwrap_err();
+        assert!(error.contains("control characters"));
     }
 
     #[test]

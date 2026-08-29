@@ -1,6 +1,6 @@
 # Drain Check
 
-Inspect a log drain before forwarding it.
+Check a log drain before forwarding it.
 
 Drain Check is for small platform teams adding a managed drain. It opens a bounded local receiver, summarizes volume and field types, flags likely sensitive data, and writes a JSON report.
 
@@ -18,7 +18,7 @@ cargo run -- listen --duration 600 --port 8787 --output report.json
 # Point a temporary HTTP drain to http://127.0.0.1:8787/.
 ```
 
-The listener binds only to `127.0.0.1`. It aggregates accepted events as they arrive, then drops their parsed values and bodies. Pass `--save-sample sample.ndjson` only when you intentionally want accepted bodies written to disk. `--output` and `--save-sample` must name different files; Drain Check refuses a collision before opening the listener.
+The receiver binds only to `127.0.0.1`. It aggregates accepted events as they arrive, then drops their parsed values and bodies. Pass `--save-sample sample.ndjson` only when you intentionally want accepted bodies written to disk. `--output` and `--save-sample` must name different files; Drain Check refuses a collision before starting the receiver.
 
 Malformed or incomplete requests return HTTP 400 without ending the sample window. The default rolling limit accepts 20 requests per second, then returns HTTP 429 with `Retry-After: 1`. Change it with `--rate-limit`.
 
@@ -67,7 +67,7 @@ cargo clippy --all-targets --all-features -- -D warnings
 cargo package --locked
 ```
 
-The static site build writes deployable files and deployment configuration to `dist/site`.
+The static site build writes deployable files and Azure Static Web Apps configuration to `dist/site`.
 
 ## Deploy the static site
 
@@ -80,10 +80,10 @@ npm run build:site
 /opt/fleet/lib/deploy-static.sh log-drain-contract-check dist/site
 ```
 
-For another static host, upload the contents of `dist/site` unchanged. Keep
-`staticwebapp.config.json` with the output so the documented routes, 404 page,
-security headers, and immutable asset caching are deployed together.
+For Azure Static Web Apps, keep `staticwebapp.config.json` at the deployment
+root. On other hosts, recreate its rewrites, 404 response, headers, and cache
+rules in that host’s configuration.
 
 ## Privacy and license
 
-The website requests only same-origin files and writes no browser storage. The CLI receives data on its loopback listener. Read the deployed [Privacy page](https://log-drain-contract-check.sociobot.in/privacy) and [Terms](https://log-drain-contract-check.sociobot.in/terms). Licensed under [MIT](LICENSE).
+The website requests only same-origin files and writes no browser storage. The CLI receives data on its loopback receiver. Read the deployed [Privacy page](https://log-drain-contract-check.sociobot.in/privacy) and [Terms](https://log-drain-contract-check.sociobot.in/terms). Licensed under [MIT](LICENSE).
