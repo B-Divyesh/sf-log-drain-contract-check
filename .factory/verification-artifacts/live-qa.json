@@ -1,0 +1,1722 @@
+{
+  "routeResults": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/",
+      "status": 200,
+      "lang": "en",
+      "title": "Drain Check — inspect a log drain sample",
+      "h1Count": 1,
+      "h1": [
+        "Inspect a log drain before forwarding"
+      ],
+      "mainCount": 1,
+      "imgAlts": [
+        {
+          "src": "https://log-drain-contract-check.sociobot.in/drain-console.webp",
+          "alt": "A pixel-art local receiver sorts log packets into review lanes."
+        }
+      ],
+      "width": {
+        "client": 1440,
+        "scroll": 1440
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Try it with sample data",
+          "tag": "A",
+          "width": 239.671875,
+          "height": 46.796875
+        },
+        {
+          "text": "Replay recording",
+          "tag": "BUTTON",
+          "width": 139.59375,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+        "https://log-drain-contract-check.sociobot.in/drain-console.webp"
+      ],
+      "thirdParty": [],
+      "errors": [],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:08:47 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:08:47 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:08:47 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/drain-console.webp",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-length": "62236",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "image/webp",
+            "date": "Sat, 29 Aug 2026 05:08:47 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/demo",
+      "status": 200,
+      "lang": "en",
+      "title": "Demo — Drain Check",
+      "h1Count": 1,
+      "h1": [
+        "Review this drain sample"
+      ],
+      "mainCount": 1,
+      "imgAlts": [],
+      "width": {
+        "client": 1440,
+        "scroll": 1440
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Reset demo",
+          "tag": "BUTTON",
+          "width": 115.265625,
+          "height": 44
+        },
+        {
+          "text": "Start for real",
+          "tag": "A",
+          "width": 104.890625,
+          "height": 44
+        },
+        {
+          "text": "Read local setup",
+          "tag": "A",
+          "width": 164.40625,
+          "height": 46.796875
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/demo",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css"
+      ],
+      "thirdParty": [],
+      "errors": [],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/demo",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:08:49 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:08:49 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:08:49 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/privacy",
+      "status": 200,
+      "lang": "en",
+      "title": "Privacy — Drain Check",
+      "h1Count": 1,
+      "h1": [
+        "Your drain stays on your machine"
+      ],
+      "mainCount": 1,
+      "imgAlts": [],
+      "width": {
+        "client": 1440,
+        "scroll": 1440
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/privacy",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css"
+      ],
+      "thirdParty": [],
+      "errors": [],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/privacy",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:08:51 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:08:51 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:08:51 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/terms",
+      "status": 200,
+      "lang": "en",
+      "title": "Terms — Drain Check",
+      "h1Count": 1,
+      "h1": [
+        "Use Drain Check at your own boundary"
+      ],
+      "mainCount": 1,
+      "imgAlts": [],
+      "width": {
+        "client": 1440,
+        "scroll": 1440
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/terms",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css"
+      ],
+      "thirdParty": [],
+      "errors": [],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/terms",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:08:52 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:08:52 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:08:52 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "route": "/definitely-missing",
+      "status": 404,
+      "lang": "en",
+      "title": "Not found — Drain Check",
+      "h1Count": 1,
+      "h1": [
+        "That screen is not in this receiver"
+      ],
+      "mainCount": 1,
+      "imgAlts": [],
+      "width": {
+        "client": 1440,
+        "scroll": 1440
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Return home",
+          "tag": "A",
+          "width": 140.609375,
+          "height": 48.03125
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/definitely-missing",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css"
+      ],
+      "thirdParty": [],
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/definitely-missing",
+          "status": 404,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-length": "1420",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:08:53 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:08:54 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:08:53 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "route": "/",
+      "status": 200,
+      "lang": "en",
+      "title": "Drain Check — inspect a log drain sample",
+      "h1Count": 1,
+      "h1": [
+        "Inspect a log drain before forwarding"
+      ],
+      "mainCount": 1,
+      "imgAlts": [
+        {
+          "src": "https://log-drain-contract-check.sociobot.in/drain-console.webp",
+          "alt": "A pixel-art local receiver sorts log packets into review lanes."
+        }
+      ],
+      "width": {
+        "client": 390,
+        "scroll": 390
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Try it with sample data",
+          "tag": "A",
+          "width": 239.671875,
+          "height": 46.796875
+        },
+        {
+          "text": "Replay recording",
+          "tag": "BUTTON",
+          "width": 113.15625,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+        "https://log-drain-contract-check.sociobot.in/drain-console.webp"
+      ],
+      "thirdParty": [],
+      "errors": [],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:08:55 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:08:55 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:08:55 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/drain-console.webp",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-length": "62236",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "image/webp",
+            "date": "Sat, 29 Aug 2026 05:08:55 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "route": "/demo",
+      "status": 200,
+      "lang": "en",
+      "title": "Demo — Drain Check",
+      "h1Count": 1,
+      "h1": [
+        "Review this drain sample"
+      ],
+      "mainCount": 1,
+      "imgAlts": [],
+      "width": {
+        "client": 390,
+        "scroll": 390
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Reset demo",
+          "tag": "BUTTON",
+          "width": 115.265625,
+          "height": 44
+        },
+        {
+          "text": "Start for real",
+          "tag": "A",
+          "width": 104.890625,
+          "height": 44
+        },
+        {
+          "text": "Read local setup",
+          "tag": "A",
+          "width": 164.40625,
+          "height": 46.796875
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/demo",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css"
+      ],
+      "thirdParty": [],
+      "errors": [],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/demo",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:08:56 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:08:56 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:08:56 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "route": "/privacy",
+      "status": 200,
+      "lang": "en",
+      "title": "Privacy — Drain Check",
+      "h1Count": 1,
+      "h1": [
+        "Your drain stays on your machine"
+      ],
+      "mainCount": 1,
+      "imgAlts": [],
+      "width": {
+        "client": 390,
+        "scroll": 390
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/privacy",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css"
+      ],
+      "thirdParty": [],
+      "errors": [],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/privacy",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:08:58 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:08:58 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:08:58 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "route": "/terms",
+      "status": 200,
+      "lang": "en",
+      "title": "Terms — Drain Check",
+      "h1Count": 1,
+      "h1": [
+        "Use Drain Check at your own boundary"
+      ],
+      "mainCount": 1,
+      "imgAlts": [],
+      "width": {
+        "client": 390,
+        "scroll": 390
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/terms",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css"
+      ],
+      "thirdParty": [],
+      "errors": [],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/terms",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:08:59 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:08:59 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:08:59 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "route": "/definitely-missing",
+      "status": 404,
+      "lang": "en",
+      "title": "Not found — Drain Check",
+      "h1Count": 1,
+      "h1": [
+        "That screen is not in this receiver"
+      ],
+      "mainCount": 1,
+      "imgAlts": [],
+      "width": {
+        "client": 390,
+        "scroll": 390
+      },
+      "storage": {
+        "local": [],
+        "session": [],
+        "cookies": ""
+      },
+      "targets": [
+        {
+          "text": "Skip to content",
+          "tag": "A",
+          "width": 141.515625,
+          "height": 44.796875
+        },
+        {
+          "text": "DRΛINCHECK",
+          "tag": "A",
+          "width": 59.1875,
+          "height": 44
+        },
+        {
+          "text": "Demo",
+          "tag": "A",
+          "width": 57.609375,
+          "height": 44
+        },
+        {
+          "text": "How it works",
+          "tag": "A",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 66.703125,
+          "height": 44
+        },
+        {
+          "text": "Return home",
+          "tag": "A",
+          "width": 140.609375,
+          "height": 48.03125
+        },
+        {
+          "text": "Privacy",
+          "tag": "A",
+          "width": 65.796875,
+          "height": 44
+        },
+        {
+          "text": "Terms",
+          "tag": "A",
+          "width": 56.5,
+          "height": 44
+        }
+      ],
+      "requests": [
+        "https://log-drain-contract-check.sociobot.in/definitely-missing",
+        "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+        "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css"
+      ],
+      "thirdParty": [],
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "severeAxe": [],
+      "responseHeaders": [
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/definitely-missing",
+          "status": 404,
+          "headers": {
+            "cache-control": "public, must-revalidate, max-age=30",
+            "content-length": "1420",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/html",
+            "date": "Sat, 29 Aug 2026 05:09:01 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/css",
+            "date": "Sat, 29 Aug 2026 05:09:01 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        },
+        {
+          "url": "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "br",
+            "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+            "content-type": "text/javascript",
+            "date": "Sat, 29 Aug 2026 05:09:00 GMT",
+            "etag": "\"51584707\"",
+            "last-modified": "Sat, 29 Aug 2026 04:46:20 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-xss-protection": "1; mode=block"
+          }
+        }
+      ]
+    }
+  ],
+  "firstScreen": {
+    "text": "Skip to content\nDRΛIN\nCHECK\nDemo\nHow it works\nPrivacy\n\nLOCAL PRE-FLIGHT / 10-MINUTE WINDOW\n\nInspect a log drain before forwarding\n\nFor platform teams who need volume, fields, and privacy risks before a drain stays on.\n\nTry it with sample data\nOpens a sample report. Nothing is saved.\n\nListens only on your machine.\nDiscards bodies after aggregation.\nFree under the MIT License.\nTHE RECEIVER STAYS LOCAL\n●\nbundled sample / recorded run\nReplay recording\n\nA text recording of the bundled CLI demo. Use the replay button to play it again.\n\n$ drain-check demo\nReviewed 3 events in 600s. 17 fields. 3 possible risks.\nReport: /tmp/drain-check-demo-[unique]/report.json\n\n$ drain-check forwarding --url https://receiver.example/logs\n# generic-http\nurl = \"https://receiver.example/logs\"\nmethod = \"POST\"\n\nTHE SHORT PATH\n\nReview a drain in three steps\nListen locally.\nRun one bounded window.\nRead the contract.\nCheck fields and likely secrets.\nForward with intent.\nUse the generated template.\nWhat Drain Check does not do\n\nIt does not store logs, search logs, or send them to a vendor.\n\nUse --save-sample only when you choose to retain accepted bodies.\n\nDrain Check samples a log drain before you forward it.\n\nPrivacy · Terms · Built by Param Factory · v0.1.0+e6fac708cdc5\n\nDrain Check — inspect a log drain sample",
+    "action": {
+      "top": 423.453125,
+      "bottom": 470.25,
+      "width": 239.671875,
+      "height": 46.796875
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "keyboardSteps": [
+    {
+      "tag": "A",
+      "text": "Skip to content",
+      "href": "#main",
+      "outline": "3px solid rgb(255, 214, 107)",
+      "boxShadow": "none"
+    },
+    {
+      "tag": "A",
+      "text": "DRΛINCHECK",
+      "href": "/",
+      "outline": "3px solid rgb(255, 214, 107)",
+      "boxShadow": "none"
+    },
+    {
+      "tag": "A",
+      "text": "Demo",
+      "href": "/demo",
+      "outline": "3px solid rgb(255, 214, 107)",
+      "boxShadow": "none"
+    },
+    {
+      "tag": "A",
+      "text": "How it works",
+      "href": "/#how",
+      "outline": "3px solid rgb(255, 214, 107)",
+      "boxShadow": "none"
+    },
+    {
+      "tag": "A",
+      "text": "Privacy",
+      "href": "/privacy",
+      "outline": "3px solid rgb(255, 214, 107)",
+      "boxShadow": "none"
+    },
+    {
+      "tag": "A",
+      "text": "Try it with sample data",
+      "href": "/demo",
+      "outline": "3px solid rgb(255, 214, 107)",
+      "boxShadow": "none"
+    }
+  ],
+  "demoAfterKeyboard": {
+    "url": "https://log-drain-contract-check.sociobot.in/demo",
+    "active": {
+      "tag": "H1",
+      "text": "Review this drain sample"
+    },
+    "banner": "Demo — sample data, nothing is savedReset demoStart for real",
+    "body": "Skip to content\nDRΛIN\nCHECK\nDemo\nHow it works\nPrivacy\nDemo — sample data, nothing is saved\nReset demo\nStart for real\n\nSAMPLE REPORT / 10-MINUTE WINDOW\n\nReview this drain sample\n\nThis report uses bundled checkout logs. It is separate from any real run.\n\n3\nevents\n0.005 / sec\nevent rate\n17\nfield paths\n2\nreview fields\nReview possible sensitive fields\n\nDetectors are conservative. A match needs a human decision.\n\n$.request.authorization HIGH\n\nsensitive field name\n\nReview this field before forwarding.\n\n$.request.user_email MEDIUM\n\nemail-shaped value\n\nConfirm that this identifier belongs in the drain.\n\nRetention estimate\n\nAt this sample rate and average event size:\n\n7 days\nabout 558.1 KiB\n30 days\nabout 2.3 MiB\nForwarding template\nurl = \"https://receiver.example/logs\"\nmethod = \"POST\"\ncontent_type = \"application/json\"\n\nRead local setup\n\nDrain Check samples a log drain before you forward it.\n\nPrivacy · Terms · Built by Param Factory · v0.1.0+e6fac708cdc5\n\nDemo — Drain Check",
+    "storage": {
+      "local": [],
+      "session": [],
+      "cookies": ""
+    }
+  },
+  "resetResult": {
+    "active": "Review this drain sample",
+    "local": [],
+    "session": []
+  },
+  "startRealResult": {
+    "url": "https://log-drain-contract-check.sociobot.in/",
+    "active": {
+      "tag": "H1",
+      "text": "Inspect a log drain before forwarding"
+    }
+  },
+  "textResize": {
+    "clientWidth": 390,
+    "scrollWidth": 390,
+    "bodyScrollWidth": 390
+  },
+  "flowRequests": [
+    "https://log-drain-contract-check.sociobot.in/",
+    "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+    "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+    "https://log-drain-contract-check.sociobot.in/drain-console.webp",
+    "https://log-drain-contract-check.sociobot.in/",
+    "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+    "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+    "https://log-drain-contract-check.sociobot.in/drain-console.webp"
+  ],
+  "flowThirdParty": [],
+  "flowErrors": [],
+  "reducedMotion": {
+    "media": true,
+    "animations": [],
+    "maxDurations": [
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      },
+      {
+        "animation": "1e-05s",
+        "transition": "1e-05s"
+      }
+    ]
+  }
+}

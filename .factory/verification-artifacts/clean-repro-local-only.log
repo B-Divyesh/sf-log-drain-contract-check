@@ -1,0 +1,67 @@
+clone_head=e6fac708cdc54e2d0edb8804bce588a7906968df
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+
+added 96 packages, and audited 97 packages in 3s
+
+22 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:local-only
+
+
+ RUN  v3.2.7 /tmp/tmp.w3ORMxmsdc/repo
+
+ ❯ site/e2e.test.ts (25 tests | 1 failed | 24 skipped) 29321ms
+   ↓ published claims > @claim:sample-demo opens a quantitatively correct report and saves nothing
+   × published claims > @claim:local-only makes no third-party request or browser storage write 28381ms
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+   ↓ published claims > @claim:discard-default proves accepted values are absent from the report
+   ↓ published claims > @claim:contract-report proves fields, types, findings, and retention values
+   ↓ published claims > @claim:false-positive-controls proves custom and ignored field handling
+   ↓ published claims > @claim:rate-limit proves the rolling request threshold
+   ↓ published claims > @claim:request-recovery proves bad requests do not end the window
+   ↓ published claims > @claim:explicit-save writes only accepted bodies when requested
+   ↓ published claims > @claim:interrupt-report writes a report after Ctrl-C
+   ↓ published claims > @claim:portable-demo runs the embedded sample outside the repository
+   ↓ published claims > @claim:mit-license proves the stated license is present
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /demo
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /privacy
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /terms
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /missing
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /demo
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /privacy
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /terms
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /missing
+   ↓ responsive and accessible site > keeps the primary action visible on a 390px first screen
+   ↓ responsive and accessible site > moves focus to the route heading after keyboard navigation
+   ↓ responsive and accessible site > keeps links touch-sized and content visible at 200% text size
+   ↓ responsive and accessible site > supports keyboard reset and reduced motion
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  site/e2e.test.ts > published claims > @claim:local-only makes no third-party request or browser storage write
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ site/e2e.test.ts:44:3
+     42|   });
+     43| 
+     44|   it('@claim:local-only makes no third-party request or browser storag…
+       |   ^
+     45|     const context = await browser.newContext();
+     46|     const page = await context.newPage();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 24 skipped (25)
+   Start at  05:13:13
+   Duration  31.14s (transform 93ms, setup 0ms, collect 794ms, tests 29.32s, environment 0ms, prepare 126ms)
+
+claim_exit=1

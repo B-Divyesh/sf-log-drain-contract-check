@@ -1,0 +1,203 @@
+{
+  "rateLimit": {
+    "port": 42351,
+    "directory": "/tmp/drain-check-independent-qez2pW",
+    "output": "/tmp/drain-check-independent-qez2pW/report.json",
+    "bound": [
+      "   7: 0100007F:A56F 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 60174 1 00000000d23b77bd 100 0 0 10 0                     "
+    ],
+    "result": {
+      "statuses": {
+        "202": 20,
+        "429": 1
+      },
+      "limited": [
+        {
+          "status": 429,
+          "retryAfter": "1",
+          "body": "Rate limit reached. Retry in one second.\n"
+        }
+      ]
+    },
+    "exit": {
+      "code": 0,
+      "signal": null
+    },
+    "stdout": "Reviewed 20 events in 1s. 2 fields. 0 possible risks.\nReport: /tmp/drain-check-independent-qez2pW/report.json\n",
+    "stderr": "Drain Check listens only on http://127.0.0.1:42351/ for 4s. Press Ctrl-C to finish early and write the report.\n",
+    "report": {
+      "events": 20,
+      "sample_seconds": 1,
+      "events_per_second": 20,
+      "average_event_bytes": 11,
+      "fields": [
+        {
+          "path": "$",
+          "types": [
+            "object"
+          ],
+          "present_in": 20
+        },
+        {
+          "path": "$.index",
+          "types": [
+            "integer"
+          ],
+          "present_in": 20
+        }
+      ],
+      "findings": [],
+      "retention": [
+        {
+          "days": 7,
+          "estimated_bytes": 133056000,
+          "display": "126.9 MiB"
+        },
+        {
+          "days": 30,
+          "estimated_bytes": 570240000,
+          "display": "543.8 MiB"
+        }
+      ],
+      "bodies_saved": false,
+      "forwarding": "Forward only after review. Keep the receiving URL in your platform's secret store."
+    }
+  },
+  "recovery": {
+    "port": 34187,
+    "directory": "/tmp/drain-check-independent-dbPvxI",
+    "output": "/tmp/drain-check-independent-dbPvxI/report.json",
+    "bound": [
+      "   6: 0100007F:858B 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 61566 1 00000000901a739d 100 0 0 10 0                     "
+    ],
+    "result": {
+      "first": {
+        "status": 202,
+        "retryAfter": null,
+        "body": ""
+      },
+      "malformed": {
+        "status": 400,
+        "retryAfter": null,
+        "body": "Invalid JSON on line 1: key must be a string at line 1 column 2\n"
+      },
+      "short": {
+        "status": 400,
+        "raw": "HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: 47\r\nConnection: close\r\n\r\nRequest ended before its declared body length.\n"
+      },
+      "second": {
+        "status": 202,
+        "retryAfter": null,
+        "body": ""
+      }
+    },
+    "exit": {
+      "code": 0,
+      "signal": null
+    },
+    "stdout": "Reviewed 2 events in 1s. 2 fields. 0 possible risks.\nReport: /tmp/drain-check-independent-dbPvxI/report.json\n",
+    "stderr": "Drain Check listens only on http://127.0.0.1:34187/ for 4s. Press Ctrl-C to finish early and write the report.\nRejected request: Invalid JSON on line 1: key must be a string at line 1 column 2\nRejected request: Request ended before its declared body length.\n",
+    "report": {
+      "events": 2,
+      "sample_seconds": 1,
+      "events_per_second": 2,
+      "average_event_bytes": 14,
+      "fields": [
+        {
+          "path": "$",
+          "types": [
+            "object"
+          ],
+          "present_in": 2
+        },
+        {
+          "path": "$.accepted",
+          "types": [
+            "integer"
+          ],
+          "present_in": 2
+        }
+      ],
+      "findings": [],
+      "retention": [
+        {
+          "days": 7,
+          "estimated_bytes": 16934400,
+          "display": "16.1 MiB"
+        },
+        {
+          "days": 30,
+          "estimated_bytes": 72576000,
+          "display": "69.2 MiB"
+        }
+      ],
+      "bodies_saved": false,
+      "forwarding": "Forward only after review. Keep the receiving URL in your platform's secret store."
+    }
+  },
+  "saved": {
+    "port": 40857,
+    "directory": "/tmp/drain-check-independent-yVxDfm",
+    "output": "/tmp/drain-check-independent-yVxDfm/report.json",
+    "bound": [
+      "  16: 0100007F:9F99 00000000:0000 0A 00000000:00000000 00:00000000 00000000     0        0 62518 1 0000000019420d67 100 0 0 10 0                     "
+    ],
+    "result": {
+      "malformed": {
+        "status": 400,
+        "retryAfter": null,
+        "body": "Invalid JSON on line 1: key must be a string at line 1 column 2\n"
+      },
+      "accepted": {
+        "status": 202,
+        "retryAfter": null,
+        "body": ""
+      },
+      "samplePath": "/tmp/drain-check-independent-yVxDfm/accepted.ndjson"
+    },
+    "exit": {
+      "code": 0,
+      "signal": null
+    },
+    "stdout": "Reviewed 1 events in 1s. 2 fields. 0 possible risks.\nReport: /tmp/drain-check-independent-yVxDfm/report.json\n",
+    "stderr": "Drain Check listens only on http://127.0.0.1:40857/ for 4s. Press Ctrl-C to finish early and write the report.\nRejected request: Invalid JSON on line 1: key must be a string at line 1 column 2\n",
+    "report": {
+      "events": 1,
+      "sample_seconds": 1,
+      "events_per_second": 1,
+      "average_event_bytes": 14,
+      "fields": [
+        {
+          "path": "$",
+          "types": [
+            "object"
+          ],
+          "present_in": 1
+        },
+        {
+          "path": "$.saved",
+          "types": [
+            "boolean"
+          ],
+          "present_in": 1
+        }
+      ],
+      "findings": [],
+      "retention": [
+        {
+          "days": 7,
+          "estimated_bytes": 8467200,
+          "display": "8.1 MiB"
+        },
+        {
+          "days": 30,
+          "estimated_bytes": 36288000,
+          "display": "34.6 MiB"
+        }
+      ],
+      "bodies_saved": true,
+      "forwarding": "Forward only after review. Keep the receiving URL in your platform's secret store."
+    },
+    "savedBody": "{\"saved\":true}\n"
+  }
+}

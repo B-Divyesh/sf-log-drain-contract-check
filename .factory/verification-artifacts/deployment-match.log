@@ -1,0 +1,14 @@
+index_match=0
+js_match=0
+css_match=0
+hero_match=0
+robots_match=0
+sitemap_match=0
+efd54d00c4d2ca33cc0a8f89d1f434ad5d38f50f57b4ad9072f8c3265b3de31b  dist/site/index.html
+efd54d00c4d2ca33cc0a8f89d1f434ad5d38f50f57b4ad9072f8c3265b3de31b  .factory/verification-artifacts/live-index.html
+c908e34c77f4112d08753a6e0094d737b6691b8ebef949f12c547705c9f4217c  dist/site/assets/main-Bw1H4TYj.js
+c908e34c77f4112d08753a6e0094d737b6691b8ebef949f12c547705c9f4217c  .factory/verification-artifacts/live-main.js
+f069cc27cdc17de0eae439da24040335646df448dd4896a470696a3585b3fd1d  dist/site/assets/main-L8INxU4s.css
+f069cc27cdc17de0eae439da24040335646df448dd4896a470696a3585b3fd1d  .factory/verification-artifacts/live-main.css
+c0e5af606afa989be2ba8e70efa396cf7509be730d16ed854045da823ef1b21b  dist/site/drain-console.webp
+c0e5af606afa989be2ba8e70efa396cf7509be730d16ed854045da823ef1b21b  .factory/verification-artifacts/live-drain-console.webp

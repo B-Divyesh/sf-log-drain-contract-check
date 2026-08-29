@@ -1,0 +1,178 @@
+{
+  "width": 390,
+  "doc": {
+    "scrollHeight": 3128,
+    "scrollWidth": 390
+  },
+  "sections": [
+    {
+      "class": "hero",
+      "text": "Inspect a log drain before forwarding",
+      "rect": {
+        "x": 16,
+        "y": 105,
+        "width": 358,
+        "height": 986.6875,
+        "bottom": 1091.6875
+      },
+      "display": "grid",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "visible"
+    },
+    {
+      "class": "terminal",
+      "text": "",
+      "rect": {
+        "x": 32,
+        "y": 1099.6875,
+        "width": 326,
+        "height": 370.125,
+        "bottom": 1469.8125
+      },
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "auto"
+    },
+    {
+      "class": "steps",
+      "text": "Review a drain in three steps",
+      "rect": {
+        "x": 16,
+        "y": 1533.8125,
+        "width": 358,
+        "height": 522.34375,
+        "bottom": 2056.15625
+      },
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "visible"
+    },
+    {
+      "class": "limits",
+      "text": "What Drain Check does not do",
+      "rect": {
+        "x": 16,
+        "y": 2056.15625,
+        "width": 358,
+        "height": 357.15625,
+        "bottom": 2413.3125
+      },
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "visible"
+    },
+    {
+      "class": "install",
+      "text": "Start a bounded receiver",
+      "rect": {
+        "x": 16,
+        "y": 2413.3125,
+        "width": 358,
+        "height": 533.125,
+        "bottom": 2946.4375
+      },
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "visible"
+    }
+  ]
+}
+{
+  "width": 1440,
+  "doc": {
+    "scrollHeight": 2351,
+    "scrollWidth": 1440
+  },
+  "sections": [
+    {
+      "class": "hero",
+      "text": "Inspect a log drain before forwarding",
+      "rect": {
+        "x": 168,
+        "y": 78,
+        "width": 1104,
+        "height": 625.1875,
+        "bottom": 703.1875
+      },
+      "display": "grid",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "visible"
+    },
+    {
+      "class": "terminal",
+      "text": "",
+      "rect": {
+        "x": 192,
+        "y": 719.1875,
+        "width": 1056,
+        "height": 277.75,
+        "bottom": 996.9375
+      },
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "auto"
+    },
+    {
+      "class": "steps",
+      "text": "Review a drain in three steps",
+      "rect": {
+        "x": 168,
+        "y": 1092.9375,
+        "width": 1104,
+        "height": 373.359375,
+        "bottom": 1466.296875
+      },
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "visible"
+    },
+    {
+      "class": "limits",
+      "text": "What Drain Check does not do",
+      "rect": {
+        "x": 312,
+        "y": 1466.296875,
+        "width": 816,
+        "height": 312.96875,
+        "bottom": 1779.265625
+      },
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "visible"
+    },
+    {
+      "class": "install",
+      "text": "Start a bounded receiver",
+      "rect": {
+        "x": 168,
+        "y": 1779.265625,
+        "width": 1104,
+        "height": 465.84375,
+        "bottom": 2245.109375
+      },
+      "display": "block",
+      "visibility": "visible",
+      "opacity": "1",
+      "position": "static",
+      "overflow": "visible"
+    }
+  ]
+}

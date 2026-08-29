@@ -1,0 +1,247 @@
+
+CLAIM sample-demo
+COMMAND npm test -- -t @claim:sample-demo
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:sample-demo
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 1409ms
+   ✓ published claims > @claim:sample-demo opens a quantitatively correct report and saves nothing  767ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:02:37
+   Duration  3.19s (transform 61ms, setup 0ms, collect 753ms, tests 1.41s, environment 0ms, prepare 163ms)
+
+EXIT 0
+
+CLAIM local-only
+COMMAND npm test -- -t @claim:local-only
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:local-only
+
+
+ RUN  v3.2.7 /work/repo
+
+ ❯ site/e2e.test.ts (25 tests | 1 failed | 24 skipped) 28060ms
+   ↓ published claims > @claim:sample-demo opens a quantitatively correct report and saves nothing
+   × published claims > @claim:local-only makes no third-party request or browser storage write 27165ms
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+   ↓ published claims > @claim:discard-default proves accepted values are absent from the report
+   ↓ published claims > @claim:contract-report proves fields, types, findings, and retention values
+   ↓ published claims > @claim:false-positive-controls proves custom and ignored field handling
+   ↓ published claims > @claim:rate-limit proves the rolling request threshold
+   ↓ published claims > @claim:request-recovery proves bad requests do not end the window
+   ↓ published claims > @claim:explicit-save writes only accepted bodies when requested
+   ↓ published claims > @claim:interrupt-report writes a report after Ctrl-C
+   ↓ published claims > @claim:portable-demo runs the embedded sample outside the repository
+   ↓ published claims > @claim:mit-license proves the stated license is present
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /demo
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /privacy
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /terms
+   ↓ responsive and accessible site > has no serious accessibility violations at 1440px on /missing
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /demo
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /privacy
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /terms
+   ↓ responsive and accessible site > has no serious accessibility violations at 390px on /missing
+   ↓ responsive and accessible site > keeps the primary action visible on a 390px first screen
+   ↓ responsive and accessible site > moves focus to the route heading after keyboard navigation
+   ↓ responsive and accessible site > keeps links touch-sized and content visible at 200% text size
+   ↓ responsive and accessible site > supports keyboard reset and reduced motion
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  site/e2e.test.ts > published claims > @claim:local-only makes no third-party request or browser storage write
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ site/e2e.test.ts:44:3
+     42|   });
+     43| 
+     44|   it('@claim:local-only makes no third-party request or browser storag…
+       |   ^
+     45|     const context = await browser.newContext();
+     46|     const page = await context.newPage();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 24 skipped (25)
+   Start at  05:02:41
+   Duration  29.74s (transform 63ms, setup 0ms, collect 742ms, tests 28.06s, environment 0ms, prepare 199ms)
+
+EXIT 1
+
+CLAIM discard-default
+COMMAND npm test -- -t @claim:discard-default
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:discard-default
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 1350ms
+   ✓ published claims > @claim:discard-default proves accepted values are absent from the report  807ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:03:12
+   Duration  3.19s (transform 95ms, setup 0ms, collect 854ms, tests 1.35s, environment 0ms, prepare 230ms)
+
+EXIT 0
+
+CLAIM contract-report
+COMMAND npm test -- -t @claim:contract-report
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:contract-report
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 754ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:03:16
+   Duration  2.50s (transform 135ms, setup 0ms, collect 754ms, tests 754ms, environment 0ms, prepare 174ms)
+
+EXIT 0
+
+CLAIM false-positive-controls
+COMMAND npm test -- -t @claim:false-positive-controls
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:false-positive-controls
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 782ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:03:19
+   Duration  2.57s (transform 103ms, setup 0ms, collect 792ms, tests 782ms, environment 0ms, prepare 224ms)
+
+EXIT 0
+
+CLAIM rate-limit
+COMMAND npm test -- -t @claim:rate-limit
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:rate-limit
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 719ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:03:23
+   Duration  2.53s (transform 93ms, setup 0ms, collect 782ms, tests 719ms, environment 0ms, prepare 205ms)
+
+EXIT 0
+
+CLAIM request-recovery
+COMMAND npm test -- -t @claim:request-recovery
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:request-recovery
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 1426ms
+   ✓ published claims > @claim:request-recovery proves bad requests do not end the window  696ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:03:26
+   Duration  3.22s (transform 211ms, setup 0ms, collect 863ms, tests 1.43s, environment 0ms, prepare 296ms)
+
+EXIT 0
+
+CLAIM explicit-save
+COMMAND npm test -- -t @claim:explicit-save
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:explicit-save
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 751ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:03:30
+   Duration  2.52s (transform 146ms, setup 0ms, collect 803ms, tests 751ms, environment 0ms, prepare 107ms)
+
+EXIT 0
+
+CLAIM interrupt-report
+COMMAND npm test -- -t @claim:interrupt-report
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:interrupt-report
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 921ms
+   ✓ published claims > @claim:interrupt-report writes a report after Ctrl-C  337ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:03:34
+   Duration  2.67s (transform 270ms, setup 0ms, collect 745ms, tests 921ms, environment 0ms, prepare 291ms)
+
+EXIT 0
+
+CLAIM portable-demo
+COMMAND npm test -- -t @claim:portable-demo
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:portable-demo
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 706ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:03:37
+   Duration  2.46s (transform 99ms, setup 0ms, collect 748ms, tests 706ms, environment 0ms, prepare 174ms)
+
+EXIT 0
+
+CLAIM mit-license
+COMMAND npm test -- -t @claim:mit-license
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:mit-license
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests | 24 skipped) 678ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:03:41
+   Duration  2.40s (transform 139ms, setup 0ms, collect 803ms, tests 678ms, environment 0ms, prepare 109ms)
+
+EXIT 0
+
+FAILED CLAIM COMMANDS 1

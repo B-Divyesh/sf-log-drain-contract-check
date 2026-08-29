@@ -1,0 +1,4 @@
+invalid_json_exit=1
+bad_url_exit=2
+zero_duration_exit=2
+zero_port_exit=2

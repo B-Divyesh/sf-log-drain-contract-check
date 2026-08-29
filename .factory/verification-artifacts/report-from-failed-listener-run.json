@@ -1,0 +1,57 @@
+{
+  "events": 1,
+  "sample_seconds": 60,
+  "events_per_second": 0.016666666666666666,
+  "average_event_bytes": 66,
+  "fields": [
+    {
+      "path": "$",
+      "types": [
+        "object"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.message",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.password",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    }
+  ],
+  "findings": [
+    {
+      "path": "$.password",
+      "detector": "secret-shaped value",
+      "confidence": "high",
+      "action": "Mask this value or exclude the field."
+    },
+    {
+      "path": "$.password",
+      "detector": "sensitive field name",
+      "confidence": "high",
+      "action": "Review this field before forwarding."
+    }
+  ],
+  "retention": [
+    {
+      "days": 7,
+      "estimated_bytes": 665280,
+      "display": "649.7 KiB"
+    },
+    {
+      "days": 30,
+      "estimated_bytes": 2851200,
+      "display": "2.7 MiB"
+    }
+  ],
+  "bodies_saved": false,
+  "forwarding": "Forward only after review. Keep the receiving URL in your platform's secret store."
+}

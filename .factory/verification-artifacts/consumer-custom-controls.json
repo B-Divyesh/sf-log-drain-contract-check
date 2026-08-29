@@ -1,0 +1,72 @@
+{
+  "events": 2,
+  "sample_seconds": 60,
+  "events_per_second": 0.03333333333333333,
+  "average_event_bytes": 61,
+  "fields": [
+    {
+      "path": "$",
+      "types": [
+        "object"
+      ],
+      "present_in": 2
+    },
+    {
+      "path": "$.internal_code",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.items",
+      "types": [
+        "array"
+      ],
+      "present_in": 2
+    },
+    {
+      "path": "$.items[]",
+      "types": [
+        "object"
+      ],
+      "present_in": 2
+    },
+    {
+      "path": "$.items[].id",
+      "types": [
+        "integer"
+      ],
+      "present_in": 2
+    },
+    {
+      "path": "$.request_id",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    }
+  ],
+  "findings": [
+    {
+      "path": "$.internal_code",
+      "detector": "sensitive field name",
+      "confidence": "high",
+      "action": "Review this field before forwarding."
+    }
+  ],
+  "retention": [
+    {
+      "days": 7,
+      "estimated_bytes": 1229760,
+      "display": "1.2 MiB"
+    },
+    {
+      "days": 30,
+      "estimated_bytes": 5270400,
+      "display": "5.0 MiB"
+    }
+  ],
+  "bodies_saved": false,
+  "forwarding": "Forward only after review. Keep the receiving URL in your platform's secret store."
+}

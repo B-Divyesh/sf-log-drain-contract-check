@@ -1,0 +1,9 @@
+
+CLAIM sample-demo
+COMMAND npm test -- -t @claim:sample-demo
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**' -t @claim:sample-demo
+
+sh: 1: vitest: not found
+EXIT 127

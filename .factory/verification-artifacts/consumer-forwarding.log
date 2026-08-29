@@ -1,0 +1,5 @@
+# generic-http
+# Send POST requests to this endpoint after contract review
+url = "https://receiver.example/logs?team=core"
+method = "POST"
+content_type = "application/json"

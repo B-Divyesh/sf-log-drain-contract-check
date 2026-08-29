@@ -1,0 +1,35 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running unittests src/lib.rs (target/debug/deps/drain_check-0cc6f31fc8c56dc5)
+
+running 4 tests
+test tests::counts_array_path_once_per_event ... ok
+test tests::detects_without_storing_values ... ok
+test tests::documented_sample_has_exact_metrics ... ok
+test tests::supports_custom_patterns_and_explicit_suppression ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/drain_check-57cb4e19b2006f70)
+
+running 7 tests
+test tests::cli_rejects_invalid_listener_and_forwarding_values ... ok
+test tests::listener_binds_to_loopback ... ok
+test tests::rate_limit_has_a_rolling_threshold ... ok
+test tests::rate_limit_returns_429_with_retry_after ... ok
+test tests::receiver_rejects_bad_requests_and_keeps_prior_events ... ok
+test tests::rejects_malformed_payload_transactionally ... ok
+test tests::save_sample_writes_only_accepted_bodies_when_requested ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.79s
+
+     Running tests/cli_release.rs (target/debug/deps/cli_release-73ed7b86e67392be)
+
+running 2 tests
+test installed_demo_runs_outside_repository ... ok
+test interrupt_writes_the_partial_report ... Drain Check listens only on http://127.0.0.1:36145/ for 60s. Press Ctrl-C to finish early and write the report.
+Reviewed 0 events in 1s. 0 fields. 0 possible risks.
+Report: /tmp/.tmpepit6q/interrupted.json
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+

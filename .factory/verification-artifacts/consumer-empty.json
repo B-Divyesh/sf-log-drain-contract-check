@@ -1,0 +1,22 @@
+{
+  "events": 0,
+  "sample_seconds": 10,
+  "events_per_second": 0.0,
+  "average_event_bytes": 0,
+  "fields": [],
+  "findings": [],
+  "retention": [
+    {
+      "days": 7,
+      "estimated_bytes": 0,
+      "display": "0 B"
+    },
+    {
+      "days": 30,
+      "estimated_bytes": 0,
+      "display": "0 B"
+    }
+  ],
+  "bodies_saved": false,
+  "forwarding": "Forward only after review. Keep the receiving URL in your platform's secret store."
+}

@@ -1,0 +1,32 @@
+
+> drain-check-site@0.1.0 test
+> vitest run site/e2e.test.ts --exclude 'target/**'
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ site/e2e.test.ts (25 tests) 20560ms
+   ✓ published claims > @claim:sample-demo opens a quantitatively correct report and saves nothing  1413ms
+   ✓ published claims > @claim:local-only makes no third-party request or browser storage write  4886ms
+   ✓ published claims > @claim:discard-default proves accepted values are absent from the report  754ms
+   ✓ published claims > @claim:request-recovery proves bad requests do not end the window  670ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 1440px on /  1389ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 1440px on /demo  1199ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 1440px on /privacy  956ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 1440px on /terms  944ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 1440px on /missing  866ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 390px on /  1072ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 390px on /demo  990ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 390px on /privacy  837ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 390px on /terms  867ms
+   ✓ responsive and accessible site > has no serious accessibility violations at 390px on /missing  905ms
+   ✓ responsive and accessible site > keeps the primary action visible on a 390px first screen  319ms
+   ✓ responsive and accessible site > moves focus to the route heading after keyboard navigation  384ms
+   ✓ responsive and accessible site > keeps links touch-sized and content visible at 200% text size  313ms
+   ✓ responsive and accessible site > supports keyboard reset and reduced motion  450ms
+
+ Test Files  1 passed (1)
+      Tests  25 passed (25)
+   Start at  05:04:33
+   Duration  23.46s (transform 188ms, setup 0ms, collect 1.50s, tests 20.56s, environment 0ms, prepare 283ms)
+

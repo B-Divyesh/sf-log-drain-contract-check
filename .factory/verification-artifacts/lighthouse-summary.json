@@ -1,0 +1,22 @@
+{
+  "lighthouseVersion": "13.4.1",
+  "categories": {
+    "performance": 99,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "agentic-browsing": 100
+  },
+  "metrics": {
+    "fcp": "0.9 s",
+    "lcp": "1.3 s",
+    "tbt": "130 ms",
+    "cls": "0",
+    "speed_index": "1.2 s",
+    "inp": null
+  },
+  "budgets": {
+    "network": "Total size was 68 KiB",
+    "js": "0.1 s"
+  }
+}

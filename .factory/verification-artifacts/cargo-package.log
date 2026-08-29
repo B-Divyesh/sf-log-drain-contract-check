@@ -1,0 +1,8 @@
+    Blocking waiting for file lock on package cache
+   Packaging drain-check v0.1.0 (/work/repo)
+warning: ignoring test `cli_release` as `tests/cli_release.rs` is not included in the published package
+    Updating crates.io index
+    Packaged 10 files, 52.4KiB (14.9KiB compressed)
+   Verifying drain-check v0.1.0 (/work/repo)
+   Compiling drain-check v0.1.0 (/work/repo/target/package/drain-check-0.1.0)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.62s

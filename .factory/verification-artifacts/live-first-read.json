@@ -1,0 +1,58 @@
+{
+  "status": 200,
+  "url": "https://log-drain-contract-check.sociobot.in/",
+  "title": "Drain Check — inspect a log drain sample",
+  "h1": [
+    "Inspect a log drain before forwarding"
+  ],
+  "visibleText": "Skip to content\nDRΛIN\nCHECK\nDemo\nHow it works\nPrivacy\n\nLOCAL PRE-FLIGHT / 10-MINUTE WINDOW\n\nInspect a log drain before forwarding\n\nFor platform teams who need volume, fields, and privacy risks before a drain stays on.\n\nTry it with sample data\nOpens a sample report. Nothing is saved.\n\nListens only on your machine.\nDiscards bodies after aggregation.\nFree under the MIT License.\nTHE RECEIVER STAYS LOCAL\n●\nbundled sample / recorded run\nReplay recording\n\nA text recording of the bundled CLI demo. Use the replay button to play it again.\n\n$ drain-check demo\nReviewed 3 events in 600s. 17 fields. 3 possible risks.\nReport: /tmp/drain-check-demo-[unique]/report.json\n\n$ drain-check forwarding --url https://receiver.example/logs\n# generic-http\nurl = \"https://receiver.example/logs\"\nmethod = \"POST\"\n\nTHE SHORT PATH\n\nReview a drain in three steps\nListen locally.\nRun one bounded window.\nRead the contract.\nCheck fields and likely secrets.\nForward with intent.\nUse the generated template.\nWhat Drain Check does not do\n\nIt does not store logs, search logs, or send them to a vendor.\n\nUse --save-sample only when you choose to retain accepted bodies.\n\nRUN IT LOCALLY\n\nStart a bounded receiver\ncargo install drain-check\n# or clone this repository\ncargo run -- listen --duration 600 --port 8787\n\nThen point your temporary HTTP drain to http://127.0.0.1:8787/.\n\nUse --ignore-field '$.request_id' to suppress a reviewed false positive.\n\nDrain Check samples a log drain before you forward it.\n\nPrivacy · Terms · Built by Param Factory · v0.1.0+e6fac708cdc5\n\nDrain Check — inspect a log drain sample",
+  "links": [
+    {
+      "text": "Skip to content",
+      "href": "https://log-drain-contract-check.sociobot.in/#main"
+    },
+    {
+      "text": "DRΛINCHECK",
+      "href": "https://log-drain-contract-check.sociobot.in/"
+    },
+    {
+      "text": "Demo",
+      "href": "https://log-drain-contract-check.sociobot.in/demo"
+    },
+    {
+      "text": "How it works",
+      "href": "https://log-drain-contract-check.sociobot.in/#how"
+    },
+    {
+      "text": "Privacy",
+      "href": "https://log-drain-contract-check.sociobot.in/privacy"
+    },
+    {
+      "text": "Try it with sample data",
+      "href": "https://log-drain-contract-check.sociobot.in/demo"
+    },
+    {
+      "text": "Privacy",
+      "href": "https://log-drain-contract-check.sociobot.in/privacy"
+    },
+    {
+      "text": "Terms",
+      "href": "https://log-drain-contract-check.sociobot.in/terms"
+    }
+  ],
+  "buttons": [
+    "Replay recording"
+  ],
+  "requests": [
+    "https://log-drain-contract-check.sociobot.in/",
+    "https://log-drain-contract-check.sociobot.in/assets/main-Bw1H4TYj.js",
+    "https://log-drain-contract-check.sociobot.in/assets/main-L8INxU4s.css",
+    "https://log-drain-contract-check.sociobot.in/drain-console.webp"
+  ],
+  "errors": [],
+  "storage": {
+    "local": [],
+    "session": [],
+    "cookies": ""
+  }
+}
