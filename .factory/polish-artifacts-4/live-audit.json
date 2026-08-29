@@ -1,0 +1,135 @@
+{
+  "base": "https://log-drain-contract-check.sociobot.in",
+  "routes": [
+    {
+      "path": "/",
+      "viewport": 1440,
+      "status": 200,
+      "title": "Drain Check — check a log drain sample",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/?demo=1",
+      "viewport": 1440,
+      "status": 200,
+      "title": "Demo — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/demo",
+      "viewport": 1440,
+      "status": 200,
+      "title": "Demo — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/privacy",
+      "viewport": 1440,
+      "status": 200,
+      "title": "Privacy — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/terms",
+      "viewport": 1440,
+      "status": 200,
+      "title": "Terms — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/missing",
+      "viewport": 1440,
+      "status": 404,
+      "title": "Not found — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/",
+      "viewport": 390,
+      "status": 200,
+      "title": "Drain Check — check a log drain sample",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/?demo=1",
+      "viewport": 390,
+      "status": 200,
+      "title": "Demo — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/demo",
+      "viewport": 390,
+      "status": 200,
+      "title": "Demo — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/privacy",
+      "viewport": 390,
+      "status": 200,
+      "title": "Privacy — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/terms",
+      "viewport": 390,
+      "status": 200,
+      "title": "Terms — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    },
+    {
+      "path": "/missing",
+      "viewport": 390,
+      "status": 404,
+      "title": "Not found — Drain Check",
+      "axeViolations": 0,
+      "errors": []
+    }
+  ],
+  "firstScreen": {
+    "primaryBottom": 443.25,
+    "viewportHeight": 844
+  },
+  "demo": {
+    "requests": [
+      "https://log-drain-contract-check.sociobot.in/",
+      "https://log-drain-contract-check.sociobot.in/assets/main-CCQmz9-O.js",
+      "https://log-drain-contract-check.sociobot.in/assets/main-CRXItHAD.css",
+      "https://log-drain-contract-check.sociobot.in/drain-console.webp"
+    ],
+    "storage": {
+      "cookies": "",
+      "local": [],
+      "session": [],
+      "indexedDb": [],
+      "cacheNames": [],
+      "registrations": [],
+      "opfsEntries": []
+    },
+    "exitFocus": "H1",
+    "errors": []
+  },
+  "privacy": {},
+  "headers": {
+    "homeStatus": 200,
+    "csp": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+    "hsts": "max-age=31536000; includeSubDomains"
+  },
+  "sourceReadme": {
+    "status": 200,
+    "deploymentGuidance": true
+  },
+  "buildId": "cd28d94fe407"
+}
