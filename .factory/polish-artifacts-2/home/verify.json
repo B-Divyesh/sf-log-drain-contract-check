@@ -1,0 +1,14 @@
+{
+  "url": "https://log-drain-contract-check.sociobot.in",
+  "loadMs": 737,
+  "errors": [],
+  "a11y": {
+    "title": "Drain Check — inspect a log drain sample",
+    "lang": "en",
+    "h1": 1,
+    "main": true,
+    "imgsMissingAlt": 0,
+    "buttonsUnlabeled": 0,
+    "textLength": 1835
+  }
+}

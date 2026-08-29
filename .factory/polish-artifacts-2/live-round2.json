@@ -1,0 +1,159 @@
+{
+  "routes": [
+    {
+      "viewport": 1440,
+      "route": "/",
+      "status": 200,
+      "title": "Drain Check — inspect a log drain sample",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 1440,
+      "route": "/?demo=1",
+      "status": 200,
+      "title": "Demo — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 1440,
+      "route": "/demo",
+      "status": 200,
+      "title": "Demo — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 1440,
+      "route": "/privacy",
+      "status": 200,
+      "title": "Privacy — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 1440,
+      "route": "/terms",
+      "status": 200,
+      "title": "Terms — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 1440,
+      "route": "/missing",
+      "status": 404,
+      "title": "Not found — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ]
+    },
+    {
+      "viewport": 390,
+      "route": "/",
+      "status": 200,
+      "title": "Drain Check — inspect a log drain sample",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 390,
+      "route": "/?demo=1",
+      "status": 200,
+      "title": "Demo — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 390,
+      "route": "/demo",
+      "status": 200,
+      "title": "Demo — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 390,
+      "route": "/privacy",
+      "status": 200,
+      "title": "Privacy — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 390,
+      "route": "/terms",
+      "status": 200,
+      "title": "Terms — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": []
+    },
+    {
+      "viewport": 390,
+      "route": "/missing",
+      "status": 404,
+      "title": "Not found — Drain Check",
+      "h1": 1,
+      "main": 1,
+      "overflow": true,
+      "seriousOrCritical": [],
+      "errors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ]
+    }
+  ],
+  "demo": {
+    "oneClickUrl": "https://log-drain-contract-check.sociobot.in/?demo=1",
+    "firstActionVisible": true,
+    "banner": 1,
+    "detectors": 3,
+    "forwarding": "$ drain-check forwarding --url https://receiver.example/logs\n# generic-http\n# Send POST requests to this endpoint after report review\nurl = \"https://receiver.example/logs\"\nmethod = \"POST\"\ncontent_type = \"application/json\"",
+    "exitLabel": 1,
+    "reset": {
+      "demo": null,
+      "real": "keep"
+    },
+    "exitUrl": "https://log-drain-contract-check.sociobot.in/",
+    "exitFocus": "H1",
+    "sameOriginRequests": true
+  },
+  "mobile": {
+    "primaryOverflow": true
+  },
+  "buildId": "Drain Check samples a log drain before you forward it.\n\nPrivacy · Terms · Built by Param Factory · v0.1.0+4d6b1d3e6b2a"
+}
