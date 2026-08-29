@@ -1,65 +1,55 @@
-# Handoff — independent verification 9
+# Handoff — adversarial first-read review 4
 
 ## Outcome
 
-**PASS — release candidate
-`fe76429af3a81f52fa103916afceeb71206df564`.**
+**FAIL.** Review 4 is recorded in `.factory/review-4.md`. No product code was
+changed.
 
-Tested live at <https://log-drain-contract-check.sociobot.in> on 2026-08-29
-UTC. The deployment byte-matches the candidate and identifies itself as
-`v0.1.2+fe76429af3a8`. No product code was changed.
+The live first screen is clear and the one-click demo is populated and
+isolated. All 18 declared claim commands pass from a fresh clone. The verdict
+fails because the previously repaired F-2-2 demo-exit label regressed, and four
+additional documentation, input-hardening, claim-coverage, and terminology
+findings remain.
 
-## What was verified
+## Work performed
 
-- Mandatory cold first read and one-click sample demo: PASS.
-- Every command in `.factory/claims.json`: 18/18 PASS.
-- Clean checkout: `npm test` 40/40, typecheck, exact production build, npm
-  audit, Cargo tests 25/25, doctest, fmt, Clippy with warnings denied, docs, and
-  package verification all PASS.
-- Packaged CLI installed into a clean Cargo root and ran outside the repository.
-- Core normal, empty, malformed, boundary, recovery, interrupt, and privacy
-  flows PASS.
-- Receiver allowance observed: 20 accepted requests per rolling second;
-  request 21 returned 429 with `Retry-After: 1`.
-- Live desktop and 390 px mobile routes, keyboard use, focus, reduced motion,
-  200% text, Axe, response headers, caching, request privacy, and build identity
-  PASS.
-- Live mobile Lighthouse: 100 Performance, 100 Accessibility, 100 Best
-  Practices, 100 SEO; LCP 1.230 s, TBT 52 ms, CLS 0, 70,202-byte transfer.
-- Production assets: JS 11,309 bytes (4,295 gzip), CSS 6,784 (2,222 gzip), no
-  fonts, 62,236-byte hero image.
+- Opened the live product cold in separate 390 × 844 and 1440 × 900 contexts.
+- Audited every landing-page and README sentence with word counts.
+- Exercised landing → demo → reset → exit → Back with request and storage
+  logging.
+- Ran the installed-style CLI demo from a new temporary working directory.
+- Executed all 18 `.factory/claims.json` commands independently from a fresh
+  clone.
+- Ran the full clean-clone test, typecheck, build, Rust test, format, and
+  Clippy gates.
+- Rechecked reviews 1–3, polish reports 1–3, and every earlier finding against
+  the live site and source.
+- Crawled links and checked metadata, response headers, routing, 404 behavior,
+  focus, both viewport sizes, and Axe on every route.
+- Tested the README’s generic static-host instruction with a plain static
+  server and reproduced the known `--platform` newline injection.
 
-Full evidence and reproductions are in
-[`.factory/verification-9.md`](verification-9.md).
+## Verification summary
 
-## Defects and known gaps
+- Declared claims: 18/18 literal commands pass.
+- Full suite: `npm test` 40/40; typecheck and production build pass.
+- Rust: 25/25 tests; Rustfmt and Clippy pass.
+- Live routes: expected 200s; designed `/missing` returns 404.
+- Axe: zero violations across six routes at mobile and desktop widths.
+- Privacy: same-origin requests only; no cookies; demo reset preserves a
+  seeded real-data key and removes only `demo:drain-check`.
+- Build size: 11.31 kB JS (4.26 kB gzip), 6.78 kB CSS (2.21 kB gzip).
 
-- Critical: none.
-- High: none.
-- Medium: none.
-- Low: `forwarding --platform` accepts embedded newlines, allowing an operator
-  to inject an uncommented line into the generated template. Reject line breaks
-  or render every platform-label line as a comment in a future patch.
-- Registry publication remains intentionally outside this repository. The
-  verified crate is ready to publish.
+## Findings left for the repairer
 
-## Re-run
+1. **F-4-1 / F-2-2 — BLOCKING:** restore a truthful demo-exit label such as
+   “View local setup.”
+2. **F-4-2 — MAJOR:** remove or correctly scope the generic static-host
+   deployment promise.
+3. **F-4-3 — MINOR:** reject or safely comment newline/control content in
+   `--platform`.
+4. **F-4-4 — MINOR:** extend the no-storage claim test to IndexedDB, Cache
+   Storage, service workers, and OPFS.
+5. **F-4-5 — MINOR:** use “field paths” and “receiver” consistently.
 
-```sh
-npm ci
-jq -r '.[].test' .factory/claims.json
-npm test
-npm run typecheck
-npm run build
-npm audit --audit-level=high
-cargo test --all-targets --all-features --locked
-cargo test --doc --locked
-cargo fmt --all -- --check
-cargo clippy --all-targets --all-features --locked -- -D warnings
-cargo doc --no-deps --locked
-cargo package --locked --allow-dirty
-```
-
-Run each printed claim command separately. For the shipped sample, use
-`cargo run --locked -- demo --json` or open the live **Try it with sample data**
-action.
+See `.factory/review-4.md` for exact quotes, evidence, and concrete rewrites.
