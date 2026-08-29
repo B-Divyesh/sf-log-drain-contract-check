@@ -184,18 +184,35 @@ fn inspect_path(path: &Path, config: &DetectorConfig) -> Result<Aggregate, Strin
 }
 
 fn inspect_reader<R: BufRead>(reader: R, config: &DetectorConfig) -> Result<Aggregate, String> {
+    let mut reader = reader;
     let mut aggregate = Aggregate::default();
-    for (index, line) in reader.lines().enumerate() {
-        let line = line.map_err(|error| format!("Could not read line {}: {error}", index + 1))?;
-        if line.trim().is_empty() {
+    let mut raw_line = Vec::new();
+    let mut line_number = 0;
+    loop {
+        raw_line.clear();
+        let count = reader
+            .read_until(b'\n', &mut raw_line)
+            .map_err(|error| format!("Could not read line {}: {error}", line_number + 1))?;
+        if count == 0 {
+            break;
+        }
+        line_number += 1;
+        let line = without_ndjson_delimiter(&raw_line);
+        if line.iter().all(u8::is_ascii_whitespace) {
             continue;
         }
-        let event: Value = serde_json::from_str(&line)
-            .map_err(|error| format!("Invalid JSON on line {}: {error}", index + 1))?;
-        let bytes = serde_json::to_vec(&event).map_or(0, |value| value.len() as u64);
-        aggregate.record_event(&event, bytes, config);
+        let event: Value = serde_json::from_slice(line)
+            .map_err(|error| format!("Invalid JSON on line {line_number}: {error}"))?;
+        aggregate.record_event(&event, line.len() as u64, config);
     }
     Ok(aggregate)
+}
+
+fn without_ndjson_delimiter(line: &[u8]) -> &[u8] {
+    let Some(line) = line.strip_suffix(b"\n") else {
+        return line;
+    };
+    line.strip_suffix(b"\r").unwrap_or(line)
 }
 
 fn write_report(report: Report, output: &Path, json: bool) -> Result<(), String> {
@@ -406,14 +423,13 @@ fn read_request(stream: &mut TcpStream) -> Result<AcceptedRequest, RequestError>
         raw.extend_from_slice(&chunk[..count]);
         if let Some(end) = raw.windows(4).position(|part| part == b"\r\n\r\n") {
             header_end = end + 4;
+            if header_end > MAX_HEADER_BYTES {
+                return Err(header_too_large());
+            }
             break;
         }
         if raw.len() > MAX_HEADER_BYTES {
-            return Err(RequestError {
-                status: 431,
-                reason: "Request Header Fields Too Large",
-                message: "Request headers exceed 32 KiB.".to_string(),
-            });
+            return Err(header_too_large());
         }
     }
 
@@ -464,6 +480,14 @@ fn read_request(stream: &mut TcpStream) -> Result<AcceptedRequest, RequestError>
     Ok(AcceptedRequest { body })
 }
 
+fn header_too_large() -> RequestError {
+    RequestError {
+        status: 431,
+        reason: "Request Header Fields Too Large",
+        message: "Request headers exceed 32 KiB.".to_string(),
+    }
+}
+
 fn validate_ndjson_body(body: &str) -> Result<(), RequestError> {
     let mut event_count = 0;
     for (index, line) in body.lines().enumerate() {
@@ -484,11 +508,14 @@ fn validate_ndjson_body(body: &str) -> Result<(), RequestError> {
 }
 
 fn aggregate_ndjson_body(body: &str, aggregate: &mut Aggregate, config: &DetectorConfig) {
-    for line in body.lines().filter(|line| !line.trim().is_empty()) {
+    for raw_line in body.as_bytes().split_inclusive(|byte| *byte == b'\n') {
+        let line = without_ndjson_delimiter(raw_line);
+        if line.iter().all(u8::is_ascii_whitespace) {
+            continue;
+        }
         // Validation is transactional and completes before this function runs.
-        let event: Value = serde_json::from_str(line).expect("validated NDJSON changed");
-        let bytes = serde_json::to_vec(&event).map_or(0, |value| value.len() as u64);
-        aggregate.record_event(&event, bytes, config);
+        let event: Value = serde_json::from_slice(line).expect("validated NDJSON changed");
+        aggregate.record_event(&event, line.len() as u64, config);
     }
 }
 
@@ -547,6 +574,43 @@ mod tests {
     fn rejects_malformed_payload_transactionally() {
         assert!(validate_ndjson_body("{\"ok\":true}\n{not-json").is_err());
         assert!(validate_ndjson_body("{\"ok\":true}\n").is_ok());
+    }
+
+    #[test]
+    fn file_inspection_counts_received_bytes_and_retention_within_target() {
+        let event = format!("{{\"a\":{}1}}", " ".repeat(1024));
+        let input = format!("{event}\r\n");
+        let aggregate =
+            inspect_reader(BufReader::new(input.as_bytes()), &DetectorConfig::default()).unwrap();
+        let report = aggregate.report(1, &[1], false);
+        let actual_daily_bytes = event.len() as u64 * 86_400;
+        let projected_daily_bytes = report.retention[0].estimated_bytes;
+        let relative_error =
+            projected_daily_bytes.abs_diff(actual_daily_bytes) as f64 / actual_daily_bytes as f64;
+
+        assert_eq!(event.len(), 1_031);
+        assert_eq!(report.average_event_bytes, 1_031);
+        assert_eq!(projected_daily_bytes, 89_078_400);
+        assert!(
+            relative_error <= 0.25,
+            "retention relative error was {relative_error:.4}"
+        );
+    }
+
+    #[test]
+    fn receiver_aggregation_counts_original_event_bytes() {
+        let first = format!("{{\"a\":{}1}}", " ".repeat(1024));
+        let second = " {\"representative\": true} ";
+        let body = format!("{first}\n{second}\r\n");
+        let mut aggregate = Aggregate::default();
+        aggregate_ndjson_body(&body, &mut aggregate, &DetectorConfig::default());
+        let report = aggregate.report(1, &[1], false);
+        let expected_average = (first.len() + second.len()) as u64 / 2;
+        let expected_daily_bytes = expected_average * 2 * 86_400;
+
+        assert_eq!(report.events, 2);
+        assert_eq!(report.average_event_bytes, expected_average);
+        assert_eq!(report.retention[0].estimated_bytes, expected_daily_bytes);
     }
 
     #[test]
@@ -723,6 +787,30 @@ mod tests {
         let report: Report = serde_json::from_str(&fs::read_to_string(output).unwrap()).unwrap();
         assert_eq!(report.events, 1);
         assert!(!report.bodies_saved);
+    }
+
+    #[test]
+    fn receiver_rejects_headers_beyond_32_kib_even_with_a_delimiter() {
+        let listener = TcpListener::bind((Ipv4Addr::LOCALHOST, 0)).unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = thread::spawn(move || {
+            let (mut stream, _) = listener.accept().unwrap();
+            match read_request(&mut stream) {
+                Ok(_) => panic!("oversized headers must not be accepted"),
+                Err(error) => error,
+            }
+        });
+        let mut client = TcpStream::connect(address).unwrap();
+        let request = format!(
+            "POST / HTTP/1.1\r\nHost: localhost\r\nX-Fill: {}\r\nContent-Length: 11\r\n\r\n{{\"ok\":true}}",
+            "a".repeat(33 * 1024)
+        );
+        client.write_all(request.as_bytes()).unwrap();
+        client.shutdown(Shutdown::Write).unwrap();
+
+        let error = server.join().unwrap();
+        assert_eq!(error.status, 431);
+        assert_eq!(error.reason, "Request Header Fields Too Large");
     }
 
     #[test]

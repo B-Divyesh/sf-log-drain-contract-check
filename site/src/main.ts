@@ -11,7 +11,7 @@ const siteVersion = typeof __SITE_VERSION__ === 'string' ? __SITE_VERSION__ : 's
 
 const shell = (content: string) => `<a class="skip" href="#main">Skip to content</a>
   <header>
-    <a class="wordmark" href="/" data-route aria-label="Drain Check home">DRΛIN<br>CHECK</a>
+    <a class="wordmark" href="/" data-route>DRΛIN<br>CHECK</a>
     <nav aria-label="Main navigation">
       <a href="/?demo=1" data-route>Demo</a><a href="/#how">How it works</a><a href="/privacy" data-route>Privacy</a>
     </nav>
@@ -86,7 +86,7 @@ function demo(path = '/demo') {
   const sevenDays = sampleReport.retention.find((estimate) => estimate.days === 7)!;
   const thirtyDays = sampleReport.retention.find((estimate) => estimate.days === 30)!;
   const reviewFields = new Set(sampleReport.findings.map((finding) => finding.path)).size;
-  return shell(`<div class="demo-banner" role="status"><span>Demo — sample data, nothing is saved</span><button id="reset-demo" type="button">Reset demo</button><a href="/" data-route>View local setup</a></div>
+  return shell(`<div class="demo-banner" role="status"><span>Demo — sample data, nothing is saved</span><button id="reset-demo" type="button">Reset demo</button><a href="/" data-route>Start for real</a></div>
     <main id="main" tabindex="-1" class="demo"><p class="eyebrow">SAMPLE REPORT / 10-MINUTE WINDOW</p><h1 tabindex="-1">Review this drain sample</h1><p class="lede">This report uses bundled checkout logs. It is separate from any real run.</p>
       <section class="metrics" aria-label="Sample summary"><div><strong>${sampleReport.events}</strong><span>events</span></div><div><strong>${sampleReport.events_per_second} / sec</strong><span>event rate</span></div><div><strong>${sampleReport.fields.length}</strong><span>field paths</span></div><div><strong>${sampleReport.findings.length}</strong><span>findings across ${reviewFields} fields</span></div></section>
       <section class="report" aria-labelledby="risk-title"><div><h2 id="risk-title">Review possible sensitive fields</h2><p>Detectors are conservative. A match needs a human decision.</p>${findingMarkup()}</div><div><h2>Retention estimate</h2><p>At this sample rate and average event size:</p><dl><dt>7 days</dt><dd>about ${sevenDays.display}</dd><dt>30 days</dt><dd>about ${thirtyDays.display}</dd></dl><h2>Generate a forwarding configuration</h2><p>Run this separate command after reviewing the report:</p><pre tabindex="0"><code>$ drain-check forwarding --url https://receiver.example/logs

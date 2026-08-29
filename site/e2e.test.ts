@@ -82,7 +82,7 @@ describe('published claims', () => {
     expect(await page.evaluate(() => localStorage.getItem('real:drain-check'))).toBe('keep');
     expect(await page.evaluate(() => localStorage.getItem('demo:drain-check'))).toBeNull();
     expect(await page.evaluate(() => sessionStorage.length)).toBe(0);
-    await page.getByRole('link', { name: 'View local setup' }).click();
+    await page.getByRole('link', { name: 'Start for real' }).click();
     expect(page.url()).toBe(`${base}/`);
     await context.close();
     cargoTest('listener_binds_to_loopback');
@@ -95,6 +95,9 @@ describe('published claims', () => {
 
   it('@claim:contract-report proves fields, types, findings, and retention values', () => {
     cargoTest('documented_sample_has_exact_metrics');
+    cargoTest('file_inspection_counts_received_bytes_and_retention_within_target');
+    cargoTest('receiver_aggregation_counts_original_event_bytes');
+    cargoTest('inspect_preserves_received_bytes_and_punctuated_source_keys');
   }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:forwarding-config renders a validated destination in a separate configuration', async () => {
@@ -124,6 +127,8 @@ describe('published claims', () => {
 
   it('@claim:false-positive-controls proves custom and ignored field handling', () => {
     cargoTest('supports_custom_patterns_and_explicit_suppression');
+    cargoTest('punctuation_in_object_keys_has_distinct_unambiguous_paths');
+    cargoTest('raw_punctuated_keys_drive_detectors_and_escaped_paths_drive_ignores');
   }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:rate-limit proves the rolling request threshold', () => {
@@ -193,6 +198,26 @@ describe('responsive and accessible site', () => {
       });
     }
   }
+
+  it('passes the experimental WCAG 2.5.3 visible-label rule', async () => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto(base);
+    const results = await new AxeBuilder({ page })
+      .withRules(['label-content-name-mismatch'])
+      .analyze();
+    expect(results.violations).toEqual([]);
+    expect(await page.getByRole('link', { name: 'DRΛIN CHECK', exact: true }).count()).toBe(1);
+    await context.close();
+  });
+
+  it('uses the demo sandbox exit label and rejects oversized request headers', async () => {
+    const page = await browser.newPage();
+    await page.goto(`${base}/demo`);
+    expect(await page.getByRole('link', { name: 'Start for real' }).count()).toBe(1);
+    await page.close();
+    cargoTest('receiver_rejects_headers_beyond_32_kib_even_with_a_delimiter');
+  }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('keeps the primary action visible on a 390px first screen', async () => {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });

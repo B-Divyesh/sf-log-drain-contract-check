@@ -28,11 +28,11 @@ You can also inspect an existing newline-delimited JSON file:
 cargo run -- inspect examples/drain.ndjson --sample-seconds 600 --output report.json --json
 ```
 
-`inspect --sample-seconds` must be at least 1. `--json` prints the report to standard output for scripts. Add `--sensitive-field session_key` for a team-specific field name. Add `--ignore-field '$.request_id'` after reviewing a false positive. A trailing `*` ignores a path prefix. `cargo run -- --help` lists all commands and options.
+`inspect --sample-seconds` must be at least 1. `--json` prints the report to standard output for scripts. Add `--sensitive-field session_key` for a team-specific field name. Add `--ignore-field '$.request_id'` after reviewing a false positive. Keys with punctuation use bracket-quoted paths, such as `$['http.method']`. A trailing `*` ignores a path prefix. `cargo run -- --help` lists all commands and options.
 
 ## What the report contains
 
-- Event count, average body size, and events per second.
+- Event count, average received event size, and events per second. NDJSON line delimiters are excluded.
 - Field paths, observed types, and how many events contained each path.
 - Conservative risk findings for field names, token-shaped values, and email-shaped values.
 - Retention estimates for 7 and 30 days.

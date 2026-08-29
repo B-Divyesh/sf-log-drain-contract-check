@@ -71,6 +71,67 @@ fn inspect_json_writes_the_report_to_standard_output() {
 }
 
 #[test]
+fn inspect_preserves_received_bytes_and_punctuated_source_keys() {
+    let directory = tempfile::tempdir().unwrap();
+    let input = directory.path().join("punctuated.ndjson");
+    let output_path = directory.path().join("report.json");
+    let spaced_value = " ".repeat(1024);
+    fs::write(
+        &input,
+        format!(
+            "{{\"a\":{spaced_value}1,\"http.method\":\"GET\",\"http\":{{\"method\":42}},\"items[]\":\"flat\",\"items\":[\"array\"],\"password.hash\":\"ordinary\",\"customer.id\":\"12345\"}}\n"
+        ),
+    )
+    .unwrap();
+    let received_event_bytes = fs::metadata(&input).unwrap().len() - 1;
+    let result = drain_check()
+        .args([
+            "inspect",
+            input.to_str().unwrap(),
+            "--sample-seconds",
+            "1",
+            "--sensitive-field",
+            "customer",
+            "--output",
+            output_path.to_str().unwrap(),
+            "--json",
+        ])
+        .output()
+        .unwrap();
+
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let report: Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["average_event_bytes"], received_event_bytes);
+    assert_eq!(
+        report["retention"][0]["estimated_bytes"],
+        received_event_bytes * 86_400 * 7
+    );
+    let fields = report["fields"].as_array().unwrap();
+    for (path, expected_type) in [
+        ("$['http.method']", "string"),
+        ("$.http.method", "integer"),
+        ("$['items[]']", "string"),
+        ("$.items[]", "string"),
+    ] {
+        let field = fields
+            .iter()
+            .find(|field| field["path"] == path)
+            .unwrap_or_else(|| panic!("missing field path {path}"));
+        assert_eq!(field["types"], serde_json::json!([expected_type]));
+    }
+    let findings = report["findings"].as_array().unwrap();
+    for path in ["$['password.hash']", "$['customer.id']"] {
+        assert!(findings.iter().any(|finding| {
+            finding["path"] == path && finding["detector"] == "sensitive field name"
+        }));
+    }
+}
+
+#[test]
 fn help_lists_each_command_and_its_options() {
     let result = drain_check().arg("--help").output().unwrap();
 

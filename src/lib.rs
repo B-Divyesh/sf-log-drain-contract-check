@@ -108,11 +108,18 @@ pub struct Aggregate {
 }
 
 impl Aggregate {
-    pub fn record_event(&mut self, event: &Value, serialized_bytes: u64, config: &DetectorConfig) {
+    pub fn record_event(&mut self, event: &Value, received_bytes: u64, config: &DetectorConfig) {
         let mut event_fields: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
         self.events += 1;
-        self.bytes = self.bytes.saturating_add(serialized_bytes);
-        inspect_value(event, "$", &mut event_fields, &mut self.findings, config);
+        self.bytes = self.bytes.saturating_add(received_bytes);
+        inspect_value(
+            event,
+            "$",
+            None,
+            &mut event_fields,
+            &mut self.findings,
+            config,
+        );
 
         for (path, types) in event_fields {
             let entry = self.fields.entry(path).or_default();
@@ -194,6 +201,7 @@ pub fn analyse_events_with_config(
 fn inspect_value(
     value: &Value,
     path: &str,
+    source_key: Option<&str>,
     event_fields: &mut BTreeMap<String, BTreeSet<String>>,
     findings: &mut BTreeMap<(String, String), Finding>,
     config: &DetectorConfig,
@@ -213,12 +221,14 @@ fn inspect_value(
         .insert(type_name.to_string());
 
     let ignored = config.ignores(path);
-    let key = path.rsplit('.').next().unwrap_or("").to_ascii_lowercase();
     if !ignored
-        && config
-            .sensitive_field_patterns
-            .iter()
-            .any(|word| key.contains(word))
+        && source_key.is_some_and(|key| {
+            let key = key.to_ascii_lowercase();
+            config
+                .sensitive_field_patterns
+                .iter()
+                .any(|word| key.contains(word))
+        })
     {
         add_finding(
             findings,
@@ -232,9 +242,11 @@ fn inspect_value(
     match value {
         Value::Object(map) => {
             for (key, child) in map {
+                let child_path = object_path(path, key);
                 inspect_value(
                     child,
-                    &format!("{path}.{key}"),
+                    &child_path,
+                    Some(key),
                     event_fields,
                     findings,
                     config,
@@ -243,7 +255,14 @@ fn inspect_value(
         }
         Value::Array(items) => {
             for child in items {
-                inspect_value(child, &format!("{path}[]"), event_fields, findings, config);
+                inspect_value(
+                    child,
+                    &format!("{path}[]"),
+                    None,
+                    event_fields,
+                    findings,
+                    config,
+                );
             }
         }
         Value::String(text) if !ignored => {
@@ -266,6 +285,21 @@ fn inspect_value(
             }
         }
         _ => {}
+    }
+}
+
+fn object_path(parent: &str, key: &str) -> String {
+    let mut characters = key.chars();
+    let safe = characters
+        .next()
+        .is_some_and(|character| character.is_ascii_alphabetic() || character == '_')
+        && characters.all(|character| character.is_ascii_alphanumeric() || character == '_');
+
+    if safe {
+        format!("{parent}.{key}")
+    } else {
+        let escaped = key.replace('\\', "\\\\").replace('\'', "\\'");
+        format!("{parent}['{escaped}']")
     }
 }
 
@@ -429,5 +463,61 @@ mod tests {
             .findings
             .iter()
             .any(|finding| finding.path.starts_with("$.request")));
+    }
+
+    #[test]
+    fn punctuation_in_object_keys_has_distinct_unambiguous_paths() {
+        let events = vec![serde_json::json!({
+            "http.method":"GET",
+            "http":{"method":42},
+            "items[]":"flat",
+            "items":["array"],
+            "quote'and\\slash": true
+        })];
+        let report = analyse_events(&events, 1, &[1]);
+        let fields: BTreeMap<_, _> = report
+            .fields
+            .iter()
+            .map(|field| (field.path.as_str(), field.types.as_slice()))
+            .collect();
+
+        assert_eq!(fields["$['http.method']"], ["string"]);
+        assert_eq!(fields["$.http.method"], ["integer"]);
+        assert_eq!(fields["$['items[]']"], ["string"]);
+        assert_eq!(fields["$.items[]"], ["string"]);
+        assert_eq!(fields["$['quote\\'and\\\\slash']"], ["boolean"]);
+    }
+
+    #[test]
+    fn raw_punctuated_keys_drive_detectors_and_escaped_paths_drive_ignores() {
+        let events = vec![serde_json::json!({
+            "password.hash":"ordinary",
+            "customer.id":"12345",
+            "review[password]":"ordinary",
+            "nested":{"password.hash":"ordinary"}
+        })];
+        let config = DetectorConfig::with_overrides(
+            &["customer".into()],
+            &[
+                "$['review[password]']".into(),
+                "$.nested['password.hash']".into(),
+            ],
+        );
+        let report = analyse_events_with_config(&events, 1, &[1], &config);
+
+        assert!(report.findings.iter().any(|finding| {
+            finding.path == "$['password.hash']" && finding.detector == "sensitive field name"
+        }));
+        assert!(report.findings.iter().any(|finding| {
+            finding.path == "$['customer.id']" && finding.detector == "sensitive field name"
+        }));
+        assert!(!report
+            .findings
+            .iter()
+            .any(|finding| finding.path == "$['review[password]']"));
+        assert!(!report
+            .findings
+            .iter()
+            .any(|finding| finding.path == "$.nested['password.hash']"));
     }
 }

@@ -25,7 +25,7 @@
     "claim": "The report shows event rate, average size, field paths and types, likely secrets, and retention estimates.",
     "where": "landing, demo, README",
     "test": "npm test -- -t @claim:contract-report",
-    "sandbox": "bundled NDJSON fixture; assert exact count, event rate, size, every path and type, findings, and both retention values"
+    "sandbox": "bundled and whitespace-heavy NDJSON fixtures; assert exact count, received-byte size, every path and type, findings, retention values, and the 25% volume bound"
   },
   {
     "id": "forwarding-config",
@@ -46,7 +46,7 @@
     "claim": "Operators can add sensitive-field patterns and suppress reviewed exact paths or prefixes.",
     "where": "landing setup, README, CLI help",
     "test": "npm test -- -t @claim:false-positive-controls",
-    "sandbox": "fixture with a custom sensitive key and benign token-shaped fields; assert custom detection plus exact-path and prefix suppression"
+    "sandbox": "fixtures with custom, dotted, bracketed, and benign token-shaped fields; assert collision-free paths, raw-key detection, exact-path suppression, and prefix suppression"
   },
   {
     "id": "rate-limit",
