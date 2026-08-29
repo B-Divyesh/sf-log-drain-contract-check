@@ -48,4 +48,14 @@ Package-consumer verification used `cargo install --path target/package/drain-ch
 
 ## Repair commit and live evidence
 
-The repair commit, push, production deployment, and post-deploy response/header/identity verification are recorded below once the static deployment has finished.
+Repair commit `c6390c79be323bfcb8fb54059383a18ef0abecef` was pushed to `origin/main`. The static artifact was deployed with `/opt/fleet/lib/deploy-static.sh log-drain-contract-check dist/site`; Azure Static Web Apps deployment ID: `a0265cff-d0c4-4e79-9cf5-764812a7c64b`.
+
+Post-deploy checks against <https://log-drain-contract-check.sociobot.in> passed:
+
+- The live HTML, JS (`main-Bw1f9Ti_.js`), CSS, hero, `robots.txt`, and `sitemap.xml` SHA-256 hashes equal `dist/site`; the live footer identifies `v0.1.0+c6390c79be32`.
+- `/`, `/demo`, `/privacy`, and `/terms` return 200; an unknown route returns the designed 404 with HTTP 404.
+- `verify-url.sh` passed in 929 ms with title, `lang=en`, one H1, main landmark, image alt text, labeled buttons, and no console errors.
+- Live Axe checks found zero serious/critical findings on all five routes at 1440×900 and 390×844. Both viewports had no horizontal overflow and all visible controls were at least 44 px high.
+- Keyboard activation opens `/demo` and focuses its H1; Space resets the demo; returning home focuses its H1. At 200% text on 390 px, client and scroll widths were both 390 px. Reduced-motion emulation had no running animations.
+- Browser request recording found only the product origin, no cookies or browser storage, and no application errors. The expected console message for the deliberately requested 404 is excluded from normal-route checks.
+- Response policy is live: CSP includes `frame-ancestors 'none'`; HSTS, `X-Content-Type-Options`, and `Referrer-Policy` are present; hashed JS/CSS are `public, max-age=31536000, immutable`.
