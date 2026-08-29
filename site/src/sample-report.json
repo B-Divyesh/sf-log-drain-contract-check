@@ -1,0 +1,161 @@
+{
+  "events": 3,
+  "sample_seconds": 600,
+  "events_per_second": 0.005,
+  "average_event_bytes": 189,
+  "fields": [
+    {
+      "path": "$",
+      "types": [
+        "object"
+      ],
+      "present_in": 3
+    },
+    {
+      "path": "$.error",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.job",
+      "types": [
+        "object"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.job.attempt",
+      "types": [
+        "integer"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.job.name",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.job.ok",
+      "types": [
+        "boolean"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.level",
+      "types": [
+        "string"
+      ],
+      "present_in": 3
+    },
+    {
+      "path": "$.region",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.request",
+      "types": [
+        "object"
+      ],
+      "present_in": 2
+    },
+    {
+      "path": "$.request.authorization",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.request.latency_ms",
+      "types": [
+        "integer"
+      ],
+      "present_in": 2
+    },
+    {
+      "path": "$.request.method",
+      "types": [
+        "string"
+      ],
+      "present_in": 2
+    },
+    {
+      "path": "$.request.path",
+      "types": [
+        "string"
+      ],
+      "present_in": 2
+    },
+    {
+      "path": "$.request.user_email",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    },
+    {
+      "path": "$.service",
+      "types": [
+        "string"
+      ],
+      "present_in": 3
+    },
+    {
+      "path": "$.timestamp",
+      "types": [
+        "string"
+      ],
+      "present_in": 3
+    },
+    {
+      "path": "$.trace_id",
+      "types": [
+        "string"
+      ],
+      "present_in": 1
+    }
+  ],
+  "findings": [
+    {
+      "path": "$.request.authorization",
+      "detector": "secret-shaped value",
+      "confidence": "high",
+      "action": "Mask this value or exclude the field."
+    },
+    {
+      "path": "$.request.authorization",
+      "detector": "sensitive field name",
+      "confidence": "high",
+      "action": "Review this field before forwarding."
+    },
+    {
+      "path": "$.request.user_email",
+      "detector": "email-shaped value",
+      "confidence": "medium",
+      "action": "Confirm that this identifier belongs in the drain."
+    }
+  ],
+  "retention": [
+    {
+      "days": 7,
+      "estimated_bytes": 571536,
+      "display": "558.1 KiB"
+    },
+    {
+      "days": 30,
+      "estimated_bytes": 2449440,
+      "display": "2.3 MiB"
+    }
+  ],
+  "bodies_saved": false,
+  "forwarding": "Forward only after review. Keep the receiving URL in your platform's secret store."
+}

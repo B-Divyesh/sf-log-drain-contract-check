@@ -1,77 +1,677 @@
 use clap::{Parser, Subcommand};
-use drain_check::analyse_events;
+use drain_check::{Aggregate, DetectorConfig, Report};
 use serde_json::Value;
-use std::{fs, io::{Read, Write}, net::{IpAddr, Ipv4Addr, TcpListener, TcpStream}, path::PathBuf, time::{Duration, Instant}};
+use std::{
+    collections::VecDeque,
+    fs::{self, File},
+    io::{BufRead, BufReader, Read, Write},
+    net::{IpAddr, Ipv4Addr, TcpListener, TcpStream},
+    path::{Path, PathBuf},
+    sync::atomic::{AtomicBool, Ordering},
+    time::{Duration, Instant},
+};
 
-#[derive(Parser)]
-#[command(name="drain-check", version, about="Sample a local log drain and review its data contract.")]
-struct Cli { #[command(subcommand)] command: Command }
-#[derive(Subcommand)]
+const DEMO_SAMPLE: &str = include_str!("../examples/drain.ndjson");
+const MAX_HEADER_BYTES: usize = 32 * 1024;
+const MAX_BODY_BYTES: usize = 2 * 1024 * 1024;
+const READ_TIMEOUT: Duration = Duration::from_millis(750);
+static RUNNING: AtomicBool = AtomicBool::new(true);
+
+#[derive(Debug, Parser)]
+#[command(
+    name = "drain-check",
+    version,
+    about = "Sample a local log drain and review its data contract."
+)]
+struct Cli {
+    #[command(subcommand)]
+    command: Command,
+}
+
+#[derive(Debug, Subcommand)]
 enum Command {
-    /// Receive a bounded local sample. Bodies are discarded after aggregation.
-    Listen { #[arg(long, default_value_t=600)] duration: u64, #[arg(long, default_value_t=8787)] port: u16, #[arg(long, default_value="report.json")] output: PathBuf, #[arg(long, value_delimiter=',', default_value="7,30")] retention_days: Vec<u32>, #[arg(long)] save_sample: Option<PathBuf>, #[arg(long)] json: bool },
+    /// Receive a bounded local sample. Bodies are aggregated and then discarded.
+    Listen {
+        /// Sampling window in seconds.
+        #[arg(long, default_value_t = 600, value_parser = clap::value_parser!(u64).range(1..))]
+        duration: u64,
+        /// Local TCP port. The receiver always binds to 127.0.0.1.
+        #[arg(long, default_value_t = 8787, value_parser = clap::value_parser!(u16).range(1..))]
+        port: u16,
+        #[arg(long, default_value = "report.json")]
+        output: PathBuf,
+        #[arg(long, value_delimiter = ',', default_value = "7,30")]
+        retention_days: Vec<u32>,
+        /// Save accepted bodies as NDJSON. Without this flag, bodies are not retained.
+        #[arg(long)]
+        save_sample: Option<PathBuf>,
+        /// Add a case-insensitive field-name fragment to the sensitive-field detector.
+        #[arg(long, value_delimiter = ',')]
+        sensitive_field: Vec<String>,
+        /// Suppress findings for an exact JSON path, or a path prefix ending in `*`.
+        #[arg(long, value_delimiter = ',')]
+        ignore_field: Vec<String>,
+        /// Maximum accepted requests per rolling second.
+        #[arg(long, default_value_t = 20, value_parser = clap::value_parser!(u32).range(1..))]
+        rate_limit: u32,
+        #[arg(long)]
+        json: bool,
+    },
     /// Analyse newline-delimited JSON from a file without opening a listener.
-    Inspect { input: PathBuf, #[arg(long, default_value_t=600)] sample_seconds: u64, #[arg(long, default_value="report.json")] output: PathBuf, #[arg(long, value_delimiter=',', default_value="7,30")] retention_days: Vec<u32>, #[arg(long)] json: bool },
-    /// Run the bundled sample in a temporary report directory.
-    Demo { #[arg(long)] json: bool },
+    Inspect {
+        input: PathBuf,
+        #[arg(long, default_value_t = 600)]
+        sample_seconds: u64,
+        #[arg(long, default_value = "report.json")]
+        output: PathBuf,
+        #[arg(long, value_delimiter = ',', default_value = "7,30")]
+        retention_days: Vec<u32>,
+        /// Add a case-insensitive field-name fragment to the sensitive-field detector.
+        #[arg(long, value_delimiter = ',')]
+        sensitive_field: Vec<String>,
+        /// Suppress findings for an exact JSON path, or a path prefix ending in `*`.
+        #[arg(long, value_delimiter = ',')]
+        ignore_field: Vec<String>,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Run the sample embedded in this binary in a new temporary directory.
+    Demo {
+        #[arg(long)]
+        json: bool,
+    },
     /// Print a forwarding configuration template.
-    Forwarding { #[arg(long, default_value="https://receiver.example/logs")] url: String, #[arg(long, default_value="generic-http")] platform: String },
+    Forwarding {
+        #[arg(
+            long,
+            default_value = "https://receiver.example/logs",
+            value_parser = validate_http_url
+        )]
+        url: String,
+        #[arg(long, default_value = "generic-http")]
+        platform: String,
+    },
 }
 
 fn main() -> Result<(), String> {
-    let cli = Cli::parse();
-    match cli.command {
-        Command::Inspect { input, sample_seconds, output, retention_days, json } => { let events = read_ndjson(&input)?; write_report(events, sample_seconds, retention_days, output, json, false) }
-        Command::Demo { json } => { let output = std::env::temp_dir().join("drain-check-demo-report.json"); let events = read_ndjson(&PathBuf::from("examples/drain.ndjson"))?; write_report(events, 600, vec![7,30], output, json, false) }
-        Command::Forwarding { url, platform } => { println!("# {platform}\n# Send POST requests to this endpoint after contract review\nurl = \"{url}\"\nmethod = \"POST\"\ncontent_type = \"application/json\""); Ok(()) }
-        Command::Listen { duration, port, output, retention_days, save_sample, json } => listen(duration, port, output, retention_days, save_sample, json),
+    match Cli::parse().command {
+        Command::Inspect {
+            input,
+            sample_seconds,
+            output,
+            retention_days,
+            sensitive_field,
+            ignore_field,
+            json,
+        } => {
+            let config = DetectorConfig::with_overrides(&sensitive_field, &ignore_field);
+            let aggregate = inspect_path(&input, &config)?;
+            write_report(
+                aggregate.report(sample_seconds, &retention_days, false),
+                &output,
+                json,
+            )
+        }
+        Command::Demo { json } => run_demo(json),
+        Command::Forwarding { url, platform } => {
+            println!(
+                "# {platform}\n# Send POST requests to this endpoint after contract review\nurl = \"{url}\"\nmethod = \"POST\"\ncontent_type = \"application/json\""
+            );
+            Ok(())
+        }
+        Command::Listen {
+            duration,
+            port,
+            output,
+            retention_days,
+            save_sample,
+            sensitive_field,
+            ignore_field,
+            rate_limit,
+            json,
+        } => listen(ListenOptions {
+            duration,
+            port,
+            output,
+            retention_days,
+            save_sample,
+            detector: DetectorConfig::with_overrides(&sensitive_field, &ignore_field),
+            rate_limit,
+            json,
+        }),
     }
 }
 
-fn write_report(events: Vec<Value>, seconds: u64, days: Vec<u32>, output: PathBuf, json: bool, bodies_saved: bool) -> Result<(), String> {
-    let mut report = analyse_events(&events, seconds, &days);
-    report.bodies_saved = bodies_saved;
-    let text = serde_json::to_string_pretty(&report).map_err(|e| e.to_string())?;
-    fs::write(&output, &text).map_err(|e| format!("Could not write {}: {e}", output.display()))?;
-    if json { println!("{text}"); } else { println!("Reviewed {} events in {}s. {} fields. {} possible risks.\nReport: {}", report.events, seconds, report.fields.len(), report.findings.len(), output.display()); }
+fn validate_http_url(value: &str) -> Result<String, String> {
+    let rest = value
+        .strip_prefix("https://")
+        .or_else(|| value.strip_prefix("http://"))
+        .ok_or_else(|| "URL must start with http:// or https://".to_string())?;
+    let authority = rest.split('/').next().unwrap_or_default();
+    if authority.is_empty()
+        || authority.starts_with('.')
+        || authority.ends_with('.')
+        || authority.chars().any(char::is_whitespace)
+    {
+        return Err("URL must include a valid host".to_string());
+    }
+    Ok(value.to_string())
+}
+
+fn run_demo(json: bool) -> Result<(), String> {
+    let directory = tempfile::Builder::new()
+        .prefix("drain-check-demo-")
+        .tempdir()
+        .map_err(|error| format!("Could not create demo directory: {error}"))?
+        .keep();
+    let output = directory.join("report.json");
+    eprintln!("Demo report: {}", output.display());
+    let aggregate = inspect_reader(
+        BufReader::new(DEMO_SAMPLE.as_bytes()),
+        &DetectorConfig::default(),
+    )?;
+    write_report(aggregate.report(600, &[7, 30], false), &output, json)
+}
+
+fn inspect_path(path: &Path, config: &DetectorConfig) -> Result<Aggregate, String> {
+    let file =
+        File::open(path).map_err(|error| format!("Could not read {}: {error}", path.display()))?;
+    inspect_reader(BufReader::new(file), config)
+}
+
+fn inspect_reader<R: BufRead>(reader: R, config: &DetectorConfig) -> Result<Aggregate, String> {
+    let mut aggregate = Aggregate::default();
+    for (index, line) in reader.lines().enumerate() {
+        let line = line.map_err(|error| format!("Could not read line {}: {error}", index + 1))?;
+        if line.trim().is_empty() {
+            continue;
+        }
+        let event: Value = serde_json::from_str(&line)
+            .map_err(|error| format!("Invalid JSON on line {}: {error}", index + 1))?;
+        let bytes = serde_json::to_vec(&event).map_or(0, |value| value.len() as u64);
+        aggregate.record_event(&event, bytes, config);
+    }
+    Ok(aggregate)
+}
+
+fn write_report(report: Report, output: &Path, json: bool) -> Result<(), String> {
+    let text = serde_json::to_string_pretty(&report).map_err(|error| error.to_string())?;
+    fs::write(output, &text)
+        .map_err(|error| format!("Could not write {}: {error}", output.display()))?;
+    if json {
+        println!("{text}");
+    } else {
+        println!(
+            "Reviewed {} events in {}s. {} fields. {} possible risks.\nReport: {}",
+            report.events,
+            report.sample_seconds,
+            report.fields.len(),
+            report.findings.len(),
+            output.display()
+        );
+    }
     Ok(())
 }
-fn read_ndjson(path: &PathBuf) -> Result<Vec<Value>, String> {
-    let data = fs::read_to_string(path).map_err(|e| format!("Could not read {}: {e}", path.display()))?;
-    data.lines().filter(|line| !line.trim().is_empty()).enumerate().map(|(i,line)| serde_json::from_str(line).map_err(|e| format!("Invalid JSON on line {}: {e}",i+1))).collect()
+
+struct ListenOptions {
+    duration: u64,
+    port: u16,
+    output: PathBuf,
+    retention_days: Vec<u32>,
+    save_sample: Option<PathBuf>,
+    detector: DetectorConfig,
+    rate_limit: u32,
+    json: bool,
 }
-fn listen(duration: u64, port: u16, output: PathBuf, days: Vec<u32>, save_sample: Option<PathBuf>, json: bool) -> Result<(), String> {
-    let listener = TcpListener::bind((IpAddr::V4(Ipv4Addr::LOCALHOST), port)).map_err(|e| format!("Could not bind 127.0.0.1:{port}: {e}"))?;
-    listener.set_nonblocking(true).map_err(|e| e.to_string())?;
-    eprintln!("Drain Check listens only on http://127.0.0.1:{port}/ for {duration}s. Press Ctrl-C to stop early.");
-    let end = Instant::now() + Duration::from_secs(duration); let mut events = vec![]; let mut saved = vec![];
-    while Instant::now() < end {
-        match listener.accept() { Ok((stream,_)) => { let accepted = read_request(stream)?; if let Some(raw) = accepted.1 { saved.push(raw); } events.extend(accepted.0); }, Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => std::thread::sleep(Duration::from_millis(50)), Err(e) => return Err(e.to_string()) }
+
+fn listen(options: ListenOptions) -> Result<(), String> {
+    let listener = bind_local(options.port)?;
+    listener
+        .set_nonblocking(true)
+        .map_err(|error| error.to_string())?;
+    RUNNING.store(true, Ordering::SeqCst);
+    ctrlc::set_handler(|| RUNNING.store(false, Ordering::SeqCst))
+        .map_err(|error| format!("Could not install Ctrl-C handler: {error}"))?;
+    eprintln!(
+        "Drain Check listens only on http://127.0.0.1:{}/ for {}s. Press Ctrl-C to finish early and write the report.",
+        options.port, options.duration
+    );
+    run_listener(
+        listener,
+        Duration::from_secs(options.duration),
+        options.duration,
+        &options,
+        &RUNNING,
+    )
+}
+
+fn bind_local(port: u16) -> Result<TcpListener, String> {
+    TcpListener::bind((IpAddr::V4(Ipv4Addr::LOCALHOST), port))
+        .map_err(|error| format!("Could not bind 127.0.0.1:{port}: {error}"))
+}
+
+fn run_listener(
+    listener: TcpListener,
+    window: Duration,
+    report_seconds: u64,
+    options: &ListenOptions,
+    running: &AtomicBool,
+) -> Result<(), String> {
+    let started = Instant::now();
+    let end = started + window;
+    let mut aggregate = Aggregate::default();
+    let mut limiter = RateLimiter::new(options.rate_limit as usize);
+    let mut sample_file = options
+        .save_sample
+        .as_ref()
+        .map(|path| {
+            File::create(path)
+                .map_err(|error| format!("Could not create {}: {error}", path.display()))
+        })
+        .transpose()?;
+
+    while Instant::now() < end && running.load(Ordering::SeqCst) {
+        match listener.accept() {
+            Ok((mut stream, _address)) => match read_request(&mut stream) {
+                Ok(request) => {
+                    if !limiter.accepts(Instant::now()) {
+                        let _ = write_response(
+                            &mut stream,
+                            429,
+                            "Too Many Requests",
+                            "Rate limit reached. Retry in one second.\n",
+                            Some(("Retry-After", "1")),
+                        );
+                        continue;
+                    }
+                    aggregate_ndjson_body(&request.body, &mut aggregate, &options.detector);
+                    if let Some(file) = sample_file.as_mut() {
+                        file.write_all(request.body.as_bytes())
+                            .and_then(|()| {
+                                if request.body.ends_with('\n') {
+                                    Ok(())
+                                } else {
+                                    file.write_all(b"\n")
+                                }
+                            })
+                            .map_err(|error| format!("Could not save accepted sample: {error}"))?;
+                    }
+                    let _ = write_response(&mut stream, 202, "Accepted", "", None);
+                }
+                Err(error) => {
+                    let body = format!("{}\n", error.message);
+                    let _ = write_response(&mut stream, error.status, error.reason, &body, None);
+                    eprintln!("Rejected request: {}", error.message);
+                }
+            },
+            Err(error) if error.kind() == std::io::ErrorKind::WouldBlock => {
+                std::thread::sleep(Duration::from_millis(10));
+            }
+            Err(error) => return Err(format!("Could not accept request: {error}")),
+        }
     }
-    let bodies_saved = save_sample.is_some();
-    if let Some(path) = save_sample { fs::write(path, saved.join("\n")).map_err(|e| e.to_string())?; }
-    write_report(events, duration, days, output, json, bodies_saved)
+
+    if let Some(file) = sample_file.as_mut() {
+        file.flush()
+            .map_err(|error| format!("Could not finish sample file: {error}"))?;
+    }
+    let elapsed_seconds = started.elapsed().as_secs().clamp(1, report_seconds);
+    let report = aggregate.report(
+        elapsed_seconds,
+        &options.retention_days,
+        options.save_sample.is_some(),
+    );
+    write_report(report, &options.output, options.json)
 }
-fn read_request(mut stream: TcpStream) -> Result<(Vec<Value>, Option<String>), String> {
-    stream.set_read_timeout(Some(Duration::from_secs(2))).map_err(|e| e.to_string())?;
-    let mut raw = Vec::new(); let mut chunk = [0_u8; 1024]; let header_end;
+
+struct AcceptedRequest {
+    body: String,
+}
+
+#[derive(Debug)]
+struct RequestError {
+    status: u16,
+    reason: &'static str,
+    message: String,
+}
+
+impl RequestError {
+    fn bad_request(message: impl Into<String>) -> Self {
+        Self {
+            status: 400,
+            reason: "Bad Request",
+            message: message.into(),
+        }
+    }
+}
+
+fn read_request(stream: &mut TcpStream) -> Result<AcceptedRequest, RequestError> {
+    stream
+        .set_read_timeout(Some(READ_TIMEOUT))
+        .map_err(|error| {
+            RequestError::bad_request(format!("Could not set read timeout: {error}"))
+        })?;
+    let mut raw = Vec::new();
+    let mut chunk = [0_u8; 4096];
+    let header_end;
     loop {
-        let count = stream.read(&mut chunk).map_err(|e| format!("Could not read request: {e}"))?;
-        if count == 0 { return Err("Request ended before headers arrived.".to_string()); }
+        let count = stream.read(&mut chunk).map_err(|error| {
+            RequestError::bad_request(format!("Could not read headers: {error}"))
+        })?;
+        if count == 0 {
+            return Err(RequestError::bad_request(
+                "Request ended before headers arrived.",
+            ));
+        }
         raw.extend_from_slice(&chunk[..count]);
-        if let Some(end) = raw.windows(4).position(|part| part == b"\r\n\r\n") { header_end = end + 4; break; }
-        if raw.len() > 32 * 1024 { return Err("Request headers exceed 32 KiB.".to_string()); }
+        if let Some(end) = raw.windows(4).position(|part| part == b"\r\n\r\n") {
+            header_end = end + 4;
+            break;
+        }
+        if raw.len() > MAX_HEADER_BYTES {
+            return Err(RequestError {
+                status: 431,
+                reason: "Request Header Fields Too Large",
+                message: "Request headers exceed 32 KiB.".to_string(),
+            });
+        }
     }
-    let headers = String::from_utf8_lossy(&raw[..header_end]);
-    let length = headers.lines().find_map(|line| line.strip_prefix("Content-Length:").or_else(|| line.strip_prefix("content-length:")).and_then(|value| value.trim().parse::<usize>().ok())).unwrap_or(0);
-    if length > 2 * 1024 * 1024 { return Err("Request body exceeds 2 MiB sample limit.".to_string()); }
+
+    let headers = std::str::from_utf8(&raw[..header_end])
+        .map_err(|_| RequestError::bad_request("Request headers must be UTF-8."))?;
+    let request_line = headers.lines().next().unwrap_or_default();
+    if !request_line.starts_with("POST ") {
+        return Err(RequestError {
+            status: 405,
+            reason: "Method Not Allowed",
+            message: "Send the drain sample with POST.".to_string(),
+        });
+    }
+    let length_header = headers.lines().skip(1).find_map(|line| {
+        let (name, value) = line.split_once(':')?;
+        name.eq_ignore_ascii_case("content-length")
+            .then_some(value.trim())
+    });
+    let length = length_header
+        .ok_or_else(|| RequestError::bad_request("Content-Length is required."))?
+        .parse::<usize>()
+        .map_err(|_| RequestError::bad_request("Content-Length must be a whole number."))?;
+    if length > MAX_BODY_BYTES {
+        return Err(RequestError {
+            status: 413,
+            reason: "Content Too Large",
+            message: "Request body exceeds the 2 MiB sample limit.".to_string(),
+        });
+    }
+
     while raw.len() - header_end < length {
-        let count = stream.read(&mut chunk).map_err(|e| format!("Could not read body: {e}"))?;
-        if count == 0 { return Err("Request ended before its declared body length.".to_string()); }
+        let count = stream.read(&mut chunk).map_err(|error| {
+            RequestError::bad_request(format!(
+                "Request ended before its declared body length: {error}"
+            ))
+        })?;
+        if count == 0 {
+            return Err(RequestError::bad_request(
+                "Request ended before its declared body length.",
+            ));
+        }
         raw.extend_from_slice(&chunk[..count]);
     }
-    let body = String::from_utf8_lossy(&raw[header_end..header_end + length]).to_string();
-    let values = body.lines().filter_map(|line| serde_json::from_str(line).ok()).collect();
-    stream.write_all(b"HTTP/1.1 202 Accepted\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").map_err(|e| e.to_string())?;
-    Ok((values, Some(body)))
+    let body = std::str::from_utf8(&raw[header_end..header_end + length])
+        .map_err(|_| RequestError::bad_request("Request body must be UTF-8."))?
+        .to_string();
+    validate_ndjson_body(&body)?;
+    Ok(AcceptedRequest { body })
+}
+
+fn validate_ndjson_body(body: &str) -> Result<(), RequestError> {
+    let mut event_count = 0;
+    for (index, line) in body.lines().enumerate() {
+        if line.trim().is_empty() {
+            continue;
+        }
+        serde_json::from_str::<Value>(line).map_err(|error| {
+            RequestError::bad_request(format!("Invalid JSON on line {}: {error}", index + 1))
+        })?;
+        event_count += 1;
+    }
+    if event_count == 0 {
+        return Err(RequestError::bad_request(
+            "Request body contains no JSON events.",
+        ));
+    }
+    Ok(())
+}
+
+fn aggregate_ndjson_body(body: &str, aggregate: &mut Aggregate, config: &DetectorConfig) {
+    for line in body.lines().filter(|line| !line.trim().is_empty()) {
+        // Validation is transactional and completes before this function runs.
+        let event: Value = serde_json::from_str(line).expect("validated NDJSON changed");
+        let bytes = serde_json::to_vec(&event).map_or(0, |value| value.len() as u64);
+        aggregate.record_event(&event, bytes, config);
+    }
+}
+
+fn write_response(
+    stream: &mut TcpStream,
+    status: u16,
+    reason: &str,
+    body: &str,
+    extra_header: Option<(&str, &str)>,
+) -> std::io::Result<()> {
+    let extra = extra_header
+        .map(|(name, value)| format!("{name}: {value}\r\n"))
+        .unwrap_or_default();
+    write!(
+        stream,
+        "HTTP/1.1 {status} {reason}\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Length: {}\r\n{extra}Connection: close\r\n\r\n{body}",
+        body.len()
+    )
+}
+
+struct RateLimiter {
+    limit: usize,
+    accepted: VecDeque<Instant>,
+}
+
+impl RateLimiter {
+    fn new(limit: usize) -> Self {
+        Self {
+            limit,
+            accepted: VecDeque::with_capacity(limit),
+        }
+    }
+
+    fn accepts(&mut self, now: Instant) -> bool {
+        while self
+            .accepted
+            .front()
+            .is_some_and(|earliest| now.duration_since(*earliest) >= Duration::from_secs(1))
+        {
+            self.accepted.pop_front();
+        }
+        if self.accepted.len() >= self.limit {
+            return false;
+        }
+        self.accepted.push_back(now);
+        true
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::{net::Shutdown, sync::Arc, thread};
+
+    #[test]
+    fn rejects_malformed_payload_transactionally() {
+        assert!(validate_ndjson_body("{\"ok\":true}\n{not-json").is_err());
+        assert!(validate_ndjson_body("{\"ok\":true}\n").is_ok());
+    }
+
+    #[test]
+    fn rate_limit_has_a_rolling_threshold() {
+        let start = Instant::now();
+        let mut limiter = RateLimiter::new(2);
+        assert!(limiter.accepts(start));
+        assert!(limiter.accepts(start));
+        assert!(!limiter.accepts(start));
+        assert!(limiter.accepts(start + Duration::from_secs(1)));
+    }
+
+    #[test]
+    fn rate_limit_returns_429_with_retry_after() {
+        let cli = Cli::try_parse_from(["drain-check", "listen"]).unwrap();
+        let Command::Listen { rate_limit, .. } = cli.command else {
+            unreachable!();
+        };
+        assert_eq!(rate_limit, 20);
+
+        let listener = TcpListener::bind((Ipv4Addr::LOCALHOST, 0)).unwrap();
+        listener.set_nonblocking(true).unwrap();
+        let address = listener.local_addr().unwrap();
+        let directory = tempfile::tempdir().unwrap();
+        let options = ListenOptions {
+            duration: 1,
+            port: address.port(),
+            output: directory.path().join("report.json"),
+            retention_days: vec![7],
+            save_sample: None,
+            detector: DetectorConfig::default(),
+            rate_limit: 1,
+            json: false,
+        };
+        let running = Arc::new(AtomicBool::new(true));
+        let server_running = Arc::clone(&running);
+        let server = thread::spawn(move || {
+            run_listener(
+                listener,
+                Duration::from_secs(2),
+                1,
+                &options,
+                &server_running,
+            )
+            .unwrap();
+        });
+        thread::sleep(Duration::from_millis(30));
+        assert!(send(address, "{\"one\":1}", None).starts_with("HTTP/1.1 202"));
+        let limited = send(address, "{\"two\":2}", None);
+        assert!(limited.starts_with("HTTP/1.1 429"));
+        assert!(limited.contains("Retry-After: 1"));
+        running.store(false, Ordering::SeqCst);
+        server.join().unwrap();
+    }
+
+    #[test]
+    fn cli_rejects_invalid_listener_and_forwarding_values() {
+        assert!(Cli::try_parse_from(["drain-check", "listen", "--duration", "0"]).is_err());
+        assert!(Cli::try_parse_from(["drain-check", "listen", "--port", "0"]).is_err());
+        assert!(Cli::try_parse_from(["drain-check", "forwarding", "--url", "not a url"]).is_err());
+    }
+
+    #[test]
+    fn listener_binds_to_loopback() {
+        let listener = bind_local(0).unwrap();
+        assert!(listener.local_addr().unwrap().ip().is_loopback());
+    }
+
+    #[test]
+    fn receiver_rejects_bad_requests_and_keeps_prior_events() {
+        let listener = TcpListener::bind((Ipv4Addr::LOCALHOST, 0)).unwrap();
+        listener.set_nonblocking(true).unwrap();
+        let address = listener.local_addr().unwrap();
+        let directory = tempfile::tempdir().unwrap();
+        let output = directory.path().join("report.json");
+        let options = ListenOptions {
+            duration: 1,
+            port: address.port(),
+            output: output.clone(),
+            retention_days: vec![7],
+            save_sample: None,
+            detector: DetectorConfig::default(),
+            rate_limit: 20,
+            json: false,
+        };
+        let running = Arc::new(AtomicBool::new(true));
+        let server_running = Arc::clone(&running);
+        let server = thread::spawn(move || {
+            run_listener(
+                listener,
+                Duration::from_millis(600),
+                1,
+                &options,
+                &server_running,
+            )
+            .unwrap();
+        });
+
+        thread::sleep(Duration::from_millis(30));
+        let good = send(address, "{\"ok\":true}\n", None);
+        assert!(good.starts_with("HTTP/1.1 202"));
+        let bad = send(address, "{not-json\n", None);
+        assert!(bad.starts_with("HTTP/1.1 400"));
+        let short = send(address, "{\"late\":true}", Some(100));
+        assert!(short.is_empty() || short.starts_with("HTTP/1.1 400"));
+        server.join().unwrap();
+
+        let report: Report = serde_json::from_str(&fs::read_to_string(output).unwrap()).unwrap();
+        assert_eq!(report.events, 1);
+        assert!(!report.bodies_saved);
+    }
+
+    #[test]
+    fn save_sample_writes_only_accepted_bodies_when_requested() {
+        let listener = TcpListener::bind((Ipv4Addr::LOCALHOST, 0)).unwrap();
+        listener.set_nonblocking(true).unwrap();
+        let address = listener.local_addr().unwrap();
+        let directory = tempfile::tempdir().unwrap();
+        let output = directory.path().join("report.json");
+        let sample = directory.path().join("accepted.ndjson");
+        let options = ListenOptions {
+            duration: 1,
+            port: address.port(),
+            output: output.clone(),
+            retention_days: vec![7],
+            save_sample: Some(sample.clone()),
+            detector: DetectorConfig::default(),
+            rate_limit: 20,
+            json: false,
+        };
+        let running = Arc::new(AtomicBool::new(true));
+        let server_running = Arc::clone(&running);
+        let server = thread::spawn(move || {
+            run_listener(
+                listener,
+                Duration::from_secs(2),
+                1,
+                &options,
+                &server_running,
+            )
+            .unwrap();
+        });
+        thread::sleep(Duration::from_millis(30));
+        assert!(send(address, "{not-json}", None).starts_with("HTTP/1.1 400"));
+        assert!(send(address, "{\"saved\":true}", None).starts_with("HTTP/1.1 202"));
+        running.store(false, Ordering::SeqCst);
+        server.join().unwrap();
+        assert_eq!(fs::read_to_string(sample).unwrap(), "{\"saved\":true}\n");
+        let report: Report = serde_json::from_str(&fs::read_to_string(output).unwrap()).unwrap();
+        assert!(report.bodies_saved);
+    }
+
+    fn send(address: std::net::SocketAddr, body: &str, declared: Option<usize>) -> String {
+        let mut stream = TcpStream::connect(address).unwrap();
+        let length = declared.unwrap_or(body.len());
+        write!(
+            stream,
+            "POST / HTTP/1.1\r\nHost: localhost\r\nContent-Length: {length}\r\n\r\n{body}"
+        )
+        .unwrap();
+        if declared.is_some() {
+            stream.shutdown(Shutdown::Write).unwrap();
+        }
+        let mut response = String::new();
+        stream.read_to_string(&mut response).unwrap();
+        response
+    }
 }

@@ -1,5 +1,79 @@
 [
-  {"id":"local-only","claim":"The web demo makes no third-party requests.","where":"Privacy page","test":"npm test -- -t @claim:local-only","sandbox":"fresh browser context; record every request while opening /demo"},
-  {"id":"discard-default","claim":"Discards bodies by default.","where":"landing facts","test":"npm test -- -t @claim:discard-default","sandbox":"fresh browser; assert the documented receiver default"},
-  {"id":"sample-demo","claim":"Try it with sample data opens a sample report and saves nothing.","where":"landing action, demo banner","test":"npm test -- -t @claim:sample-demo","sandbox":"fresh browser; click the landing action and assert the report and banner"}
+  {
+    "id": "sample-demo",
+    "claim": "The one-click web demo shows the bundled three-event report with 17 paths, 558.1 KiB for 7 days, and 2.3 MiB for 30 days without saving data.",
+    "where": "landing action, demo report, README",
+    "test": "npm test -- -t @claim:sample-demo",
+    "sandbox": "fresh browser context; click from /; assert route, banner, exact report metrics, and empty storage"
+  },
+  {
+    "id": "local-only",
+    "claim": "The website makes no third-party requests or storage writes, and the receiver binds only to loopback.",
+    "where": "landing facts, privacy page, README",
+    "test": "npm test -- -t @claim:local-only",
+    "sandbox": "fresh browser context records requests, cookies, and storage; Rust regression asserts the bound address is loopback"
+  },
+  {
+    "id": "discard-default",
+    "claim": "The receiver aggregates accepted events and discards their bodies and values unless --save-sample is set.",
+    "where": "landing facts, privacy page, README, CLI help",
+    "test": "npm test -- -t @claim:discard-default",
+    "sandbox": "Rust regressions send a unique value, assert it is absent from the report, and assert bodies_saved is false"
+  },
+  {
+    "id": "contract-report",
+    "claim": "The report shows event rate, average size, field paths and types, likely secrets, and retention estimates.",
+    "where": "landing, demo, README",
+    "test": "npm test -- -t @claim:contract-report",
+    "sandbox": "bundled NDJSON fixture; assert exact count, size, paths, finding, and both retention values"
+  },
+  {
+    "id": "false-positive-controls",
+    "claim": "Operators can add sensitive-field patterns and suppress reviewed exact paths or prefixes.",
+    "where": "landing setup, README, CLI help",
+    "test": "npm test -- -t @claim:false-positive-controls",
+    "sandbox": "fixture with a custom sensitive key and a benign token-shaped request ID; assert custom detection and suppression"
+  },
+  {
+    "id": "rate-limit",
+    "claim": "The receiver accepts 20 requests per rolling second by default and returns HTTP 429 with Retry-After when limited.",
+    "where": "README, CLI help",
+    "test": "npm test -- -t @claim:rate-limit",
+    "sandbox": "local receiver configured at one request per second; assert first 202, second 429, and Retry-After: 1"
+  },
+  {
+    "id": "request-recovery",
+    "claim": "Malformed or incomplete requests return HTTP 400 without ending the sample window or losing accepted events.",
+    "where": "README",
+    "test": "npm test -- -t @claim:request-recovery",
+    "sandbox": "local receiver receives a valid event, malformed NDJSON, and a short declared body; assert 202 then 400 responses and a one-event report"
+  },
+  {
+    "id": "explicit-save",
+    "claim": "The receiver writes accepted bodies only when --save-sample is set.",
+    "where": "landing limits, privacy page, README, CLI help",
+    "test": "npm test -- -t @claim:explicit-save",
+    "sandbox": "local receiver gets malformed and valid bodies with --save-sample; assert only the accepted body is written and bodies_saved is true"
+  },
+  {
+    "id": "interrupt-report",
+    "claim": "Ctrl-C finishes the sample early and writes its report.",
+    "where": "CLI runtime help",
+    "test": "npm test -- -t @claim:interrupt-report",
+    "sandbox": "start the compiled listener for 60 seconds, send SIGINT, assert successful exit and a valid report"
+  },
+  {
+    "id": "portable-demo",
+    "claim": "The installed CLI demo runs from any working directory using its embedded sample and a unique temporary report directory.",
+    "where": "landing recording, README, demo documentation",
+    "test": "npm test -- -t @claim:portable-demo",
+    "sandbox": "compiled binary launched from a fresh temporary consumer directory; assert sample metrics and report path outside the repository"
+  },
+  {
+    "id": "mit-license",
+    "claim": "Drain Check is free software under the MIT License.",
+    "where": "landing facts, terms page, README",
+    "test": "npm test -- -t @claim:mit-license",
+    "sandbox": "read the shipped LICENSE and assert its MIT grant"
+  }
 ]

@@ -27,4 +27,6 @@ Status changes flicker in over 180 ms as if a terminal refreshes. The scanline t
 
 ## Art plan and provenance
 
-`site/public/drain-console.webp` is an original raster illustration: a pixel-art local receiver catching bright log packets and sorting them into field, secret, and volume lanes. It is generated with `/opt/fleet/lib/gen-image.sh` (factory-image), then converted to WebP (61 KB). `og-drain-console.webp` is a 1200×630 composition derived from it. It contains no text, logos, stock material, or third-party asset. The exact prompt and generation metadata sit in `.factory/assets/drain-console.png.json`; the source PNG remains there too, outside the deploy bundle.
+`site/public/drain-console.webp` is an original raster illustration: a pixel-art local receiver catching bright log packets and sorting them into field, secret, and volume lanes. It was generated with `/opt/fleet/lib/gen-image.sh` (factory-image), then converted to WebP (61 KB). `og-drain-console.webp` is a 1200×630 center crop derived from that original. It contains no text, logos, stock material, or third-party asset. The exact prompt and generation metadata sit in `.factory/assets/drain-console.png.json`; the source PNG remains there too, outside the deploy bundle.
+
+The CLI recording is rendered as selectable HTML text from a real bundled-sample run. Its replay motion reveals four characters per frame and resolves instantly when reduced motion is requested. On phones, the task and sample action precede the illustration so the first action stays in the first viewport.
