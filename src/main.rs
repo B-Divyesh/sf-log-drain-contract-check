@@ -2,7 +2,7 @@ use clap::{Parser, Subcommand};
 use drain_check::{Aggregate, DetectorConfig, Report};
 use serde_json::Value;
 use std::{
-    collections::VecDeque,
+    collections::{HashSet, VecDeque},
     fs::{self, File},
     io::{BufRead, BufReader, Read, Write},
     net::{IpAddr, Ipv4Addr, TcpListener, TcpStream},
@@ -22,7 +22,7 @@ static RUNNING: AtomicBool = AtomicBool::new(true);
 #[command(
     name = "drain-check",
     version,
-    about = "Sample a local log drain and review its data contract."
+    about = "Sample a local log drain and review its fields, size, and sensitive data."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -158,7 +158,7 @@ fn forwarding_config(url: &Url, platform: &str) -> String {
     // when a URL contains characters that need escaping.
     let encoded_url = serde_json::to_string(url.as_str()).expect("URL strings serialize");
     format!(
-        "# {platform}\n# Send POST requests to this endpoint after contract review\nurl = {encoded_url}\nmethod = \"POST\"\ncontent_type = \"application/json\"\n"
+        "# {platform}\n# Send POST requests to this endpoint after report review\nurl = {encoded_url}\nmethod = \"POST\"\ncontent_type = \"application/json\"\n"
     )
 }
 
@@ -205,12 +205,19 @@ fn write_report(report: Report, output: &Path, json: bool) -> Result<(), String>
     if json {
         println!("{text}");
     } else {
+        let review_fields = report
+            .findings
+            .iter()
+            .map(|finding| finding.path.as_str())
+            .collect::<HashSet<_>>()
+            .len();
         println!(
-            "Reviewed {} events in {}s. {} fields. {} possible risks.\nReport: {}",
+            "Reviewed {} events in {}s. {} fields. {} findings across {} fields.\nReport: {}",
             report.events,
             report.sample_seconds,
             report.fields.len(),
             report.findings.len(),
+            review_fields,
             output.display()
         );
     }

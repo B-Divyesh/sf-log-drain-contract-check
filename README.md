@@ -2,13 +2,15 @@
 
 Inspect a log drain before forwarding it.
 
-Drain Check is for small platform teams adding a managed drain. It opens a bounded local receiver, summarizes volume and field types, flags likely secrets, and writes a JSON report. It is not a log destination.
+Drain Check is for small platform teams adding a managed drain. It opens a bounded local receiver, summarizes volume and field types, flags likely sensitive data, and writes a JSON report.
 
 ## Install and run
 
-You need Rust 1.75+ and Node 20+ to build the docs site.
+You need Rust 1.75+ to run the CLI. Clone the public source repository first:
 
 ```sh
+git clone https://github.com/B-Divyesh/sf-log-drain-contract-check.git
+cd sf-log-drain-contract-check
 cargo run -- demo --json
 # Uses the sample embedded in the binary and prints the unique report directory.
 
@@ -24,10 +26,9 @@ You can also inspect an existing newline-delimited JSON file:
 
 ```sh
 cargo run -- inspect examples/drain.ndjson --sample-seconds 600 --output report.json --json
-cargo run -- forwarding --url https://receiver.example/logs
 ```
 
-`inspect --sample-seconds` must be at least 1. `forwarding` accepts a parsed HTTP(S) URL and safely encodes it in the generated configuration. `--json` prints the report to standard output for scripts. Add `--sensitive-field session_key` for a team-specific field name. Add `--ignore-field '$.request_id'` after reviewing a false positive. A trailing `*` ignores a path prefix. `cargo run -- --help` lists all commands and options.
+`inspect --sample-seconds` must be at least 1. `--json` prints the report to standard output for scripts. Add `--sensitive-field session_key` for a team-specific field name. Add `--ignore-field '$.request_id'` after reviewing a false positive. A trailing `*` ignores a path prefix. `cargo run -- --help` lists all commands and options.
 
 ## What the report contains
 
@@ -35,13 +36,23 @@ cargo run -- forwarding --url https://receiver.example/logs
 - Field paths, observed types, and how many events contained each path.
 - Conservative risk findings for field names, token-shaped values, and email-shaped values.
 - Retention estimates for 7 and 30 days.
-- A destination-neutral HTTP forwarding template.
+- A recommendation to review the sample before forwarding.
 
 Risk findings are prompts for review. They do not prove a value is sensitive, and they cannot find every secret. The bundled sample reports 3 events, 17 field paths, 558.1 KiB for 7 days, and 2.3 MiB for 30 days.
 
+## Generate a forwarding configuration
+
+Run the separate `forwarding` command after reviewing the report:
+
+```sh
+cargo run -- forwarding --url https://receiver.example/logs
+```
+
+The command accepts an HTTP(S) URL and safely encodes it in the generated configuration.
+
 ## Demo
 
-Open [the web demo](https://log-drain-contract-check.sociobot.in/demo) for a self-contained sample report. The command-line equivalent is `cargo run -- demo --json`. See [.factory/demo.md](.factory/demo.md) for the sandbox contract.
+Open [the web demo](https://log-drain-contract-check.sociobot.in/?demo=1) for the bundled sample report. The command-line equivalent is `cargo run -- demo --json`. See [.factory/demo.md](.factory/demo.md) for demo storage and reset details.
 
 ## Develop, test, and build
 
@@ -60,4 +71,4 @@ The static site build lands in `dist/site` with its deployment configuration at 
 
 ## Privacy and license
 
-There is no telemetry. The CLI only receives data on its loopback listener. Read the deployed [Privacy page](https://log-drain-contract-check.sociobot.in/privacy) and [Terms](https://log-drain-contract-check.sociobot.in/terms). Licensed under [MIT](LICENSE).
+The website requests only same-origin files and writes no browser storage. The CLI receives data on its loopback listener. Read the deployed [Privacy page](https://log-drain-contract-check.sociobot.in/privacy) and [Terms](https://log-drain-contract-check.sociobot.in/terms). Licensed under [MIT](LICENSE).

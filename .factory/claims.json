@@ -28,6 +28,20 @@
     "sandbox": "bundled NDJSON fixture; assert exact count, size, paths, finding, and both retention values"
   },
   {
+    "id": "forwarding-config",
+    "claim": "The separate forwarding command validates an HTTP(S) URL and safely renders it in a configuration.",
+    "where": "landing recording, demo configuration section, README",
+    "test": "npm test -- -t @claim:forwarding-config",
+    "sandbox": "bundled demo plus Rust regression; assert the command and generated output, reject non-HTTP destinations, and encode unsafe URL characters"
+  },
+  {
+    "id": "source-checkout",
+    "claim": "The documented public source checkout builds and runs with Cargo.",
+    "where": "landing local setup, README",
+    "test": "npm test -- -t @claim:source-checkout",
+    "sandbox": "fresh temporary clone of the public GitHub repository; run cargo run --locked -- --help and assert the CLI commands"
+  },
+  {
     "id": "false-positive-controls",
     "claim": "Operators can add sensitive-field patterns and suppress reviewed exact paths or prefixes.",
     "where": "landing setup, README, CLI help",

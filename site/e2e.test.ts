@@ -1,5 +1,7 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { chromium, type Browser } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
@@ -8,7 +10,7 @@ import { createServer, type ViteDevServer } from 'vite';
 let server: ViteDevServer;
 let browser: Browser;
 const base = 'http://127.0.0.1:4179';
-const routes = ['/', '/demo', '/privacy', '/terms', '/missing'];
+const routes = ['/', '/?demo=1', '/demo', '/privacy', '/terms', '/missing'];
 // Each published Cargo-backed claim must pass from a cold clone. Rust compilation
 // legitimately takes longer than Vitest's 5s default, while the behavior checks
 // below still run unchanged after compilation completes.
@@ -29,18 +31,33 @@ function cargoTest(name: string) {
   execFileSync('cargo', ['test', '--locked', name], { cwd: process.cwd(), stdio: 'pipe' });
 }
 
+describe('claims contract', () => {
+  it('lists one executable tagged test for every declared claim', () => {
+    const claims = JSON.parse(readFileSync('.factory/claims.json', 'utf8')) as Array<{ id: string; test: string }>;
+    const source = readFileSync('site/e2e.test.ts', 'utf8');
+    for (const claim of claims) {
+      expect(claim.test).toBe(`npm test -- -t @claim:${claim.id}`);
+      expect(source.split(`@claim:${claim.id}`).length - 1).toBe(1);
+    }
+  });
+});
+
 describe('published claims', () => {
   it('@claim:sample-demo opens a quantitatively correct report and saves nothing', async () => {
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(base);
     await page.getByRole('link', { name: 'Try it with sample data' }).click();
-    expect(page.url()).toBe(`${base}/demo`);
+    expect(page.url()).toBe(`${base}/?demo=1`);
     expect(await page.getByRole('heading', { name: 'Review this drain sample' }).count()).toBe(1);
     expect(await page.getByText('Demo — sample data, nothing is saved').count()).toBe(1);
     expect(await page.getByText('558.1 KiB').count()).toBe(1);
     expect(await page.getByText('2.3 MiB').count()).toBe(1);
     expect(await page.getByText('17', { exact: true }).count()).toBe(1);
+    expect(await page.getByText('findings across 2 fields', { exact: true }).count()).toBe(1);
+    expect(await page.locator('.report li').filter({ hasText: 'secret-shaped value' }).count()).toBe(1);
+    expect(await page.locator('.report li').filter({ hasText: 'sensitive field name' }).count()).toBe(1);
+    expect(await page.locator('.report li').filter({ hasText: 'email-shaped value' }).count()).toBe(1);
     expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }))).toEqual({ local: 0, session: 0 });
     await context.close();
   });
@@ -50,11 +67,17 @@ describe('published claims', () => {
     const page = await context.newPage();
     const requests: string[] = [];
     page.on('request', (request) => requests.push(request.url()));
-    await page.goto(`${base}/demo`);
+    await page.goto(`${base}/?demo=1`);
+    expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
+    await page.evaluate(() => localStorage.setItem('real:drain-check', 'keep'));
     await page.getByRole('button', { name: 'Reset demo' }).click();
     expect(requests.every((url) => new URL(url).origin === base)).toBe(true);
     expect(await context.cookies()).toEqual([]);
-    expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
+    expect(await page.evaluate(() => localStorage.getItem('real:drain-check'))).toBe('keep');
+    expect(await page.evaluate(() => localStorage.getItem('demo:drain-check'))).toBeNull();
+    expect(await page.evaluate(() => sessionStorage.length)).toBe(0);
+    await page.getByRole('link', { name: 'Start for real' }).click();
+    expect(page.url()).toBe(`${base}/`);
     await context.close();
     cargoTest('listener_binds_to_loopback');
   }, CARGO_CLAIM_TIMEOUT_MS);
@@ -66,8 +89,32 @@ describe('published claims', () => {
 
   it('@claim:contract-report proves fields, types, findings, and retention values', () => {
     cargoTest('documented_sample_has_exact_metrics');
-    cargoTest('cli_rejects_invalid_listener_and_forwarding_values');
   }, CARGO_CLAIM_TIMEOUT_MS);
+
+  it('@claim:forwarding-config renders a validated destination in a separate configuration', async () => {
+    cargoTest('forwarding_requires_a_real_http_url_and_encodes_it_safely');
+    const page = await browser.newPage();
+    await page.goto(`${base}/?demo=1`);
+    expect(await page.getByRole('heading', { name: 'Generate a forwarding configuration' }).count()).toBe(1);
+    const configuration = await page.locator('.report pre').textContent();
+    expect(configuration).toContain('$ drain-check forwarding --url https://receiver.example/logs');
+    expect(configuration).toContain('url = "https://receiver.example/logs"');
+    expect(configuration).toContain('method = "POST"');
+    await page.close();
+  }, CARGO_CLAIM_TIMEOUT_MS);
+
+  it('@claim:source-checkout runs from a fresh public source checkout', () => {
+    const temporary = mkdtempSync(join(tmpdir(), 'drain-check-source-'));
+    const checkout = join(temporary, 'sf-log-drain-contract-check');
+    try {
+      execFileSync('git', ['clone', '--quiet', '--depth', '1', 'https://github.com/B-Divyesh/sf-log-drain-contract-check.git', checkout], { stdio: 'pipe' });
+      const output = execFileSync('cargo', ['run', '--locked', '--', '--help'], { cwd: checkout, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+      expect(output).toContain('Sample a local log drain');
+      expect(output).toContain('listen');
+    } finally {
+      rmSync(temporary, { recursive: true, force: true });
+    }
+  }, 180_000);
 
   it('@claim:false-positive-controls proves custom and ignored field handling', () => {
     cargoTest('supports_custom_patterns_and_explicit_suppression');
@@ -136,6 +183,34 @@ describe('responsive and accessible site', () => {
     await link.focus();
     await link.press('Enter');
     expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('H1');
+    expect(page.url()).toBe(`${base}/?demo=1`);
+    await page.goBack();
+    expect(await page.getByRole('heading', { name: 'Inspect a log drain before forwarding' }).count()).toBe(1);
+    expect(await page.evaluate(() => document.activeElement?.tagName)).toBe('H1');
+    await page.close();
+  });
+
+  it('sets route titles, metadata, legal links, and the designed 404 contract', async () => {
+    const expected = [
+      ['/', 'Drain Check — inspect a log drain sample', 'https://log-drain-contract-check.sociobot.in/'],
+      ['/?demo=1', 'Demo — Drain Check', 'https://log-drain-contract-check.sociobot.in/?demo=1'],
+      ['/privacy', 'Privacy — Drain Check', 'https://log-drain-contract-check.sociobot.in/privacy'],
+      ['/terms', 'Terms — Drain Check', 'https://log-drain-contract-check.sociobot.in/terms'],
+      ['/missing', 'Not found — Drain Check', 'https://log-drain-contract-check.sociobot.in/missing'],
+    ];
+    const page = await browser.newPage();
+    for (const [path, title, canonical] of expected) {
+      await page.goto(`${base}${path}`);
+      expect(await page.title()).toBe(title);
+      expect(await page.locator('link[rel="canonical"]').getAttribute('href')).toBe(canonical);
+      expect(await page.locator('meta[name="description"]').getAttribute('content')).toBeTruthy();
+      expect(await page.locator('h1').count()).toBe(1);
+    }
+    await page.goto(base);
+    expect(await page.locator('footer a[href="/privacy"]').count()).toBe(1);
+    expect(await page.locator('footer a[href="/terms"]').count()).toBe(1);
+    const config = JSON.parse(readFileSync('staticwebapp.config.json', 'utf8'));
+    expect(config.responseOverrides['404'].rewrite).toBe('/404.html');
     await page.close();
   });
 
@@ -157,11 +232,13 @@ describe('responsive and accessible site', () => {
     const context = await browser.newContext({ reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto(`${base}/demo`);
+    await page.evaluate(() => localStorage.setItem('real:drain-check', 'keep'));
     await page.evaluate(() => localStorage.setItem('demo:drain-check', 'test'));
     const reset = page.getByRole('button', { name: 'Reset demo' });
     await reset.focus();
     await page.keyboard.press('Space');
     expect(await page.evaluate(() => localStorage.getItem('demo:drain-check'))).toBeNull();
+    expect(await page.evaluate(() => localStorage.getItem('real:drain-check'))).toBe('keep');
     expect(await page.locator('.demo-banner').evaluate((element) => getComputedStyle(element).animationDuration)).not.toBe('.25s');
     await context.close();
   });

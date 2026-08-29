@@ -1,26 +1,47 @@
 # Copy audit
 
-Audited 2026-08-29 against the rendered landing page. Labels, commands, and terminal output are excluded from sentence counts.
+Audited 2026-08-29 against the rendered landing page. Commands, navigation labels, and metric fragments are listed separately. Word counts treat an inline command as one word.
 
-| Sentence | Words |
-| --- | ---: |
-| Inspect a log drain before forwarding. | 6 |
-| For platform teams who need volume, fields, and privacy risks before a drain stays on. | 15 |
-| Opens a sample report. | 4 |
-| Nothing is saved. | 3 |
-| Listens only on your machine. | 5 |
-| Discards bodies after aggregation. | 4 |
-| Free under the MIT License. | 5 |
-| Run one bounded window. | 4 |
-| Check fields and likely secrets. | 5 |
-| Use the generated template. | 4 |
-| It does not store logs, search logs, or send them to a vendor. | 14 |
-| Use `--save-sample` only when you choose to retain accepted bodies. | 10 |
-| Then point your temporary HTTP drain to `http://127.0.0.1:8787/`. | 8 |
-| Use `--ignore-field '$.request_id'` to suppress a reviewed false positive. | 9 |
-| Drain Check samples a log drain before you forward it. | 10 |
+## Landing-page sentences
+
+| Location | Sentence | Words | Result |
+| --- | --- | ---: | --- |
+| H1 | Inspect a log drain before forwarding. | 6 | Pass |
+| First screen | For platform teams checking volume, field types, and sensitive data before enabling a log drain. | 15 | Pass |
+| First screen | Opens the bundled report. | 4 | Pass |
+| First screen | Writes no browser data. | 4 | Pass |
+| First screen fact | The receiver binds to `127.0.0.1`. | 5 | Pass |
+| First screen fact | Accepted bodies are discarded by default. | 6 | Pass |
+| First screen fact | Free under the MIT License. | 5 | Pass |
+| Recording help | A text recording of the bundled CLI demo. | 8 | Pass |
+| Recording help | Use the replay button to play it again. | 8 | Pass |
+| How it works | Listen locally. | 2 | Pass |
+| How it works | Run one bounded window. | 4 | Pass |
+| How it works | Review the report. | 3 | Pass |
+| How it works | Check fields and likely sensitive data. | 6 | Pass |
+| How it works | Generate a forwarding configuration. | 4 | Pass |
+| How it works | Review the generated configuration. | 4 | Pass |
+| Data handling | The receiver discards accepted bodies after aggregation by default. | 9 | Pass |
+| Data handling | Saving accepted bodies requires `--save-sample`. | 5 | Pass |
+| Local setup | Clone the public source repository on GitHub, then run the receiver. | 11 | Pass |
+| Local setup | Point your temporary HTTP drain to `http://127.0.0.1:8787/`. | 8 | Pass |
+| Local setup | Use `--ignore-field '$.request_id'` to suppress a reviewed false positive. | 9 | Pass |
+| Footer | Drain Check samples a log drain before you forward it. | 10 | Pass |
 
 No sentence exceeds 22 words. No banned word appears.
+
+## Labels and recorded output
+
+| Location | Text | Result |
+| --- | --- | --- |
+| First-screen label | Local 10-minute sample | Direct section name |
+| First-screen action | Try it with sample data | Result-naming verb |
+| Art caption | The receiver stays local | Narrow tested claim |
+| Recording | Reviewed 3 events in 600s. 17 fields. 3 findings across 2 fields. | Matches the bundled report |
+| Section label | How it works | Direct section name |
+| Section heading | Review a drain in three steps | Direct section name |
+| Section heading | What Drain Check does not retain | Direct section name |
+| Section heading | Start a bounded receiver | Result-naming verb |
 
 ## Terminology
 
@@ -28,9 +49,11 @@ No sentence exceeds 22 words. No banned word appears.
 | --- | --- |
 | log delivery integration | drain |
 | one bounded set of events | sample |
+| CLI output | report |
 | HTTP payload | body |
-| detector warning | possible risk |
-| destination setup | forwarding template |
+| detector warning | finding |
+| data needing review | sensitive data |
+| destination setup | forwarding configuration |
 | approved detector exception | ignored field |
 
-Catalog description: `Inspect a log drain before forwarding it.` (8 words)
+Catalog description: `Inspect a local log drain for volume, field types, and sensitive data before forwarding.` (14 words, 86 characters).

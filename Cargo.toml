@@ -2,7 +2,7 @@
 name = "drain-check"
 version = "0.1.0"
 edition = "2021"
-description = "Sample a local log drain and review its data contract."
+description = "Sample a local log drain and review its fields, size, and sensitive data."
 license = "MIT"
 repository = "https://github.com/B-Divyesh/sf-log-drain-contract-check"
 homepage = "https://log-drain-contract-check.sociobot.in"
