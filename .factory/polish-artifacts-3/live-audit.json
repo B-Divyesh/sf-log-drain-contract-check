@@ -1,0 +1,223 @@
+{
+  "origin": "https://log-drain-contract-check.sociobot.in",
+  "routes": [
+    {
+      "path": "/",
+      "viewport": 1440,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Drain Check — inspect a log drain sample",
+      "h1": "Inspect a log drain before forwarding",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/",
+      "description": "Inspect a bounded local log drain sample before forwarding it.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/",
+      "viewport": 390,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Drain Check — inspect a log drain sample",
+      "h1": "Inspect a log drain before forwarding",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/",
+      "description": "Inspect a bounded local log drain sample before forwarding it.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/?demo=1",
+      "viewport": 1440,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Demo — Drain Check",
+      "h1": "Review this drain sample",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/?demo=1",
+      "description": "Review the bundled Drain Check sample report without saving browser data.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/?demo=1",
+      "viewport": 390,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Demo — Drain Check",
+      "h1": "Review this drain sample",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/?demo=1",
+      "description": "Review the bundled Drain Check sample report without saving browser data.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/demo",
+      "viewport": 1440,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Demo — Drain Check",
+      "h1": "Review this drain sample",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/demo",
+      "description": "Review the bundled Drain Check sample report without saving browser data.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/demo",
+      "viewport": 390,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Demo — Drain Check",
+      "h1": "Review this drain sample",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/demo",
+      "description": "Review the bundled Drain Check sample report without saving browser data.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/privacy",
+      "viewport": 1440,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Privacy — Drain Check",
+      "h1": "Privacy for local drain samples",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/privacy",
+      "description": "How Drain Check handles drain samples and website data.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/privacy",
+      "viewport": 390,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Privacy — Drain Check",
+      "h1": "Privacy for local drain samples",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/privacy",
+      "description": "How Drain Check handles drain samples and website data.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/terms",
+      "viewport": 1440,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Terms — Drain Check",
+      "h1": "Terms for using Drain Check",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/terms",
+      "description": "Terms for using Drain Check.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/terms",
+      "viewport": 390,
+      "status": 200,
+      "errors": [],
+      "axeViolations": 0,
+      "title": "Terms — Drain Check",
+      "h1": "Terms for using Drain Check",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/terms",
+      "description": "Terms for using Drain Check.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/missing",
+      "viewport": 1440,
+      "status": 404,
+      "errors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "axeViolations": 0,
+      "title": "Not found — Drain Check",
+      "h1": "Page not found",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/missing",
+      "description": "Return to the Drain Check local receiver guide.",
+      "lang": "en",
+      "overflow": false
+    },
+    {
+      "path": "/missing",
+      "viewport": 390,
+      "status": 404,
+      "errors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "axeViolations": 0,
+      "title": "Not found — Drain Check",
+      "h1": "Page not found",
+      "h1Count": 1,
+      "mainCount": 1,
+      "canonical": "https://log-drain-contract-check.sociobot.in/missing",
+      "description": "Return to the Drain Check local receiver guide.",
+      "lang": "en",
+      "overflow": false
+    }
+  ],
+  "demo": {
+    "initialStorage": {
+      "local": 0,
+      "session": 0
+    },
+    "afterReset": {
+      "real": "keep",
+      "demo": null,
+      "session": 0
+    },
+    "sameOriginRequests": 4,
+    "leaveDemo": {
+      "url": "https://log-drain-contract-check.sociobot.in/",
+      "focus": "H1",
+      "h1": "Inspect a log drain before forwarding"
+    }
+  },
+  "navigation": {
+    "box": {
+      "x": 16,
+      "y": 423.453125,
+      "width": 239.671875,
+      "height": 46.796875
+    },
+    "demoFocus": {
+      "url": "https://log-drain-contract-check.sociobot.in/?demo=1",
+      "tag": "H1"
+    },
+    "backFocus": {
+      "url": "https://log-drain-contract-check.sociobot.in/",
+      "tag": "H1"
+    }
+  },
+  "deployedBuild": "2d77f83671c2"
+}

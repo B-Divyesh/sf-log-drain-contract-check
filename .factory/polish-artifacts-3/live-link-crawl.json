@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "href": "https://github.com/B-Divyesh/sf-log-drain-contract-check",
+      "status": 200,
+      "finalUrl": "https://github.com/B-Divyesh/sf-log-drain-contract-check"
+    },
+    {
+      "href": "https://log-drain-contract-check.sociobot.in/",
+      "status": 200,
+      "finalUrl": "https://log-drain-contract-check.sociobot.in/"
+    },
+    {
+      "href": "https://log-drain-contract-check.sociobot.in/?demo=1",
+      "status": 200,
+      "finalUrl": "https://log-drain-contract-check.sociobot.in/?demo=1"
+    },
+    {
+      "href": "https://log-drain-contract-check.sociobot.in/privacy",
+      "status": 200,
+      "finalUrl": "https://log-drain-contract-check.sociobot.in/privacy"
+    },
+    {
+      "href": "https://log-drain-contract-check.sociobot.in/terms",
+      "status": 200,
+      "finalUrl": "https://log-drain-contract-check.sociobot.in/terms"
+    }
+  ],
+  "robots": 200,
+  "sitemap": 200
+}
