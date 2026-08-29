@@ -3,13 +3,13 @@ import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 
-const [base, evidenceDirectory] = process.argv.slice(2);
+const [base, evidenceDirectory, expectedBuildId] = process.argv.slice(2);
 if (!base || !evidenceDirectory) {
-  throw new Error('Usage: node scripts/live-audit.mjs <base-url> <evidence-directory>');
+  throw new Error('Usage: node scripts/live-audit.mjs <base-url> <evidence-directory> [expected-build-id]');
 }
 
 const origin = new URL(base).origin;
-const buildId = execFileSync('git', ['rev-parse', '--short=12', 'HEAD'], { encoding: 'utf8' }).trim();
+const buildId = expectedBuildId ?? execFileSync('git', ['rev-parse', '--short=12', 'HEAD'], { encoding: 'utf8' }).trim();
 const routes = [
   { path: '/', status: 200, title: 'Drain Check — check a log drain sample', h1: 'Check a log drain before forwarding', file: 'home' },
   { path: '/?demo=1', status: 200, title: 'Demo — Drain Check', h1: 'Review this drain sample', file: 'demo-query' },

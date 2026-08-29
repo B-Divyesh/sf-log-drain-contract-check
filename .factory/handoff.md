@@ -51,7 +51,7 @@ Fresh remote clone: `/tmp/drain-check-round4-clean-mWtGuM/repo` at
   route titles, `lang=en`, one h1, main, image alt text, labeled buttons, and no
   page errors.
 - `node scripts/live-audit.mjs https://log-drain-contract-check.sociobot.in
-  .factory/polish-artifacts-4` passed after deploy. It checks all six routes at
+  .factory/polish-artifacts-4 cd28d94fe407` passed after deploy. It checks all six routes at
   1440 and 390 px, real HTTP 404, metadata/canonicals, zero serious/critical
   Axe findings, zero normal-route console errors, no overflow, the query demo,
   reset isolation, all browser storage surfaces, same-origin requests, focus,
