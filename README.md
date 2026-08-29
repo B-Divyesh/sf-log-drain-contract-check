@@ -6,7 +6,7 @@ Drain Check is for small platform teams adding a managed drain. It opens a bound
 
 ## Install and run
 
-You need Rust 1.75+ to run the CLI. Clone the public source repository first:
+Clone the public source repository first:
 
 ```sh
 git clone https://github.com/B-Divyesh/sf-log-drain-contract-check.git
@@ -38,7 +38,7 @@ cargo run -- inspect examples/drain.ndjson --sample-seconds 600 --output report.
 - Retention estimates for 7 and 30 days.
 - A recommendation to review the sample before forwarding.
 
-Risk findings are prompts for review. They do not prove a value is sensitive, and they cannot find every secret. The bundled sample reports 3 events, 17 field paths, 558.1 KiB for 7 days, and 2.3 MiB for 30 days.
+Review each finding before forwarding. The bundled sample reports 3 events, 17 field paths, 558.1 KiB for 7 days, and 2.3 MiB for 30 days.
 
 ## Generate a forwarding configuration
 

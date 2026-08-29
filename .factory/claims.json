@@ -70,6 +70,34 @@
     "sandbox": "local receiver gets malformed and valid bodies with --save-sample; assert only the accepted body is written and bodies_saved is true"
   },
   {
+    "id": "separate-output-paths",
+    "claim": "The receiver refuses matching --output and --save-sample paths before opening its listener.",
+    "where": "README, CLI validation message",
+    "test": "npm test -- -t @claim:separate-output-paths",
+    "sandbox": "use the same existing path for both options; assert startup fails before binding and the existing file stays unchanged"
+  },
+  {
+    "id": "minimum-sample-duration",
+    "claim": "File inspection rejects a sample duration below one second.",
+    "where": "README, inspect option validation",
+    "test": "npm test -- -t @claim:minimum-sample-duration",
+    "sandbox": "run inspect with --sample-seconds 0; assert a non-zero exit and Clap range validation"
+  },
+  {
+    "id": "json-stdout",
+    "claim": "The --json option writes the complete report to standard output.",
+    "where": "README, CLI option",
+    "test": "npm test -- -t @claim:json-stdout",
+    "sandbox": "inspect the bundled fixture with --json; parse stdout and assert it equals the report written to the chosen output path"
+  },
+  {
+    "id": "complete-help",
+    "claim": "The help command lists every CLI command and global help options.",
+    "where": "README, CLI help",
+    "test": "npm test -- -t @claim:complete-help",
+    "sandbox": "run drain-check --help and assert listen, inspect, demo, forwarding, --help, and --version are present"
+  },
+  {
     "id": "interrupt-report",
     "claim": "Ctrl-C finishes the sample early and writes its report.",
     "where": "CLI runtime help",

@@ -76,7 +76,7 @@ describe('published claims', () => {
     expect(await page.evaluate(() => localStorage.getItem('real:drain-check'))).toBe('keep');
     expect(await page.evaluate(() => localStorage.getItem('demo:drain-check'))).toBeNull();
     expect(await page.evaluate(() => sessionStorage.length)).toBe(0);
-    await page.getByRole('link', { name: 'Start for real' }).click();
+    await page.getByRole('link', { name: 'View local setup' }).click();
     expect(page.url()).toBe(`${base}/`);
     await context.close();
     cargoTest('listener_binds_to_loopback');
@@ -130,7 +130,22 @@ describe('published claims', () => {
 
   it('@claim:explicit-save writes only accepted bodies when requested', () => {
     cargoTest('save_sample_writes_only_accepted_bodies_when_requested');
+  }, CARGO_CLAIM_TIMEOUT_MS);
+
+  it('@claim:separate-output-paths refuses output and sample path collisions before binding', () => {
     cargoTest('colliding_output_and_sample_paths_are_rejected_before_binding');
+  }, CARGO_CLAIM_TIMEOUT_MS);
+
+  it('@claim:minimum-sample-duration rejects a zero-second file sample', () => {
+    cargoTest('inspect_requires_a_positive_sample_duration');
+  }, CARGO_CLAIM_TIMEOUT_MS);
+
+  it('@claim:json-stdout prints the complete report as JSON', () => {
+    cargoTest('inspect_json_writes_the_report_to_standard_output');
+  }, CARGO_CLAIM_TIMEOUT_MS);
+
+  it('@claim:complete-help lists every command and global help options', () => {
+    cargoTest('help_lists_each_command_and_its_options');
   }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:interrupt-report writes a report after Ctrl-C', () => {

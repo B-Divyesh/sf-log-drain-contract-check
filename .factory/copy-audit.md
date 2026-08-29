@@ -36,6 +36,7 @@ No sentence exceeds 22 words. No banned word appears.
 | --- | --- | --- |
 | First-screen label | Local 10-minute sample | Direct section name |
 | First-screen action | Try it with sample data | Result-naming verb |
+| Demo exit action | View local setup | Names the destination screen |
 | Art caption | The receiver stays local | Narrow tested claim |
 | Recording | Reviewed 3 events in 600s. 17 fields. 3 findings across 2 fields. | Matches the bundled report |
 | Section label | How it works | Direct section name |
@@ -56,4 +57,4 @@ No sentence exceeds 22 words. No banned word appears.
 | destination setup | forwarding configuration |
 | approved detector exception | ignored field |
 
-Catalog description: `Inspect a local log drain for volume, field types, and sensitive data before forwarding.` (14 words, 86 characters).
+Catalog description: `Inspect local log drains for volume, fields, and sensitive data before forwarding.` (12 words, 79 characters).
