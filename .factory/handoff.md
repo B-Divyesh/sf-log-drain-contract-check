@@ -17,7 +17,7 @@ CARGO_TARGET_DIR="$(mktemp -d)" npm test -- -t @claim:local-only
 # Cold target test time: 13.04 s (within explicit 60 s)
 ```
 
-Every exact command in `.factory/claims.json` was run in file order with a fresh, empty `CARGO_TARGET_DIR` for each command. All 11 passed; this prevents any claim from relying on the repository's `target/` cache. The Cargo-backed commands continued to assert the original loopback, body-discard, report, control, rate-limit, recovery, explicit-save, interrupt, and portable-demo behavior.
+Every exact command in `.factory/claims.json` was then run in file order from a newly cloned checkout of repair commit `c6390c79be323bfcb8fb54059383a18ef0abecef`, with a fresh, empty `CARGO_TARGET_DIR` for each command. All 11 passed; Cargo-backed claims each completed in 13–14.6 seconds, safely inside their explicit 60-second allowance. This prevents any claim from relying on a repository `target/` cache. The Cargo-backed commands continued to assert the original loopback, body-discard, report, control, rate-limit, recovery, explicit-save, interrupt, and portable-demo behavior.
 
 The complete local release suite passed:
 
