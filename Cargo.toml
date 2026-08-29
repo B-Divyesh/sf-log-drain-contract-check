@@ -8,13 +8,13 @@ repository = "https://github.com/B-Divyesh/sf-log-drain-contract-check"
 homepage = "https://log-drain-contract-check.sociobot.in"
 documentation = "https://log-drain-contract-check.sociobot.in"
 include = [
-  "src/**",
-  "examples/drain.ndjson",
-  "Cargo.toml",
-  "Cargo.lock",
-  "README.md",
-  "LICENSE",
-  "CHANGELOG.md"
+  "/src/**",
+  "/examples/drain.ndjson",
+  "/Cargo.toml",
+  "/Cargo.lock",
+  "/README.md",
+  "/LICENSE",
+  "/CHANGELOG.md"
 ]
 
 [dependencies]
