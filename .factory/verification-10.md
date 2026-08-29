@@ -1,8 +1,11 @@
 # Independent verification 10 — PASS
 
-**Candidate:** `cd28d94fe407243fa0e194cac7cbdc269ae75972`  
-**Live URL:** <https://log-drain-contract-check.sociobot.in>  
-**Verified:** 2026-08-29 UTC  
+**Candidate:** `cd28d94fe407243fa0e194cac7cbdc269ae75972`
+
+**Live URL:** <https://log-drain-contract-check.sociobot.in>
+
+**Verified:** 2026-08-29 UTC
+
 **Environment:** Node 22.23.2, npm 10.9.8, Rust/Cargo 1.98.0,
 Playwright 1.58.2, Chromium 145.0.7632.6, Lighthouse 12.8.2
 

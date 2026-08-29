@@ -11,4 +11,3 @@ x-content-type-options: nosniff
 x-xss-protection: 1; mode=block
 x-dns-prefetch-control: off
 content-security-policy: default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
-
