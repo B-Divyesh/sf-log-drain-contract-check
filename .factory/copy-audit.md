@@ -57,4 +57,4 @@ No sentence exceeds 22 words. No banned word appears.
 | destination setup | forwarding configuration |
 | approved detector exception | ignored field |
 
-Catalog description: `Inspect local log drains for volume, fields, and sensitive data before forwarding.` (12 words, 79 characters).
+Catalog description: `Check local log drains for volume, fields, and sensitive data before forwarding.` (12 words, 77 characters).

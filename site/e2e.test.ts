@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -154,6 +154,13 @@ describe('published claims', () => {
 
   it('@claim:portable-demo runs the embedded sample outside the repository', () => {
     cargoTest('installed_demo_runs_outside_repository');
+  }, CARGO_CLAIM_TIMEOUT_MS);
+
+  it('@claim:site-build-output writes the deployable site and deployment configuration', () => {
+    execFileSync('npm', ['run', 'build:site'], { cwd: process.cwd(), stdio: 'pipe' });
+    const output = join(process.cwd(), 'dist', 'site');
+    expect(existsSync(join(output, 'index.html'))).toBe(true);
+    expect(existsSync(join(output, 'staticwebapp.config.json'))).toBe(true);
   }, CARGO_CLAIM_TIMEOUT_MS);
 
   it('@claim:mit-license proves the stated license is present', () => {

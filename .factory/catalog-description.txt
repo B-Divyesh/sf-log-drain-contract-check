@@ -1,1 +1,1 @@
-Inspect local log drains for volume, fields, and sensitive data before forwarding.
+Check local log drains for volume, fields, and sensitive data before forwarding.

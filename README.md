@@ -67,7 +67,7 @@ cargo clippy --all-targets --all-features -- -D warnings
 cargo package --locked
 ```
 
-The static site build lands in `dist/site` with its deployment configuration at that root. `cargo package` prepares the CLI crate for publishing; this repository does not publish it.
+The static site build writes deployable files and deployment configuration to `dist/site`.
 
 ## Privacy and license
 

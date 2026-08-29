@@ -112,6 +112,13 @@
     "sandbox": "compiled binary launched from a fresh temporary consumer directory; assert sample metrics and report path outside the repository"
   },
   {
+    "id": "site-build-output",
+    "claim": "The static site build writes deployable files and deployment configuration to dist/site.",
+    "where": "README",
+    "test": "npm test -- -t @claim:site-build-output",
+    "sandbox": "fresh checkout; run npm run build:site and assert dist/site/index.html plus dist/site/staticwebapp.config.json"
+  },
+  {
     "id": "mit-license",
     "claim": "Drain Check is free software under the MIT License.",
     "where": "landing facts, terms page, README",
