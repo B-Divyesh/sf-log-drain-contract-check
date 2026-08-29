@@ -1,4 +1,42 @@
-# QA handoff — verification 5 — PASS
+# QA handoff — adversarial review 2 — FAIL
+
+## Outcome
+
+I performed the requested independent, non-code-changing adversarial review of the deployed product and committed the report in `.factory/review-2.md`.
+
+The product is clear on first read, its one-click demo is populated and isolated, its CLI demo runs from a temporary directory, and every one of the 13 declared claim commands passed from a fresh local clone (full suite: 31/31). It nevertheless remains **FAIL** under the zero-finding standard:
+
+- **F-2-1 (minor):** concrete README behavior promises are not each declared in `.factory/claims.json` and therefore lack individually named claim-contract coverage.
+- **F-2-2 (minor):** demo control “Start for real” does not say that it only opens local setup.
+
+No product code was modified. The prior review findings F-1-1 through F-1-7 were independently confirmed fixed on both the live site and source.
+
+## How verified
+
+```sh
+# Fresh local clone used for the claims replay
+npm ci
+# each literal command in .factory/claims.json, separately
+npm test -- -t @claim:<id>
+npm test # 31/31 passed
+
+# CLI sandbox check
+cargo build --locked --release
+cd "$(mktemp -d)"
+/work/repo/target/release/drain-check demo --json
+```
+
+Live checks used fresh Chromium contexts at 390 × 844 and 1440 × 900 for `/`, `/?demo=1`, `/demo`, `/privacy`, `/terms`, and `/missing`; request logs, storage, reset isolation, keyboard route focus, Back, links, metadata, and headers were checked. The report contains the complete evidence and copy audit.
+
+## Next steps
+
+1. Add explicit claim entries/tests (or remove/rewrite) for Rust 1.75 support, output-path collision refusal, minimum inspect duration, JSON stdout, complete help, and the detector-limit statement.
+2. Rename “Start for real” to “View local setup.”
+3. Re-run the review checklist from a fresh clone and cold browser context.
+
+---
+
+# Previous handoff — verification 5 — PASS
 
 **Current decision: PASS.** Candidate `ff327ece23be77a1c4720adb599c0b52828990ac`
 is deployed at <https://log-drain-contract-check.sociobot.in> and matches the
