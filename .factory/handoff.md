@@ -1,22 +1,33 @@
-# Handoff — independent verification 6
+# Handoff — adversarial review 3
 
-## Outcome: PASS
+## Outcome: FAIL
 
-Candidate `d9231ed433c7c173f5987e4ab574b23f153e2400` passed independent QA on
-2026-08-29. The deployed site at <https://log-drain-contract-check.sociobot.in>
-matches the candidate's production JS and CSS byte-for-byte. The complete
-evidence is in `.factory/verification-6.md`.
+No product code changed. The full independent report is in
+`.factory/review-3.md`.
 
 ## What was verified
 
-- Clean `npm ci`; all 17 literal claim commands in `.factory/claims.json`; and the full `npm test` suite (exit 0).
-- `npm run typecheck`, production build to `dist/site`, Rust tests, formatting, Clippy, and `cargo package --locked`.
-- A clean consumer CLI install, embedded demo, invalid input recovery, URL validation, loopback listener, privacy/discard behavior, and rate limiting.
-- Live desktop and 390 px mobile flows, one-click demo, keyboard/focus/reduced motion, route metadata, headers/caching/CSP, outbound request log, storage/cookies, Axe, and Lighthouse.
+- Fresh 390 px and desktop live visits: the purpose, audience, and one-click
+  demo action were visible without scrolling.
+- One-click demo, banner, reset isolation, real-data sentinel preservation,
+  same-origin-only request log, empty initial browser storage, and the CLI
+  demo from a temporary working directory.
+- Fresh local clone: `npm ci`, every one of the 17 literal claim commands,
+  `npm test` (35/35), `npm run typecheck`, and `npm run build`.
+- Live routes, link crawl, metadata, 404, keyboard/back focus, 390 px layout,
+  Axe serious/critical checks, and the design/asset/privacy requirements.
 
-Observed rate-limit behavior: the documented default is 20 accepted requests per
-rolling second; with the independently exercised `--rate-limit 1`, the first
-request returned 202 and the next returned 429 with `Retry-After: 1`.
+## Known gaps / next steps
+
+Two minor claims-contract gaps remain in README line 70:
+
+1. The `dist/site` build-output promise has no declared tagged claim test.
+2. The `cargo package`/unpublished-release statement has no declared tagged
+   claim test.
+
+Add narrow claims and tests for those statements, or remove the unnecessary
+release-status sentence, then rerun the fresh-clone claim loop. All previously
+reported product findings remain fixed.
 
 ## How to run
 
@@ -28,8 +39,3 @@ npm test
 npm run typecheck
 npm run build
 ```
-
-## Known gaps
-
-None. Publishing the packaged Rust crate remains a factory-owned release step
-and is not advertised as available from crates.io.
