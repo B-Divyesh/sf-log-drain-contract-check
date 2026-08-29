@@ -69,6 +69,21 @@ cargo package --locked
 
 The static site build writes deployable files and deployment configuration to `dist/site`.
 
+## Deploy the static site
+
+Build the site first, then deploy the complete `dist/site` directory with the
+factory static deployment command:
+
+```sh
+npm ci
+npm run build:site
+/opt/fleet/lib/deploy-static.sh log-drain-contract-check dist/site
+```
+
+For another static host, upload the contents of `dist/site` unchanged. Keep
+`staticwebapp.config.json` with the output so the documented routes, 404 page,
+security headers, and immutable asset caching are deployed together.
+
 ## Privacy and license
 
 The website requests only same-origin files and writes no browser storage. The CLI receives data on its loopback listener. Read the deployed [Privacy page](https://log-drain-contract-check.sociobot.in/privacy) and [Terms](https://log-drain-contract-check.sociobot.in/terms). Licensed under [MIT](LICENSE).

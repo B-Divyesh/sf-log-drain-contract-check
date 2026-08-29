@@ -2,10 +2,12 @@ import './style.css';
 import sampleReport from './sample-report.json';
 
 declare const __BUILD_ID__: string;
+declare const __SITE_VERSION__: string;
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 const routeStatus = () => document.querySelector<HTMLElement>('#route-status');
 const buildId = typeof __BUILD_ID__ === 'string' ? __BUILD_ID__ : 'dev';
+const siteVersion = typeof __SITE_VERSION__ === 'string' ? __SITE_VERSION__ : 'source';
 
 const shell = (content: string) => `<a class="skip" href="#main">Skip to content</a>
   <header>
@@ -17,7 +19,7 @@ const shell = (content: string) => `<a class="skip" href="#main">Skip to content
   ${content}
   <footer>
     <p>Drain Check samples a log drain before you forward it.</p>
-    <p><a href="/privacy" data-route>Privacy</a><span aria-hidden="true"> · </span><a href="/terms" data-route>Terms</a><span aria-hidden="true"> · </span>Built by Param Factory<span aria-hidden="true"> · </span>v0.1.0+${buildId}</p>
+    <p><a href="/privacy" data-route>Privacy</a><span aria-hidden="true"> · </span><a href="/terms" data-route>Terms</a><span aria-hidden="true"> · </span>Built by Param Factory<span aria-hidden="true"> · </span>v${siteVersion}+${buildId}</p>
   </footer>
   <div id="route-status" class="sr-only" aria-live="polite"></div>`;
 

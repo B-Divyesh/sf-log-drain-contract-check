@@ -578,7 +578,7 @@ mod tests {
             retention_days: vec![7],
             save_sample: None,
             detector: DetectorConfig::default(),
-            rate_limit: 1,
+            rate_limit,
             json: false,
         };
         let running = Arc::new(AtomicBool::new(true));
@@ -594,12 +594,23 @@ mod tests {
             .unwrap();
         });
         thread::sleep(Duration::from_millis(30));
-        assert!(send(address, "{\"one\":1}", None).starts_with("HTTP/1.1 202"));
-        let limited = send(address, "{\"two\":2}", None);
+        for event in 1..=rate_limit {
+            let accepted = send(address, &format!("{{\"event\":{event}}}"), None);
+            assert!(
+                accepted.starts_with("HTTP/1.1 202"),
+                "request {event} should be accepted: {accepted}"
+            );
+        }
+        let limited = send(address, "{\"event\":21}", None);
         assert!(limited.starts_with("HTTP/1.1 429"));
         assert!(limited.contains("Retry-After: 1"));
         running.store(false, Ordering::SeqCst);
         server.join().unwrap();
+        let report: Report = serde_json::from_str(
+            &fs::read_to_string(directory.path().join("report.json")).unwrap(),
+        )
+        .unwrap();
+        assert_eq!(report.events, rate_limit as usize);
     }
 
     #[test]
@@ -703,7 +714,10 @@ mod tests {
         let bad = send(address, "{not-json\n", None);
         assert!(bad.starts_with("HTTP/1.1 400"));
         let short = send(address, "{\"late\":true}", Some(100));
-        assert!(short.is_empty() || short.starts_with("HTTP/1.1 400"));
+        assert!(
+            short.starts_with("HTTP/1.1 400"),
+            "incomplete request must receive HTTP 400, got: {short:?}"
+        );
         server.join().unwrap();
 
         let report: Report = serde_json::from_str(&fs::read_to_string(output).unwrap()).unwrap();

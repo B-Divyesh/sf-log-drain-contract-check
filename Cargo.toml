@@ -1,6 +1,6 @@
 [package]
 name = "drain-check"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Sample a local log drain and review its fields, size, and sensitive data."
 license = "MIT"

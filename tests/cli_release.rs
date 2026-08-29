@@ -91,6 +91,19 @@ fn help_lists_each_command_and_its_options() {
     }
 }
 
+#[test]
+fn version_matches_the_released_changelog_section() {
+    let result = drain_check().arg("--version").output().unwrap();
+
+    assert!(result.status.success());
+    let version = env!("CARGO_PKG_VERSION");
+    assert_eq!(
+        String::from_utf8(result.stdout).unwrap().trim(),
+        format!("drain-check {version}")
+    );
+    assert!(include_str!("../CHANGELOG.md").contains(&format!("## {version}\n")));
+}
+
 #[cfg(unix)]
 #[test]
 fn interrupt_writes_the_partial_report() {

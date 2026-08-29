@@ -335,14 +335,46 @@ mod tests {
             .collect();
         let report = analyse_events(&sample, 600, &[7, 30]);
         assert_eq!(report.events, 3);
+        assert_eq!(report.sample_seconds, 600);
+        assert_eq!(report.events_per_second, 0.005);
         assert_eq!(report.average_event_bytes, 189);
-        assert_eq!(report.fields.len(), 17);
+        let expected_fields = [
+            ("$", &["object"][..], 3),
+            ("$.error", &["string"][..], 1),
+            ("$.job", &["object"][..], 1),
+            ("$.job.attempt", &["integer"][..], 1),
+            ("$.job.name", &["string"][..], 1),
+            ("$.job.ok", &["boolean"][..], 1),
+            ("$.level", &["string"][..], 3),
+            ("$.region", &["string"][..], 1),
+            ("$.request", &["object"][..], 2),
+            ("$.request.authorization", &["string"][..], 1),
+            ("$.request.latency_ms", &["integer"][..], 2),
+            ("$.request.method", &["string"][..], 2),
+            ("$.request.path", &["string"][..], 2),
+            ("$.request.user_email", &["string"][..], 1),
+            ("$.service", &["string"][..], 3),
+            ("$.timestamp", &["string"][..], 3),
+            ("$.trace_id", &["string"][..], 1),
+        ];
+        assert_eq!(report.fields.len(), expected_fields.len());
+        for (field, (path, types, present_in)) in report.fields.iter().zip(expected_fields) {
+            assert_eq!(field.path, path);
+            assert_eq!(field.types, types);
+            assert_eq!(field.present_in, present_in);
+        }
+        assert_eq!(report.findings.len(), 3);
         assert_eq!(report.retention[0].display, "558.1 KiB");
         assert_eq!(report.retention[1].display, "2.3 MiB");
-        assert!(report
-            .findings
-            .iter()
-            .any(|finding| finding.path == "$.request.authorization"));
+        assert!(report.findings.iter().any(|finding| {
+            finding.path == "$.request.authorization" && finding.detector == "secret-shaped value"
+        }));
+        assert!(report.findings.iter().any(|finding| {
+            finding.path == "$.request.authorization" && finding.detector == "sensitive field name"
+        }));
+        assert!(report.findings.iter().any(|finding| {
+            finding.path == "$.request.user_email" && finding.detector == "email-shaped value"
+        }));
     }
 
     #[test]
@@ -374,10 +406,16 @@ mod tests {
     fn supports_custom_patterns_and_explicit_suppression() {
         let events = vec![serde_json::json!({
             "session_key":"ordinary-value",
-            "request_id":"12345678901234567890123456789012"
+            "request_id":"12345678901234567890123456789012",
+            "request": {
+                "authorization":"Bearer fake_demo_token_123456789012345678901234",
+                "nested_token":"12345678901234567890123456789012"
+            }
         })];
-        let config =
-            DetectorConfig::with_overrides(&["session_key".into()], &["$.request_id".into()]);
+        let config = DetectorConfig::with_overrides(
+            &["session_key".into()],
+            &["$.request_id".into(), "$.request*".into()],
+        );
         let report = analyse_events_with_config(&events, 60, &[7], &config);
         assert!(report
             .findings
@@ -387,5 +425,9 @@ mod tests {
             .findings
             .iter()
             .any(|finding| finding.path == "$.request_id"));
+        assert!(!report
+            .findings
+            .iter()
+            .any(|finding| finding.path.starts_with("$.request")));
     }
 }

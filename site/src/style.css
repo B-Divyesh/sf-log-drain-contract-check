@@ -20,7 +20,7 @@ body {
   background-image: linear-gradient(rgba(247, 240, 213, .025) 1px, transparent 1px);
   background-size: 100% 4px;
 }
-a { color: var(--signal); text-underline-offset: 3px; }
+a { color: var(--signal); text-underline-offset: 3px; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; }
 button, .button {
   min-width: 44px;
   min-height: 44px;
@@ -103,7 +103,7 @@ footer p { margin: 0; }
 @media (max-width: 650px) {
   header, footer, main { padding-left: 16px; padding-right: 16px; }
   header { padding-top: 8px; padding-bottom: 8px; }
-  nav { gap: 0; }
+  nav { gap: 8px; }
   .hero { grid-template-columns: minmax(0, 1fr); padding-top: 30px; }
   .hero h1, .demo h1, .prose h1 { max-width: 100%; font-size: clamp(2rem, 11vw, 3rem); }
   .button-note { display: block; margin: 0; }
@@ -120,7 +120,7 @@ footer p { margin: 0; }
 
 @media (max-width: 390px) {
   header { align-items: flex-start; }
-  nav { max-width: 230px; }
+  nav { max-width: 270px; }
   pre { white-space: pre-wrap; word-break: break-word; }
 }
 

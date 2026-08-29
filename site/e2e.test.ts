@@ -16,6 +16,11 @@ const routes = ['/', '/?demo=1', '/demo', '/privacy', '/terms', '/missing'];
 // below still run unchanged after compilation completes.
 const CARGO_CLAIM_TIMEOUT_MS = 60_000;
 
+function manifestVersion() {
+  const cargo = readFileSync('Cargo.toml', 'utf8');
+  return cargo.match(/^version = "([^"]+)"$/m)?.[1];
+}
+
 beforeAll(async () => {
   server = await createServer({ server: { host: '127.0.0.1', port: 4179 }, logLevel: 'error' });
   await server.listen();
@@ -51,6 +56,7 @@ describe('published claims', () => {
     expect(page.url()).toBe(`${base}/?demo=1`);
     expect(await page.getByRole('heading', { name: 'Review this drain sample' }).count()).toBe(1);
     expect(await page.getByText('Demo — sample data, nothing is saved').count()).toBe(1);
+    expect(await page.locator('.metrics div').nth(0).innerText()).toBe('3\nevents');
     expect(await page.getByText('558.1 KiB').count()).toBe(1);
     expect(await page.getByText('2.3 MiB').count()).toBe(1);
     expect(await page.getByText('17', { exact: true }).count()).toBe(1);
@@ -236,18 +242,48 @@ describe('responsive and accessible site', () => {
     await page.close();
   });
 
-  it('keeps links touch-sized and content visible at 200% text size', async () => {
+  it('keeps every mobile interactive target touch-sized and separates navigation targets', async () => {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await context.newPage();
+    for (const route of routes) {
+      await page.goto(`${base}${route}`);
+      const targets = await page.locator('a, button').evaluateAll((elements) => elements.map((element) => {
+        const box = element.getBoundingClientRect();
+        return { label: element.textContent?.trim(), width: box.width, height: box.height };
+      }));
+      expect(targets.every(({ width, height }) => width >= 44 && height >= 44), route).toBe(true);
+    }
     await page.goto(base);
+    const navigation = await page.locator('nav a').evaluateAll((elements) => elements.map((element) => {
+      const box = element.getBoundingClientRect();
+      return { left: box.left, right: box.right, top: box.top, bottom: box.bottom };
+    }));
+    for (let index = 0; index < navigation.length - 1; index += 1) {
+      const current = navigation[index];
+      const next = navigation[index + 1];
+      const gap = next.top === current.top ? next.left - current.right : next.top - current.bottom;
+      expect(gap).toBeGreaterThanOrEqual(8);
+    }
     await page.evaluate(() => { document.documentElement.style.fontSize = '32px'; });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-    const targets = await page.locator('header a, footer a').evaluateAll((elements) => elements.map((element) => {
-      const box = element.getBoundingClientRect();
-      return { width: box.width, height: box.height };
-    }));
-    expect(targets.every(({ width, height }) => width >= 44 && height >= 44)).toBe(true);
     await context.close();
+  });
+
+  it('keeps the CLI, site, package, and changelog release versions aligned', async () => {
+    const version = manifestVersion();
+    if (!version) throw new Error('Cargo.toml does not declare a package version.');
+    expect(JSON.parse(readFileSync('package.json', 'utf8')).version).toBe(version);
+    expect(readFileSync('CHANGELOG.md', 'utf8')).toMatch(new RegExp(`^## ${version.replaceAll('.', '\\.')}$`, 'm'));
+    const page = await browser.newPage();
+    await page.goto(base);
+    expect(await page.locator('footer').innerText()).toContain(`v${version}+`);
+    await page.close();
+  });
+
+  it('documents the static deployment command and build output', () => {
+    const readme = readFileSync('README.md', 'utf8');
+    expect(readme).toContain('/opt/fleet/lib/deploy-static.sh log-drain-contract-check dist/site');
+    expect(readme).toContain('dist/site');
   });
 
   it('supports keyboard reset and reduced motion', async () => {

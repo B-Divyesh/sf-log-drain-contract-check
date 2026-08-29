@@ -4,7 +4,7 @@
     "claim": "The one-click web demo shows the bundled three-event report with 17 paths, 558.1 KiB for 7 days, and 2.3 MiB for 30 days without saving data.",
     "where": "landing action, demo report, README",
     "test": "npm test -- -t @claim:sample-demo",
-    "sandbox": "fresh browser context; click from /; assert route, banner, exact report metrics, and empty storage"
+    "sandbox": "fresh browser context; click from /; assert route, banner, three events, exact report metrics, and empty storage"
   },
   {
     "id": "local-only",
@@ -25,7 +25,7 @@
     "claim": "The report shows event rate, average size, field paths and types, likely secrets, and retention estimates.",
     "where": "landing, demo, README",
     "test": "npm test -- -t @claim:contract-report",
-    "sandbox": "bundled NDJSON fixture; assert exact count, size, paths, finding, and both retention values"
+    "sandbox": "bundled NDJSON fixture; assert exact count, event rate, size, every path and type, findings, and both retention values"
   },
   {
     "id": "forwarding-config",
@@ -46,14 +46,14 @@
     "claim": "Operators can add sensitive-field patterns and suppress reviewed exact paths or prefixes.",
     "where": "landing setup, README, CLI help",
     "test": "npm test -- -t @claim:false-positive-controls",
-    "sandbox": "fixture with a custom sensitive key and a benign token-shaped request ID; assert custom detection and suppression"
+    "sandbox": "fixture with a custom sensitive key and benign token-shaped fields; assert custom detection plus exact-path and prefix suppression"
   },
   {
     "id": "rate-limit",
     "claim": "The receiver accepts 20 requests per rolling second by default and returns HTTP 429 with Retry-After when limited.",
     "where": "README, CLI help",
     "test": "npm test -- -t @claim:rate-limit",
-    "sandbox": "local receiver configured at one request per second; assert first 202, second 429, and Retry-After: 1"
+    "sandbox": "local receiver at the default limit; assert 20 accepted requests, request 21 gets 429, Retry-After: 1, and a 20-event report"
   },
   {
     "id": "request-recovery",

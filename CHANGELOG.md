@@ -2,6 +2,10 @@
 
 ## 0.1.1
 
+- Make each published claim regression assert its complete promise, including
+  the default receiver allowance and incomplete-request response.
+- Give every mobile link a 44 px touch target and separate navigation targets.
+- Align the CLI, site, and package release identity and document deployment.
 - Reject colliding report and saved-sample paths before the receiver binds.
 - Require a file sample window of at least one second.
 - Parse forwarding destinations as HTTP(S) URLs and safely encode generated configuration values.
