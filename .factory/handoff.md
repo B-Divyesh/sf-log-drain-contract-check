@@ -62,6 +62,20 @@ URLs, `/privacy`, `/terms`, and `/missing` at 1440×900 and 390×844. The suite
 also covers keyboard route focus, Space activation of Reset demo, reduced
 motion, privacy/storage/request boundaries, and touch geometry.
 
+The repair was deployed through
+`/opt/fleet/lib/deploy-static.sh log-drain-contract-check dist/site` as Azure
+Static Web Apps deployment `536048b1-ed69-4943-8661-35869cd9f0f1`. Live
+`index.html`, generated JavaScript, generated CSS, and the hero WebP
+byte-compare with `dist/site`. Live `/` returns the same-origin CSP,
+HSTS, nosniff, strict referrer policy, and 30-second HTML revalidation;
+the hashed JavaScript is immutable for one year; `/missing` is an actual 404.
+The live browser check passed all six routes at 1440 px and 390 px, with zero
+serious/critical Axe issues, zero normal-route console errors, same-origin
+requests, zero cookies/storage, keyboard focus on the new h1, and 8 px mobile
+navigation gaps. A fresh mobile Lighthouse run scored 100 performance, 100
+accessibility, 100 best practices, and 100 SEO; FCP was 0.8 s, LCP 1.2 s,
+TBT 60 ms, and CLS 0.
+
 The product is a static documentation site for a local CLI. It has no service
 worker, updater, hosted account, or offline claim; service-worker
 offline/update checks are therefore not applicable. Static response policy is
