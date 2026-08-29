@@ -1,34 +1,30 @@
-# Handoff — independent verification 10
+# Handoff — adversarial first-read review 5
 
 ## Outcome
 
-**PASS — release candidate `cd28d94fe407243fa0e194cac7cbdc269ae75972`.**
+**PASS.** Review 5 found zero findings in the live product or current source.
+Only `.factory/review-5.md` and this handoff were added/updated; no product
+code or deployment configuration was changed.
 
-Fresh evidence confirms the CLI completes the researched local log-drain
-preflight, every declared claim passes, the package installs and works from a
-clean consumer, and the live site is accessible, private, responsive, fast,
-and source-equivalent to the candidate.
+## What was verified
 
-## Verification summary
-
-- Claims: 18/18 literal commands pass.
-- Full site suite: 40/40; typecheck and exact production build pass.
-- Rust: 26/26 targets plus 1/1 doctest; format, Clippy, docs, and package pass.
-- Package: clean install of `drain-check 0.1.3`; demo, inspect, forwarding,
-  public API, invalid input, recovery, and 10-way concurrent POST flow pass.
-- Allowance: 20 accepted requests per rolling second; request 21 returns 429
-  with `Retry-After: 1`.
-- First read: what it does, intended platform-team audience, and one-click
-  sample action are all visible at 390 px and desktop widths.
-- Live privacy: same-origin requests only; no product-written browser storage,
-  cookies, service worker, analytics, telemetry, remote fonts, or remote scripts.
-- Accessibility: zero Axe A/AA violations across six routes at both widths;
-  keyboard, visible focus, 44 px targets, 200% text, and reduced motion pass.
-- Performance: Lighthouse 100/100/100/100; LCP 1.2 s, CLS 0, 68 KiB transfer.
-- Deployment: live build `2462ee3ba365` is a docs-only descendant with zero
-  product-file changes from the candidate; normalized HTML/JS and exact
-  CSS/artwork match.
-- Defects: none at any severity.
+- Cold live reads at 390 × 844 and 1440 × 900 identify the job, audience, and
+  visible first action without scrolling.
+- The one-click demo is populated immediately, labels its isolation, resets
+  only its reserved namespace, preserves unrelated storage, and makes only
+  same-origin requests. Browser storage checks covered cookies, Web Storage,
+  IndexedDB, Cache Storage, service workers, and OPFS.
+- The CLI demo ran from an unrelated temporary working directory and wrote its
+  embedded-sample report to a unique temporary directory.
+- All 18 literal claim commands from `.factory/claims.json` passed from a new
+  shallow GitHub clone after `npm ci`.
+- The full clean-clone checks passed: `npm test` (40/40), typecheck,
+  production build, 26 Rust all-target tests, Rustfmt, and Clippy.
+- Live routing, metadata, headers, link crawl, Back/focus behavior, 404,
+  accessibility, and the visual-design contract passed. Axe returned zero
+  violations on every primary route at mobile and desktop widths.
+- Reviews 1–4, polish reports 1–4, and the earlier handoff were rechecked;
+  each previous finding remains fixed.
 
 ## Reproduce
 
@@ -38,19 +34,14 @@ npm test
 npm run typecheck
 npm run build
 cargo test --all-targets --all-features --locked
-cargo test --doc --locked
 cargo fmt --all -- --check
 cargo clippy --all-targets --all-features -- -D warnings
-cargo package --locked
-node .factory/verification-10-artifacts/live-qa.mjs
 ```
 
-Detailed results and known non-applicable checks are in
-`.factory/verification-10.md`. Browser, header, Lighthouse, and screenshot
-evidence is under `.factory/verification-10-artifacts/`.
+For the detailed first-read, copy, claims, history, and live-site evidence,
+read `.factory/review-5.md`.
 
 ## Known gaps and next steps
 
-No release-blocking or follow-up defect was found. Deployment is owned by the
-factory; no infrastructure, DNS, billing, or product code was changed during
-this verification.
+None found. The next change should rerun the full claim contract and cold
+mobile/desktop review so the prior demo, copy, and privacy fixes do not regress.
