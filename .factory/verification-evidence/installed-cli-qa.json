@@ -1,0 +1,76 @@
+{
+  "binary": "/tmp/drain-check-consumer7-E0qJzX/install/bin/drain-check",
+  "work": "/tmp/drain-check-consumer7-E0qJzX/work-JlYGMR",
+  "help": {
+    "version": "drain-check 0.1.0",
+    "commands": [
+      "listen",
+      "inspect",
+      "demo",
+      "forwarding"
+    ]
+  },
+  "demo": {
+    "runs": 2,
+    "unique": true,
+    "report_paths": [
+      "/tmp/drain-check-demo-vfeTJQ/report.json",
+      "/tmp/drain-check-demo-H86KAn/report.json"
+    ],
+    "metrics": {
+      "events": 3,
+      "paths": 17,
+      "days7": "558.1 KiB",
+      "days30": "2.3 MiB"
+    }
+  },
+  "inspect": {
+    "normal": {
+      "events": 2,
+      "array_path_present_in": 1,
+      "values_absent": true
+    },
+    "empty_events": 0,
+    "malformed_exit": 1,
+    "zero_duration_exit": 2,
+    "missing_exit": 1
+  },
+  "forwarding": {
+    "valid_encoded": "# consumer-test\n# Send POST requests to this endpoint after report review\nurl = \"https://receiver.example/logs?token=a%20b\"\nmethod = \"POST\"\ncontent_type = \"application/json\"",
+    "invalid_exit": 2
+  },
+  "listener_default": {
+    "bind_proc_entry": "7: 0100007F:951D 00000000:0000 0A 00000000:00000001 00:00000000 00000000     0        0 195705 2 000000008e51b209 100 0 0 10 0",
+    "valid": 202,
+    "malformed": 400,
+    "short_body": 400,
+    "oversized": 413,
+    "get": 405,
+    "empty": 400,
+    "recovery": 202,
+    "allowance": 20,
+    "burst": {
+      "requests": 25,
+      "accepted": 18,
+      "limited": 7,
+      "retry_after": "1"
+    },
+    "report": {
+      "events": 20,
+      "bodies_saved": false,
+      "values_absent": true
+    }
+  },
+  "listener_save": {
+    "events": 1,
+    "bodies_saved": true,
+    "saved_only_accepted": true,
+    "report_values_absent": true
+  },
+  "validation": {
+    "path_collision_exit": 1,
+    "path_preserved": true,
+    "port_zero_exit": 2,
+    "rate_zero_exit": 2
+  }
+}

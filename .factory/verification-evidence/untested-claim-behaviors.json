@@ -1,0 +1,9 @@
+{
+  "status": 0,
+  "eventRate": 0.1,
+  "authorizationTypes": [
+    "string"
+  ],
+  "prefixSuppressed": true,
+  "customDetected": true
+}

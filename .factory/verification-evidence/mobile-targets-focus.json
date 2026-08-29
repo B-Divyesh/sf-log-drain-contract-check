@@ -1,0 +1,159 @@
+{
+  "firstFocus": {
+    "text": "Skip to content",
+    "tag": "A",
+    "rect": {
+      "x": 12,
+      "y": 12,
+      "width": 141.515625,
+      "height": 44.796875
+    },
+    "outline": "rgb(255, 214, 107) solid 3px"
+  },
+  "interactives": [
+    {
+      "index": 0,
+      "text": "Skip to content",
+      "rect": {
+        "x": 12,
+        "y": 12,
+        "width": 141.5,
+        "height": 44.8,
+        "bottom": 56.8,
+        "right": 153.5
+      },
+      "display": "block"
+    },
+    {
+      "index": 1,
+      "text": "DRΛINCHECK",
+      "rect": {
+        "x": 16,
+        "y": 8,
+        "width": 59.2,
+        "height": 44,
+        "bottom": 52,
+        "right": 75.2
+      },
+      "display": "flex"
+    },
+    {
+      "index": 2,
+      "text": "Demo",
+      "rect": {
+        "x": 210.4,
+        "y": 8,
+        "width": 57.6,
+        "height": 44,
+        "bottom": 52,
+        "right": 268
+      },
+      "display": "flex"
+    },
+    {
+      "index": 3,
+      "text": "How it works",
+      "rect": {
+        "x": 268,
+        "y": 8,
+        "width": 106,
+        "height": 44,
+        "bottom": 52,
+        "right": 374
+      },
+      "display": "flex"
+    },
+    {
+      "index": 4,
+      "text": "Privacy",
+      "rect": {
+        "x": 307.3,
+        "y": 52,
+        "width": 66.7,
+        "height": 44,
+        "bottom": 96,
+        "right": 374
+      },
+      "display": "flex"
+    },
+    {
+      "index": 5,
+      "text": "Try it with sample data",
+      "rect": {
+        "x": 16,
+        "y": 423.5,
+        "width": 239.7,
+        "height": 46.8,
+        "bottom": 470.3,
+        "right": 255.7
+      },
+      "display": "flex"
+    },
+    {
+      "index": 6,
+      "text": "Replay recording",
+      "rect": {
+        "x": 230.8,
+        "y": 1128.7,
+        "width": 113.2,
+        "height": 44,
+        "bottom": 1172.7,
+        "right": 344
+      },
+      "display": "flex"
+    },
+    {
+      "index": 7,
+      "text": "public source repository on GitHub",
+      "rect": {
+        "x": 16,
+        "y": 2737.1,
+        "width": 299.2,
+        "height": 43.8,
+        "bottom": 2780.9,
+        "right": 315.2
+      },
+      "display": "inline"
+    },
+    {
+      "index": 8,
+      "text": "Privacy",
+      "rect": {
+        "x": 16,
+        "y": 3278.1,
+        "width": 65.8,
+        "height": 44,
+        "bottom": 3322.1,
+        "right": 81.8
+      },
+      "display": "inline-flex"
+    },
+    {
+      "index": 9,
+      "text": "Terms",
+      "rect": {
+        "x": 94.9,
+        "y": 3278.1,
+        "width": 56.5,
+        "height": 44,
+        "bottom": 3322.1,
+        "right": 151.4
+      },
+      "display": "inline-flex"
+    }
+  ],
+  "adjacent": [
+    {
+      "a": "Skip to content",
+      "b": "DRΛINCHECK",
+      "gap": 0,
+      "overlapY": 40
+    },
+    {
+      "a": "Demo",
+      "b": "How it works",
+      "gap": 0,
+      "overlapY": 44
+    }
+  ]
+}

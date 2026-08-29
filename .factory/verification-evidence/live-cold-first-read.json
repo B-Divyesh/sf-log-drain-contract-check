@@ -1,0 +1,66 @@
+{
+  "status": 200,
+  "headers": {
+    "cache-control": "public, must-revalidate, max-age=30",
+    "content-encoding": "br",
+    "content-security-policy": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+    "content-type": "text/html",
+    "date": "Sat, 29 Aug 2026 10:59:01 GMT",
+    "etag": "\"49723491\"",
+    "last-modified": "Sat, 29 Aug 2026 10:01:16 GMT",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "strict-transport-security": "max-age=31536000; includeSubDomains",
+    "vary": "Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-dns-prefetch-control": "off",
+    "x-xss-protection": "1; mode=block"
+  },
+  "url": "https://log-drain-contract-check.sociobot.in/",
+  "title": "Drain Check — inspect a log drain sample",
+  "h1": [
+    "Inspect a log drain before forwarding"
+  ],
+  "visibleText": [
+    "LOCAL 10-MINUTE SAMPLE",
+    "Inspect a log drain before forwarding",
+    "For platform teams checking volume, field types, and sensitive data before enabling a log drain.",
+    "Try it with sample data\nOpens the bundled report. Writes no browser data.",
+    "The receiver binds to 127.0.0.1.",
+    "Accepted bodies are discarded by default.",
+    "Free under the MIT License.",
+    "A text recording of the bundled CLI demo. Use the replay button to play it again."
+  ],
+  "actions": [
+    {
+      "text": "DRΛIN\nCHECK",
+      "tag": "A",
+      "href": "https://log-drain-contract-check.sociobot.in/"
+    },
+    {
+      "text": "Demo",
+      "tag": "A",
+      "href": "https://log-drain-contract-check.sociobot.in/?demo=1"
+    },
+    {
+      "text": "How it works",
+      "tag": "A",
+      "href": "https://log-drain-contract-check.sociobot.in/#how"
+    },
+    {
+      "text": "Privacy",
+      "tag": "A",
+      "href": "https://log-drain-contract-check.sociobot.in/privacy"
+    },
+    {
+      "text": "Try it with sample data",
+      "tag": "A",
+      "href": "https://log-drain-contract-check.sociobot.in/?demo=1"
+    },
+    {
+      "text": "Replay recording",
+      "tag": "BUTTON",
+      "href": null
+    }
+  ],
+  "errors": []
+}

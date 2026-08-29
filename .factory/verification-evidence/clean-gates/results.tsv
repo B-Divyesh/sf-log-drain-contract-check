@@ -1,0 +1,10 @@
+npm-test	0
+npm-typecheck	0
+npm-build	0
+cargo-test	0
+cargo-doc-test	0
+cargo-fmt	0
+cargo-clippy	0
+cargo-package	0
+cargo-doc	0
+npm-audit	0

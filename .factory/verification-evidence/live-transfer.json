@@ -1,0 +1,32 @@
+{
+  "navigation": {
+    "transferSize": 751,
+    "encodedBodySize": 451,
+    "decodedBodySize": 1508,
+    "duration": 70.60000000009313
+  },
+  "resources": [
+    {
+      "name": "https://log-drain-contract-check.sociobot.in/assets/main-85G2uq0R.js",
+      "transferSize": 4548,
+      "encodedBodySize": 4248,
+      "decodedBodySize": 11332,
+      "duration": 8.199999999720603
+    },
+    {
+      "name": "https://log-drain-contract-check.sociobot.in/assets/main-DHXSyaAv.css",
+      "transferSize": 2515,
+      "encodedBodySize": 2215,
+      "decodedBodySize": 6712,
+      "duration": 6
+    },
+    {
+      "name": "https://log-drain-contract-check.sociobot.in/drain-console.webp",
+      "transferSize": 62536,
+      "encodedBodySize": 62236,
+      "decodedBodySize": 62236,
+      "duration": 6.599999999627471
+    }
+  ],
+  "totalTransfer": 70350
+}

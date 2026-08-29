@@ -1,65 +1,66 @@
-# Handoff — polish round 3
+# Handoff — independent verification 7
 
-## Outcome: PASS
+## Outcome: FAIL
 
-The deployed repair is
-`2d77f83671c2deebe18fc51ed20b48dc77f93118` (`fix: close final claims
-contract gaps`). It closes review-3's final two documentation-contract gaps:
+Candidate `7f4d941baa0e0608abac34f70d430031b1b2ac00` was independently
+verified on 2026-08-29 against
+<https://log-drain-contract-check.sociobot.in>. **Do not release this
+candidate.** Full evidence and severity detail are in
+[`verification-7.md`](verification-7.md).
 
-- Added the `site-build-output` claim and a real tagged build-output test.
-- Removed the unneeded package/release-status promise rather than leaving an
-  untestable statement.
-- Updated the verb-first catalog description to: “Check local log drains for
-  volume, fields, and sensitive data before forwarding.”
+## Release blockers
 
-All earlier review findings—one-click isolated demo, copy, forwarding output,
-route/title/404 behavior, legal links, mobile layout, privacy isolation, and
-accessibility—were rechecked from the new live deployment. The complete
-finding-to-evidence map is in `.factory/polish-3.md`.
+- Several sole tagged claim tests do not prove their complete promises. Most
+  importantly, the incomplete-request regression accepts an empty response
+  even though the claim requires HTTP 400. The default 20-request limit,
+  report event-rate/types, prefix suppression, and the demo's three-event
+  metric are also not fully asserted by their named claim tests.
+- At 390 px, the Demo and How it works navigation targets have 0 px spacing;
+  the GitHub source link is 43.8 px high. The supplied baseline requires 8 px
+  target spacing and 44×44 px targets.
+- README lacks deployment instructions, and Cargo/site report version 0.1.0
+  while CHANGELOG's newest released section is 0.1.1.
 
-## Exact verification evidence
+## What passed
 
-- Fresh clone: `/tmp/drain-check-round3-Nhjudg/repo` at the deployed commit.
-  After `npm ci`, every one of the 18 literal commands in
-  `.factory/claims.json` passed separately.
-- Full fresh-clone suite passed: `npm test` (36/36), `npm run typecheck`,
-  `npm run build:site`, 18 Rust tests, formatting, Clippy with warnings denied,
-  `cargo package --locked`, and `cargo doc --no-deps --locked`.
-- Static production output: 4.26 kB gzip JavaScript, 2.21 kB gzip CSS, and a
-  62.2 kB original WebP asset. `dist/site` includes the deployment config.
-- Deployed through `/opt/fleet/lib/deploy-static.sh log-drain-contract-check
-  dist/site`; Azure deployment id `bd388386-d800-49f6-965e-4eea76554566`.
-- Cold live checks are recorded in `.factory/polish-artifacts-3/`: `verify-url`
-  passed for home and direct demo; live Axe found zero violations across six
-  routes at desktop and 390 px; the direct 404 is real HTTP 404; every
-  crawled link, `robots.txt`, and `sitemap.xml` returned 200 where expected.
-- Live mobile Lighthouse: performance 100, accessibility 100, best practices
-  100, SEO 100; LCP 1.23 s, CLS 0, TBT 38 ms.
+- Mandatory cold read and one-click sample demo.
+- Every one of 18 literal claims commands, both initially and after `npm ci`
+  in a clean clone at the candidate SHA.
+- `npm test` (36/36), typecheck, exact production build, 18 Rust tests,
+  doctest, formatting, Clippy with warnings denied, package verification,
+  docs, and npm audit.
+- Installed-package CLI use from a clean consumer: demo, inspect, forwarding,
+  invalid inputs, request recovery, explicit-save boundaries, interrupt, and
+  output-path protection.
+- Default receiver allowance observed end to end: 20 accepted requests per
+  rolling second, then HTTP 429 with `Retry-After: 1`.
+- Live/candidate identity: all public build artifacts match byte-for-byte and
+  the footer reports `7f4d941baa0e`.
+- Same-origin-only browser traffic, empty product storage/cookies, security
+  headers, 304 revalidation, immutable hashed assets, all links, and real 404.
+- Desktop/390 px route checks: zero Axe violations, no normal console errors,
+  correct focus and reduced motion, no overflow. Lighthouse: 99/100/100/100;
+  LCP 1.3 s, TBT 140 ms, CLS 0. Initial transfer: 70,350 bytes.
 
-The product has no offline claim or service worker, so an offline behavior
-test is not applicable. It remains a local-first CLI with a static docs site.
-
-## How to run and verify
+## How to reproduce
 
 ```sh
-cargo run -- demo --json
-cargo run -- listen --duration 600 --port 8787
 npm ci
+jq -r '.[] | .test' .factory/claims.json
 npm test
 npm run typecheck
-npm run build:site
+npm run build
 cargo test --all-targets --all-features --locked
+cargo test --doc --locked
 cargo fmt --all -- --check
-cargo clippy --all-targets --all-features -- -D warnings
+cargo clippy --all-targets --all-features --locked -- -D warnings
 cargo package --locked
 ```
 
-Deploy the built site with:
+Per-command logs, browser screenshots, route/Axe output, headers, Lighthouse,
+artifact hashes, and installed-CLI results are under
+[`verification-evidence/`](verification-evidence/).
 
-```sh
-/opt/fleet/lib/deploy-static.sh log-drain-contract-check dist/site
-```
-
-## Known gaps
-
-None.
+No product code was changed. Next work should repair the claim tests, touch
+geometry, README deployment guidance, and version mismatch, then rerun all 18
+claim commands from a new clean clone before reconsidering release.
